@@ -1,0 +1,250 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source files">
+      <UniqueIdentifier>{5f351c40-4041-439c-bd4a-8b5d4bad8426}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header files">
+      <UniqueIdentifier>{54f56bd0-f3bf-4606-833e-e185007d0612}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource files">
+      <UniqueIdentifier>{4cadea69-0a8d-48da-b4d5-1f440ccd4816}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Project files">
+      <UniqueIdentifier>{a551f3ae-cef5-4f11-908a-5072203b6c38}</UniqueIdentifier>
+      <Extensions>pro</Extensions>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{c056c40c-ec1d-4ee2-8c0b-70985243c0df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\System">
+      <UniqueIdentifier>{95f60046-4d7e-4074-8ebf-eb5f6afa3cd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\System\Utilities">
+      <UniqueIdentifier>{9f256708-800a-414b-a29c-2c5edec53476}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\System\Types">
+      <UniqueIdentifier>{ff5d200d-7249-40a2-89c9-4615bb8ca5d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\RaspberryPeripherals">
+      <UniqueIdentifier>{421ce930-a99f-4f6c-9947-8435f9b3396a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Utilities">
+      <UniqueIdentifier>{670fee82-c10d-43e4-83ee-e54f735c9f1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Nucleo">
+      <UniqueIdentifier>{b2967ac5-c1dd-4838-a47e-2b9673ddfad9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\SharedDefines">
+      <UniqueIdentifier>{31a22bca-1bf3-4436-829c-a3b01055d2f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Defines">
+      <UniqueIdentifier>{0d147168-719f-42ef-91b9-94eaf14cd35d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\HardwareSettings">
+      <UniqueIdentifier>{440bb250-49ac-48db-8ef0-14992225acd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\FaultManagement">
+      <UniqueIdentifier>{345abe1a-0280-4aa4-8c95-69d82aa68faf}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DSCMasterApplication.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindow.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Nucleo\UnitsDetector.cpp">
+      <Filter>Core\Nucleo</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Utilities\Logger.cpp">
+      <Filter>Core\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\RaspberryPeripherals\AsyncSerial.cpp">
+      <Filter>Core\RaspberryPeripherals</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\RaspberryPeripherals\GpioManager.cpp">
+      <Filter>Core\RaspberryPeripherals</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\RaspberryPeripherals\UartManager.cpp">
+      <Filter>Core\RaspberryPeripherals</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\System\ActiveObject.cpp">
+      <Filter>Core\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\System\DeviceConfigurator.cpp">
+      <Filter>Core\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\System\ThreadPool.cpp">
+      <Filter>Core\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\System\TimerManager.cpp">
+      <Filter>Core\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\System\Utilities\ScopedThread.cpp">
+      <Filter>Core\System\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="InfoDialog.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\FaultManagement\FaultManager.cpp">
+      <Filter>Core\FaultManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Utilities\ToStringConverter.cpp">
+      <Filter>Core\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Utilities\Utilities.cpp">
+      <Filter>Core\System\Utilities</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MainWindow.ui">
+      <Filter>Source files</Filter>
+    </None>
+    <None Include="DSCMasterApplication.pro" />
+    <None Include="debug.pro">
+      <Filter>Project files</Filter>
+    </None>
+    <None Include="release.pro">
+      <Filter>Project files</Filter>
+    </None>
+    <None Include="qdarkstyle\style.qrc">
+      <Filter>Resource files</Filter>
+    </None>
+    <None Include="qdarkstyle\style.qss">
+      <Filter>Resource files</Filter>
+    </None>
+    <None Include="InfoDialog.ui">
+      <Filter>Source files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MainWindow.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Nucleo\UnitsDetector.hpp">
+      <Filter>Core\Nucleo</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Utilities\Logger.hpp">
+      <Filter>Core\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\RaspberryPeripherals\AsyncSerial.hpp">
+      <Filter>Core\RaspberryPeripherals</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\RaspberryPeripherals\GpioManager.hpp">
+      <Filter>Core\RaspberryPeripherals</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\RaspberryPeripherals\UartManager.hpp">
+      <Filter>Core\RaspberryPeripherals</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\System\ActiveObject.hpp">
+      <Filter>Core\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\System\DeviceConfigurator.hpp">
+      <Filter>Core\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\System\ThreadPool.hpp">
+      <Filter>Core\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\System\TimerManager.hpp">
+      <Filter>Core\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\System\Types\TaskPriority.hpp">
+      <Filter>Core\System\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\System\Utilities\ScopedThread.hpp">
+      <Filter>Core\System\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\System\Utilities\ThreadSafeQueue.hpp">
+      <Filter>Core\System\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SharedDefines\ADS1248Types.h">
+      <Filter>Core\SharedDefines</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SharedDefines\EControlSystemType.h">
+      <Filter>Core\SharedDefines</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SharedDefines\EFaultId.h">
+      <Filter>Core\SharedDefines</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SharedDefines\EFaultIndicationState.h">
+      <Filter>Core\SharedDefines</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SharedDefines\ELogSeverity.h">
+      <Filter>Core\SharedDefines</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SharedDefines\EMessageId.h">
+      <Filter>Core\SharedDefines</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SharedDefines\EMessagePart.h">
+      <Filter>Core\SharedDefines</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SharedDefines\EPid.h">
+      <Filter>Core\SharedDefines</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SharedDefines\ERegisteringDataType.h">
+      <Filter>Core\SharedDefines</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SharedDefines\EUnitId.h">
+      <Filter>Core\SharedDefines</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SharedDefines\LMP90100Types.h">
+      <Filter>Core\SharedDefines</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SharedDefines\MessagesDefines.h">
+      <Filter>Core\SharedDefines</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SharedDefines\PrinterPrefixes.h">
+      <Filter>Core\SharedDefines</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SharedDefines\SControllerData.h">
+      <Filter>Core\SharedDefines</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SharedDefines\SFaultIndication.h">
+      <Filter>Core\SharedDefines</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SharedDefines\SPidTunes.h">
+      <Filter>Core\SharedDefines</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SharedDefines\SProcessModelParameters.h">
+      <Filter>Core\SharedDefines</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SharedDefines\SRTDPolynomialCoefficients.h">
+      <Filter>Core\SharedDefines</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SharedDefines\SSampleCarrierData.h">
+      <Filter>Core\SharedDefines</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SharedDefines\SSegmentData.h">
+      <Filter>Core\SharedDefines</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\SharedDefines\TMessage.h">
+      <Filter>Core\SharedDefines</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Defines\CommonDefines.hpp">
+      <Filter>Core\Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\HardwareSettings\GpioDefines.hpp">
+      <Filter>Core\HardwareSettings</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Utilities\LoggerTypes.hpp">
+      <Filter>Core\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="InfoDialog.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\FaultManagement\FaultManager.hpp">
+      <Filter>Core\FaultManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Utilities\ToStringConverter.hpp">
+      <Filter>Core\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Utilities\Utilities.hpp">
+      <Filter>Core\System\Utilities</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

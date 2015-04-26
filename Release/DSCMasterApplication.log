@@ -1,0 +1,13 @@
+﻿Build started 26/04/2015 22:38:21.
+     1>Project "E:\Work\DSCProject\DSCMasterApplication\DSCMasterApplication\DSCMasterApplication.vcxproj" on node 2 (Build target(s)).
+     1>Build:
+         "C:\Program Files (x86)\Sysprogs\VisualGDB\\VisualGDB.exe" /build "E:\Work\DSCProject\DSCMasterApplication\DSCMasterApplication\DSCMasterApplication.vcxproj" "/solution:E:\Work\DSCProject\DSCMasterApplication\DSCMasterApplication.sln" "/config:Release" "/platform:Win32"
+         VisualGDB: Run "C:\SysGCC\raspberry\Qt\v4\qmake.exe  DSCMasterApplication.pro CONFIGNAME=Release      " in directory "E:\Work\DSCProject\DSCMasterApplication\DSCMasterApplication" on local computer
+     1>EXEC : warning : e:\Work\DSCProject\DSCMasterApplication\DSCMasterApplication\release.pro:9: Unescaped backslashes are deprecated.
+         VisualGDB: Run "cmd.exe /c "C:\SysGCC\raspberry\bin\make.exe"" in directory "E:\Work\DSCProject\DSCMasterApplication\DSCMasterApplication" on local computer
+         make: Nothing to be done for `first'.
+     1>Done Building Project "E:\Work\DSCProject\DSCMasterApplication\DSCMasterApplication\DSCMasterApplication.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.16
