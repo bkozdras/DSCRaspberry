@@ -100,6 +100,12 @@
     <ClCompile Include="Core\Utilities\Utilities.cpp">
       <Filter>Core\System\Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="Core\RaspberryPeripherals\UartMessageMemoryManager.cpp">
+      <Filter>Core\RaspberryPeripherals</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Nucleo\MessageGateway.cpp">
+      <Filter>Core\Nucleo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="MainWindow.ui">
@@ -245,6 +251,12 @@
     </ClInclude>
     <ClInclude Include="Core\Utilities\Utilities.hpp">
       <Filter>Core\System\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\RaspberryPeripherals\UartMessageMemoryManager.hpp">
+      <Filter>Core\RaspberryPeripherals</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Nucleo\MessageGateway.hpp">
+      <Filter>Core\Nucleo</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

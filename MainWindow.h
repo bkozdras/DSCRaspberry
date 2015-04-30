@@ -72,10 +72,10 @@ private:
 
     // AUTODETECTION TAB LABELS
     void setupAutodetectionTabLabels();
-    void changeUnitStatus(EUnitId unitId, UnitsDetector::Status status);
+    void changeUnitStatus(EUnitId unitId, Nucleo::UnitsDetector::Status status);
     QLabel* getQLabelForUnit(EUnitId unitId);
-    const QColor & getColorForUnitStatus(UnitsDetector::Status status);
-    const QString & getQStringForUnitStatus(UnitsDetector::Status status);
+    const QColor & getColorForUnitStatus(Nucleo::UnitsDetector::Status status);
+    const QString & getQStringForUnitStatus(Nucleo::UnitsDetector::Status status);
 };
 
 #endif // MAINWINDOW_H

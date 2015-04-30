@@ -2,14 +2,17 @@
 
 #include <boost/noncopyable.hpp>
 
-class UnitsDetector : boost::noncopyable
+namespace Nucleo
 {
-    public :
+    class UnitsDetector : boost::noncopyable
+    {
+        public:
 
-        enum class Status
-        {
-            Detected,
-            Lost,
-            Unknown
-        };
-};
+            enum class Status
+            {
+                Detected,
+                Lost,
+                Unknown
+            };
+    };
+}

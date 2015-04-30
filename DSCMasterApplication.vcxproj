@@ -110,10 +110,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Core\FaultManagement\FaultManager.cpp" />
+    <ClCompile Include="Core\Nucleo\MessageGateway.cpp" />
     <ClCompile Include="Core\Nucleo\UnitsDetector.cpp" />
     <ClCompile Include="Core\RaspberryPeripherals\AsyncSerial.cpp" />
     <ClCompile Include="Core\RaspberryPeripherals\GpioManager.cpp" />
     <ClCompile Include="Core\RaspberryPeripherals\UartManager.cpp" />
+    <ClCompile Include="Core\RaspberryPeripherals\UartMessageMemoryManager.cpp" />
     <ClCompile Include="Core\System\ActiveObject.cpp" />
     <ClCompile Include="Core\System\DeviceConfigurator.cpp" />
     <ClCompile Include="Core\System\ThreadPool.cpp" />
@@ -139,10 +141,12 @@
     <ClInclude Include="Core\Defines\CommonDefines.hpp" />
     <ClInclude Include="Core\FaultManagement\FaultManager.hpp" />
     <ClInclude Include="Core\HardwareSettings\GpioDefines.hpp" />
+    <ClInclude Include="Core\Nucleo\MessageGateway.hpp" />
     <ClInclude Include="Core\Nucleo\UnitsDetector.hpp" />
     <ClInclude Include="Core\RaspberryPeripherals\AsyncSerial.hpp" />
     <ClInclude Include="Core\RaspberryPeripherals\GpioManager.hpp" />
     <ClInclude Include="Core\RaspberryPeripherals\UartManager.hpp" />
+    <ClInclude Include="Core\RaspberryPeripherals\UartMessageMemoryManager.hpp" />
     <ClInclude Include="Core\SharedDefines\ADS1248Types.h" />
     <ClInclude Include="Core\SharedDefines\EControlSystemType.h" />
     <ClInclude Include="Core\SharedDefines\EFaultId.h" />

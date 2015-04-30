@@ -316,15 +316,15 @@ void MainWindow::setupAutodetectionTabLabels()
     setWhiteTextColor(ui->labelStatusStm32f401reInfo1);
     setWhiteTextColor(ui->labelStatusStm32f401reInfo2);
 
-    changeUnitStatus(EUnitId_ADS1248, UnitsDetector::Status::Unknown);
-    changeUnitStatus(EUnitId_DRV595, UnitsDetector::Status::Unknown);
-    changeUnitStatus(EUnitId_LMP90100ControlSystem, UnitsDetector::Status::Unknown);
-    changeUnitStatus(EUnitId_LMP90100SignalsMeasurement, UnitsDetector::Status::Unknown);
-    changeUnitStatus(EUnitId_MCP4716, UnitsDetector::Status::Unknown);
-    changeUnitStatus(EUnitId_Nucleo, UnitsDetector::Status::Unknown);
+    changeUnitStatus(EUnitId_ADS1248, Nucleo::UnitsDetector::Status::Unknown);
+    changeUnitStatus(EUnitId_DRV595, Nucleo::UnitsDetector::Status::Unknown);
+    changeUnitStatus(EUnitId_LMP90100ControlSystem, Nucleo::UnitsDetector::Status::Unknown);
+    changeUnitStatus(EUnitId_LMP90100SignalsMeasurement, Nucleo::UnitsDetector::Status::Unknown);
+    changeUnitStatus(EUnitId_MCP4716, Nucleo::UnitsDetector::Status::Unknown);
+    changeUnitStatus(EUnitId_Nucleo, Nucleo::UnitsDetector::Status::Unknown);
 }
 
-void MainWindow::changeUnitStatus(EUnitId unitId, UnitsDetector::Status status)
+void MainWindow::changeUnitStatus(EUnitId unitId, Nucleo::UnitsDetector::Status status)
 {
     auto* qLabel = getQLabelForUnit(unitId);
     if (qLabel)
@@ -359,25 +359,25 @@ QLabel* MainWindow::getQLabelForUnit(EUnitId unitId)
     return nullptr;
 }
 
-const QColor & MainWindow::getColorForUnitStatus(UnitsDetector::Status status)
+const QColor & MainWindow::getColorForUnitStatus(Nucleo::UnitsDetector::Status status)
 {
-    static std::map<UnitsDetector::Status, QColor> statusToColor = decltype(statusToColor)
+    static std::map<Nucleo::UnitsDetector::Status, QColor> statusToColor = decltype(statusToColor)
     {
-        { UnitsDetector::Status::Detected, QColor(128, 255, 0) },
-        { UnitsDetector::Status::Lost, QColor(255, 69, 0) },
-        { UnitsDetector::Status::Unknown, QColor(0, 211, 211) }
+        { Nucleo::UnitsDetector::Status::Detected, QColor(128, 255, 0) },
+        { Nucleo::UnitsDetector::Status::Lost, QColor(255, 69, 0) },
+        { Nucleo::UnitsDetector::Status::Unknown, QColor(0, 211, 211) }
     };
 
     return statusToColor[status];
 }
 
-const QString & MainWindow::getQStringForUnitStatus(UnitsDetector::Status status)
+const QString & MainWindow::getQStringForUnitStatus(Nucleo::UnitsDetector::Status status)
 {
-    static std::map<UnitsDetector::Status, QString> statusToQString = decltype(statusToQString)
+    static std::map<Nucleo::UnitsDetector::Status, QString> statusToQString = decltype(statusToQString)
     {
-        { UnitsDetector::Status::Detected, "Detected" },
-        { UnitsDetector::Status::Lost, "Lost" },
-        { UnitsDetector::Status::Unknown, "Detection ongoing..." }
+        { Nucleo::UnitsDetector::Status::Detected, "Detected" },
+        { Nucleo::UnitsDetector::Status::Lost, "Lost" },
+        { Nucleo::UnitsDetector::Status::Unknown, "Detection ongoing..." }
     };
 
     return statusToQString[status];

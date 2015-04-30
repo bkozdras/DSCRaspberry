@@ -2,8 +2,17 @@
 
 #define _T_MESSAGE_H_
 
-#include "Defines/CommonDefines.h"
-#include "SharedDefines/EMessageId.h"
+#ifdef RASPBERRY
+
+    #include "../Defines/CommonDefines.hpp"
+    #include "EMessageId.h"
+
+#else
+
+    #include "Defines/CommonDefines.h"
+    #include "SharedDefines/EMessageId.h"
+
+#endif
 
 typedef struct _TMessage
 {
