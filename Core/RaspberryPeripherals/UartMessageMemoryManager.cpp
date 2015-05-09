@@ -215,6 +215,7 @@ u16 UartMessageMemoryManager::getLength(EMessageId messageId)
         {
             Logger::error("%s: Unknown message length: ID %u.", getLoggerPrefix().c_str(), messageId);
             FaultManager::generate(EFaultId_System, EUnitId_Raspberry);
+            return 0;
         }
     }
 }

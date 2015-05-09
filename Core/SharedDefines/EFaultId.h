@@ -1,7 +1,9 @@
 #ifndef _E_FAULT_ID_H_
 #define _E_FAULT_ID_H_
 
-typedef enum _EFaultId
+#include "../Defines/CommonDefines.hpp"
+
+typedef enum _EFaultId : u8
 {
     EFaultId_Unknown            = 0,
     EFaultId_Assert             = 1,

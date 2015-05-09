@@ -6,6 +6,10 @@
 
 #include <boost/bind.hpp>
 #include <termios.h>
+#include <iostream>
+#include <cstdio>
+#include <unistd.h>	
+#include <fcntl.h>
 
 bool UartManager::initialize()
 {
@@ -14,9 +18,16 @@ bool UartManager::initialize()
     initializeInternalData();
     initializeTerminal();
 
-    bool success = true;
+    auto success = initializeHardwareConnection();
 
-    Logger::info("%s: Initialized!", getLoggerPrefix().c_str());
+    if (success)
+    {
+        Logger::info("%s: Initialized!", getLoggerPrefix().c_str());
+    }
+    else
+    {
+        Logger::error("%s: Not initialized! Failure...", getLoggerPrefix().c_str());
+    }
 
     return success;
 }
@@ -60,19 +71,56 @@ void UartManager::initializeInternalData()
     mHandlingMessage = std::make_shared<TMessage>();
 
     mNewMessageCallback = decltype(mNewMessageCallback)();
-
-    mAsyncSerial.setCallback([](const char* data, size_t length){ newDataReceivedCallback(data, length); });
 }
 
 void UartManager::initializeTerminal()
-{
+{/*
     termios stored_settings;
     tcgetattr(0, &stored_settings);
     termios new_settings = stored_settings;
     new_settings.c_lflag &= (~ICANON);
     new_settings.c_lflag &= (~ISIG); // don't automatically handle control-C
     new_settings.c_lflag &= ~(ECHO); // no echo
-    tcsetattr(0, TCSANOW, &new_settings);
+    tcsetattr(0, TCSANOW, &new_settings);*/
+
+    int USB = open("/dev/ttyAMA0", O_RDWR | O_NOCTTY);
+
+    struct termios tty;
+    struct termios tty_old;
+    memset(&tty, 0, sizeof tty);
+
+    /* Error Handling */
+    if (tcgetattr(USB, &tty) != 0) {
+        std::cout << "Error " << errno << " from tcgetattr: " << strerror(errno) << std::endl;
+    }
+
+    /* Save old tty parameters */
+    tty_old = tty;
+
+    /* Set Baud Rate */
+    cfsetospeed(&tty, (speed_t)B1000000);
+
+    /* Setting other Port Stuff */
+    tty.c_cflag &= ~PARENB;            // Make 8n1
+    tty.c_cflag &= ~CSTOPB;
+    tty.c_cflag &= ~CSIZE;
+    tty.c_cflag |= CS8;
+
+    tty.c_cflag &= ~CRTSCTS;           // no flow control
+    tty.c_cc[VMIN] = 1;                  // read doesn't block
+    tty.c_cc[VTIME] = 5;                  // 0.5 seconds read timeout
+    tty.c_cflag |= CREAD | CLOCAL;     // turn on READ & ignore ctrl lines
+
+    /* Make raw */
+    cfmakeraw(&tty);
+
+    /* Flush Port, then applies attributes */
+    tcflush(USB, TCIFLUSH);
+    if (tcsetattr(USB, TCSANOW, &tty) != 0) {
+        std::cout << "Error " << errno << " from tcsetattr" << std::endl;
+    }
+
+    close(USB);
 
     Logger::debug("%s: Terminal options set.", getLoggerPrefix().c_str());
 }
@@ -98,6 +146,8 @@ bool UartManager::initializeHardwareConnection()
         FaultManager::generate(EFaultId_Uart, EUnitId_Raspberry, EUnitId_Empty);
         return false;
     }
+
+    mAsyncSerial.setCallback([](const char* data, size_t length){ newDataReceivedCallback(data, length); });
 
     Logger::debug("%s: Initialized hardware connection! Serial port is open with success.", getLoggerPrefix().c_str());
     Logger::debug("%s: Transmission with second device is now allowed.", getLoggerPrefix().c_str());
@@ -144,6 +194,8 @@ bool UartManager::dataPhaseMessageParser()
     }
 
     mActualReceivingPhase = MessageReceivingPhase::End;
+
+    return true;
 }
 
 bool UartManager::endPhaseMessageParser()
@@ -219,25 +271,27 @@ void UartManager::newDataReceivedCallback(const char* data, size_t length)
 
     mReceivedDataBuffer.insert(mReceivedDataBuffer.begin(), data, data + length);
 
-    while (!mReceivedDataBuffer.empty())
+    auto isParsingPassed = true;
+
+    while (isParsingPassed)
     {
         switch (mActualReceivingPhase)
         {
             case MessageReceivingPhase::Header:
             {
-                headerPhaseMessageParser();
+                isParsingPassed = headerPhaseMessageParser();
                 break;
             }
 
             case MessageReceivingPhase::Data:
             {
-                dataPhaseMessageParser();
+                isParsingPassed = dataPhaseMessageParser();
                 break;
             }
 
             case MessageReceivingPhase::End:
             {
-                endPhaseMessageParser();
+                isParsingPassed = endPhaseMessageParser();
                 break;
             }
         }

@@ -2,7 +2,9 @@
 
 #define _E_MESSAGE_PART_H_
 
-typedef enum _EMessagePart
+#include "../Defines/CommonDefines.hpp"
+
+typedef enum _EMessagePart : u8
 {
     EMessagePart_Header         = 0,
     EMessagePart_Data           = 1,

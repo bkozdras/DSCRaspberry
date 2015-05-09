@@ -2,7 +2,9 @@
 
 #define _E_MESSAGE_ID_H_
 
-typedef enum _EMessageId
+#include "../Defines/CommonDefines.hpp"
+
+typedef enum _EMessageId : u8
 {
     EMessageId_Unknown                                                      = 0,
     EMessageId_LogInd                                                       = 1,

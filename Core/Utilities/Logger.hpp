@@ -61,8 +61,6 @@ class Logger : boost::noncopyable
         static void warning(const std::string & format, ...);
         static void error(const std::string & format, ...);
 
-        static void nucleoInd(std::shared_ptr<TLogInd> logInd);
-
         static void registerGuiTableLogCallback(std::function<void(std::shared_ptr<Logger::StoredLog>)> callback);
         static void deregisterGuiTableLogCallback();
 
@@ -81,6 +79,8 @@ class Logger : boost::noncopyable
         static void storeLog(ELogSeverity severity, const std::string & format, va_list vaList);
         static void storeLog(std::shared_ptr<StoredLog> && log);
         static void fillWithActualTime(std::shared_ptr<StoredLog> & log);
+
+        static void nucleoInd(TLogInd && logInd);
 
         static void updateLoggerTimerStates();
         static void updateGuiTable();

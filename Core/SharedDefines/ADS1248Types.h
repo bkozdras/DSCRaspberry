@@ -2,13 +2,15 @@
 
 #define _ADS1248_TYPES_H_
 
-typedef enum _EADS1248Mode
+#include "../Defines/CommonDefines.hpp"
+
+typedef enum _EADS1248Mode : u8
 {
     EADS1248Mode_Off    = 0,
     EADS1248Mode_On     = 1
 } EADS1248Mode;
 
-typedef enum _EADS1248CallibrationType
+typedef enum _EADS1248CallibrationType : u8
 {
     EADS1248CallibrationType_Idle           = 0,
     EADS1248CallibrationType_OffsetSystem   = 1,
@@ -16,7 +18,7 @@ typedef enum _EADS1248CallibrationType
     EADS1248CallibrationType_SelfOffset     = 3
 } EADS1248CallibrationType;
 
-typedef enum _EADS1248GainValue
+typedef enum _EADS1248GainValue : u8
 {
     EADS1248GainValue_1                     = 0,
     EADS1248GainValue_2                     = 1,
@@ -28,7 +30,7 @@ typedef enum _EADS1248GainValue
     EADS1248GainValue_128                   = 7
 } EADS1248GainValue;
 
-typedef enum _EADS1248SamplingSpeed
+typedef enum _EADS1248SamplingSpeed : u8
 {
     EADS1248SamplingSpeed_5SPS              = 0,
     EADS1248SamplingSpeed_10SPS             = 1,

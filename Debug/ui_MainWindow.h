@@ -74,6 +74,7 @@ public:
     QLabel *labelStatusStm32f401re;
     QLabel *labelStatusMcp4716Info1;
     QFrame *frame_3;
+    QWidget *tab;
     QWidget *tab_2;
     QGridLayout *gridLayout_2;
     QDockWidget *dscDataDockWidget;
@@ -339,6 +340,9 @@ public:
         gridLayout->addWidget(frame, 0, 0, 1, 1);
 
         applicationTabWidget->addTab(tabAutodetection, QString());
+        tab = new QWidget();
+        tab->setObjectName(QString::fromUtf8("tab"));
+        applicationTabWidget->addTab(tab, QString());
         tab_2 = new QWidget();
         tab_2->setObjectName(QString::fromUtf8("tab_2"));
         tab_2->setEnabled(false);
@@ -430,6 +434,7 @@ public:
         labelStatusStm32f401re->setText(QApplication::translate("MainWindow", "Detection ongoing...", 0, QApplication::UnicodeUTF8));
         labelStatusMcp4716Info1->setText(QApplication::translate("MainWindow", "MCP4716", 0, QApplication::UnicodeUTF8));
         applicationTabWidget->setTabText(applicationTabWidget->indexOf(tabAutodetection), QApplication::translate("MainWindow", "Autodetection", 0, QApplication::UnicodeUTF8));
+        applicationTabWidget->setTabText(applicationTabWidget->indexOf(tab), QApplication::translate("MainWindow", "Page", 0, QApplication::UnicodeUTF8));
         applicationTabWidget->setTabText(applicationTabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "Tab 2", 0, QApplication::UnicodeUTF8));
         dscDataDockWidget->setWindowTitle(QApplication::translate("MainWindow", "DSC / Device Data", 0, QApplication::UnicodeUTF8));
     } // retranslateUi

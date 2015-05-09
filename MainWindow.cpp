@@ -10,6 +10,7 @@
 #include "../Core/System/ThreadPool.hpp"
 #include "../Core/System/DeviceConfigurator.hpp"
 #include "../Core/Utilities/ToStringConverter.hpp"
+#include "../Core/DevicePeripherals/UnitsDetector.hpp"
 #include <map>
 #include <iostream>
 
@@ -46,6 +47,13 @@ void MainWindow::ButtonClicked()
 void MainWindow::run()
 {
     openInfoDialog();
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    DeviceConfigurator::shutdownSystem();
+    FaultManager::deregisterNotificationCallback(mNewFaultCallbackId);
+    Logger::deregisterGuiTableLogCallback();
 }
 
 void MainWindow::openInfoDialog()
@@ -206,7 +214,7 @@ void MainWindow::setupFaultsTable()
     ui->faultsTable->setColumnWidth(2, unitColumnWidth);
     ui->faultsTable->setColumnWidth(3, subunitColumnWidth);
 
-    FaultManager::registerNotificationCallback
+    mNewFaultCallbackId = FaultManager::registerNotificationCallback
     (
         [this](std::shared_ptr<SFaultIndication> indication)
         {
@@ -298,9 +306,7 @@ void MainWindow::setupAutodetectionTabLabels()
     auto setWhiteTextColor =
         [this](QLabel* label)
         {
-            QPalette palette = label->palette();
-            palette.setColor(QPalette::WindowText, QColor(250, 250, 250));
-            label->setPalette(palette);
+            label->setStyleSheet("QLabel { color:rgb(0,211,211) }");
         };
 
     setWhiteTextColor(ui->labelStatusAds1248Info1);
@@ -316,23 +322,23 @@ void MainWindow::setupAutodetectionTabLabels()
     setWhiteTextColor(ui->labelStatusStm32f401reInfo1);
     setWhiteTextColor(ui->labelStatusStm32f401reInfo2);
 
-    changeUnitStatus(EUnitId_ADS1248, Nucleo::UnitsDetector::Status::Unknown);
-    changeUnitStatus(EUnitId_DRV595, Nucleo::UnitsDetector::Status::Unknown);
-    changeUnitStatus(EUnitId_LMP90100ControlSystem, Nucleo::UnitsDetector::Status::Unknown);
-    changeUnitStatus(EUnitId_LMP90100SignalsMeasurement, Nucleo::UnitsDetector::Status::Unknown);
-    changeUnitStatus(EUnitId_MCP4716, Nucleo::UnitsDetector::Status::Unknown);
-    changeUnitStatus(EUnitId_Nucleo, Nucleo::UnitsDetector::Status::Unknown);
+    changeUnitStatus(EUnitId_ADS1248, DevicePeripherals::UnitsDetector::Status::Unknown);
+    changeUnitStatus(EUnitId_DRV595, DevicePeripherals::UnitsDetector::Status::Unknown);
+    changeUnitStatus(EUnitId_LMP90100ControlSystem, DevicePeripherals::UnitsDetector::Status::Unknown);
+    changeUnitStatus(EUnitId_LMP90100SignalsMeasurement, DevicePeripherals::UnitsDetector::Status::Unknown);
+    changeUnitStatus(EUnitId_MCP4716, DevicePeripherals::UnitsDetector::Status::Unknown);
+    changeUnitStatus(EUnitId_Nucleo, DevicePeripherals::UnitsDetector::Status::Unknown);
+
+    DevicePeripherals::UnitsDetector::registerUnitReadyNotificationCallback([this](EUnitId unitId, DevicePeripherals::UnitsDetector::Status status){ changeUnitStatus(unitId, status); });
 }
 
-void MainWindow::changeUnitStatus(EUnitId unitId, Nucleo::UnitsDetector::Status status)
+void MainWindow::changeUnitStatus(EUnitId unitId, DevicePeripherals::UnitsDetector::Status status)
 {
     auto* qLabel = getQLabelForUnit(unitId);
     if (qLabel)
     {
-        QPalette palette = qLabel->palette();
-        palette.setColor(QPalette::WindowText, getColorForUnitStatus(status));
-        qLabel->setPalette(palette);
         qLabel->setText(getQStringForUnitStatus(status));
+        qLabel->setStyleSheet(getColorForUnitStatus(status));
     }
 }
 
@@ -359,25 +365,25 @@ QLabel* MainWindow::getQLabelForUnit(EUnitId unitId)
     return nullptr;
 }
 
-const QColor & MainWindow::getColorForUnitStatus(Nucleo::UnitsDetector::Status status)
+const QString & MainWindow::getColorForUnitStatus(DevicePeripherals::UnitsDetector::Status status)
 {
-    static std::map<Nucleo::UnitsDetector::Status, QColor> statusToColor = decltype(statusToColor)
+    static std::map<DevicePeripherals::UnitsDetector::Status, QString> statusToColor = decltype(statusToColor)
     {
-        { Nucleo::UnitsDetector::Status::Detected, QColor(128, 255, 0) },
-        { Nucleo::UnitsDetector::Status::Lost, QColor(255, 69, 0) },
-        { Nucleo::UnitsDetector::Status::Unknown, QColor(0, 211, 211) }
+        { DevicePeripherals::UnitsDetector::Status::Detected, "QLabel { color:rgb(128,255,0) }"},
+        { DevicePeripherals::UnitsDetector::Status::Lost, "QLabel { color:rgb(255,69,0) }" },
+        { DevicePeripherals::UnitsDetector::Status::Unknown, "QLabel { color:rgb(0,211,211) }" }
     };
 
     return statusToColor[status];
 }
 
-const QString & MainWindow::getQStringForUnitStatus(Nucleo::UnitsDetector::Status status)
+const QString & MainWindow::getQStringForUnitStatus(DevicePeripherals::UnitsDetector::Status status)
 {
-    static std::map<Nucleo::UnitsDetector::Status, QString> statusToQString = decltype(statusToQString)
+    static std::map<DevicePeripherals::UnitsDetector::Status, QString> statusToQString = decltype(statusToQString)
     {
-        { Nucleo::UnitsDetector::Status::Detected, "Detected" },
-        { Nucleo::UnitsDetector::Status::Lost, "Lost" },
-        { Nucleo::UnitsDetector::Status::Unknown, "Detection ongoing..." }
+        { DevicePeripherals::UnitsDetector::Status::Detected, "Detected" },
+        { DevicePeripherals::UnitsDetector::Status::Lost, "Lost" },
+        { DevicePeripherals::UnitsDetector::Status::Unknown, "Detection ongoing..." }
     };
 
     return statusToQString[status];

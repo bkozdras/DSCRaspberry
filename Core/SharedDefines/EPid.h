@@ -2,7 +2,9 @@
 
 #define _E_PID_H_
 
-typedef enum _EPid
+#include "../Defines/CommonDefines.hpp"
+
+typedef enum _EPid : u8
 {
     EPid_ProcessController  = 0,
     EPid_ModelController    = 1

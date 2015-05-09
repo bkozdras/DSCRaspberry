@@ -50,6 +50,9 @@
     <Filter Include="Core\FaultManagement">
       <UniqueIdentifier>{345abe1a-0280-4aa4-8c95-69d82aa68faf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\DevicePeripherals">
+      <UniqueIdentifier>{c4399652-2451-46c8-aa66-c7145f7a9a18}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DSCMasterApplication.cpp">
@@ -57,9 +60,6 @@
     </ClCompile>
     <ClCompile Include="MainWindow.cpp">
       <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Nucleo\UnitsDetector.cpp">
-      <Filter>Core\Nucleo</Filter>
     </ClCompile>
     <ClCompile Include="Core\Utilities\Logger.cpp">
       <Filter>Core\Utilities</Filter>
@@ -106,6 +106,18 @@
     <ClCompile Include="Core\Nucleo\MessageGateway.cpp">
       <Filter>Core\Nucleo</Filter>
     </ClCompile>
+    <ClCompile Include="Core\RaspberryPeripherals\GPIOClass.cpp">
+      <Filter>Core\RaspberryPeripherals</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\DevicePeripherals\StateManager.cpp">
+      <Filter>Core\DevicePeripherals</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\DevicePeripherals\UnitsDetector.cpp">
+      <Filter>Core\DevicePeripherals</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Nucleo\DeviceCommunicator.cpp">
+      <Filter>Core\Nucleo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="MainWindow.ui">
@@ -131,9 +143,6 @@
   <ItemGroup>
     <ClInclude Include="MainWindow.h">
       <Filter>Header files</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Nucleo\UnitsDetector.hpp">
-      <Filter>Core\Nucleo</Filter>
     </ClInclude>
     <ClInclude Include="Core\Utilities\Logger.hpp">
       <Filter>Core\Utilities</Filter>
@@ -256,6 +265,18 @@
       <Filter>Core\RaspberryPeripherals</Filter>
     </ClInclude>
     <ClInclude Include="Core\Nucleo\MessageGateway.hpp">
+      <Filter>Core\Nucleo</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\RaspberryPeripherals\GPIOClass.hpp">
+      <Filter>Core\RaspberryPeripherals</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\DevicePeripherals\StateManager.hpp">
+      <Filter>Core\DevicePeripherals</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\DevicePeripherals\UnitsDetector.hpp">
+      <Filter>Core\DevicePeripherals</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Nucleo\DeviceCommunicator.hpp">
       <Filter>Core\Nucleo</Filter>
     </ClInclude>
   </ItemGroup>

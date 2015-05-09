@@ -97,7 +97,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <NMakeIncludeSearchPath>c:\sysgcc\raspberry\arm-linux-gnueabihf\sysroot\usr\share\qt4\mkspecs\arm-linux-gnueabihf;c:\sysgcc\raspberry\arm-linux-gnueabihf\sysroot\usr\include\qt4\QtCore;c:\sysgcc\raspberry\arm-linux-gnueabihf\sysroot\usr\include\qt4\QtGui;c:\sysgcc\raspberry\arm-linux-gnueabihf\sysroot\usr\include\qt4;c:\sysgcc\raspberry\arm-linux-gnueabihf\include\c++\4.9;c:\sysgcc\raspberry\arm-linux-gnueabihf\include\c++\4.9\backward;c:\sysgcc\raspberry\lib\gcc\arm-linux-gnueabihf\4.9\include;c:\sysgcc\raspberry\lib\gcc\arm-linux-gnueabihf\4.9\include-fixed;c:\sysgcc\raspberry\arm-linux-gnueabihf\include;c:\sysgcc\raspberry\arm-linux-gnueabihf\include\arm-linux-gnueabihf\c++\4.9;c:\sysgcc\raspberry\arm-linux-gnueabihf\sysroot\usr\include\arm-linux-gnueabihf;c:\sysgcc\raspberry\arm-linux-gnueabihf\sysroot\usr\include;$(ProjectDir)\Release;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
     <NMakeForcedIncludes>$(ProjectDir)\gcc_Release.h;$(VISUALGDB_DIR)\gcc_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
-    <NMakePreprocessorDefinitions>__VisualGDB_CFG_Release;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
     <NMakeBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /build "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeBuildCommandLine>
     <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
     <NMakeReBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /rebuild "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeReBuildCommandLine>
@@ -105,14 +104,18 @@
     <IncludePath />
     <ReferencePath />
     <LibraryPath />
+    <NMakePreprocessorDefinitions>__VisualGDB_CFG_Release;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Core\DevicePeripherals\StateManager.cpp" />
+    <ClCompile Include="Core\DevicePeripherals\UnitsDetector.cpp" />
     <ClCompile Include="Core\FaultManagement\FaultManager.cpp" />
+    <ClCompile Include="Core\Nucleo\DeviceCommunicator.cpp" />
     <ClCompile Include="Core\Nucleo\MessageGateway.cpp" />
-    <ClCompile Include="Core\Nucleo\UnitsDetector.cpp" />
     <ClCompile Include="Core\RaspberryPeripherals\AsyncSerial.cpp" />
+    <ClCompile Include="Core\RaspberryPeripherals\GPIOClass.cpp" />
     <ClCompile Include="Core\RaspberryPeripherals\GpioManager.cpp" />
     <ClCompile Include="Core\RaspberryPeripherals\UartManager.cpp" />
     <ClCompile Include="Core\RaspberryPeripherals\UartMessageMemoryManager.cpp" />
@@ -139,11 +142,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Defines\CommonDefines.hpp" />
+    <ClInclude Include="Core\DevicePeripherals\StateManager.hpp" />
+    <ClInclude Include="Core\DevicePeripherals\UnitsDetector.hpp" />
     <ClInclude Include="Core\FaultManagement\FaultManager.hpp" />
     <ClInclude Include="Core\HardwareSettings\GpioDefines.hpp" />
+    <ClInclude Include="Core\Nucleo\DeviceCommunicator.hpp" />
     <ClInclude Include="Core\Nucleo\MessageGateway.hpp" />
-    <ClInclude Include="Core\Nucleo\UnitsDetector.hpp" />
     <ClInclude Include="Core\RaspberryPeripherals\AsyncSerial.hpp" />
+    <ClInclude Include="Core\RaspberryPeripherals\GPIOClass.hpp" />
     <ClInclude Include="Core\RaspberryPeripherals\GpioManager.hpp" />
     <ClInclude Include="Core\RaspberryPeripherals\UartManager.hpp" />
     <ClInclude Include="Core\RaspberryPeripherals\UartMessageMemoryManager.hpp" />

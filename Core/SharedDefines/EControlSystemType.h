@@ -2,7 +2,9 @@
 
 #define _E_CONTROL_SYSTEM_TYPE_H_
 
-typedef enum _EControlSystemType
+#include "../Defines/CommonDefines.hpp"
+
+typedef enum _EControlSystemType : u8
 {
     EControlSystemType_OpenLoop         = 0,
     EControlSystemType_SimpleFeedback   = 1,

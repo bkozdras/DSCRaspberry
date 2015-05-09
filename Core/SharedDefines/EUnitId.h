@@ -2,7 +2,9 @@
 
 #define _E_UNIT_ID_H_
 
-typedef enum _EUnitId
+#include "../Defines/CommonDefines.hpp"
+
+typedef enum _EUnitId : u8
 {
     EUnitId_Unknown                     = 0,
     EUnitId_Empty                       = 1,

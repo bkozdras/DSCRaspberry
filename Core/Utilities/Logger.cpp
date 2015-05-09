@@ -12,6 +12,7 @@
 #include <sstream>
 
 #include "../System/ThreadPool.hpp"
+#include "../Nucleo/DeviceCommunicator.hpp"
 
 void Logger::initialize()
 {
@@ -22,6 +23,8 @@ void Logger::initialize()
         { LoggerOutput::GuiTable, { LoggerLevel::Off, std::vector<std::shared_ptr<StoredLog>>(), 0U, 500U, std::bind(&Logger::updateGuiTable) } },
         { LoggerOutput::SnapshotFile, { LoggerLevel::Off, std::vector<std::shared_ptr<StoredLog>>(), 0U, 2000U, std::bind(&Logger::updateSnapshotFile) } }
     };
+
+    Nucleo::DeviceCommunicator::registerIndCallback([](TLogInd && logInd){ nucleoInd(std::move(logInd)); });
 }
 
 void Logger::setLevel(LoggerOutput output, LoggerLevel level)
@@ -101,19 +104,6 @@ void Logger::error(const std::string & format, ...)
     va_start(vaList, format);
     storeLog(ELogSeverity_Error, format, vaList);
     va_end(vaList);
-}
-
-void Logger::nucleoInd(std::shared_ptr<TLogInd> logInd)
-{
-    std::lock_guard<std::mutex> lockGuard(mDataMtx);
-
-    auto storedLog = std::make_shared<StoredLog>();
-    storedLog->log = logInd->data;
-    storedLog->severity = logInd->severity;
-    storedLog->source = LogSource::Nucleo;
-    fillWithActualTime(storedLog);
-
-    storeLog(std::move(storedLog));
 }
 
 void Logger::registerGuiTableLogCallback(std::function<void(std::shared_ptr<Logger::StoredLog>)> callback)
@@ -229,6 +219,19 @@ void Logger::fillWithActualTime(std::shared_ptr<StoredLog> & log)
     timePattern = "%T";
     tempPut.put(timeStream, timeStream, ' ', localTime, timePattern.c_str(), timePattern.c_str() + timePattern.length());
     log->timeData.time = timeStream.str();
+}
+
+void Logger::nucleoInd(TLogInd && logInd)
+{
+    std::lock_guard<std::mutex> lockGuard(mDataMtx);
+
+    auto storedLog = std::make_shared<StoredLog>();
+    storedLog->log = std::string(logInd.data, logInd.length);
+    storedLog->severity = logInd.severity;
+    storedLog->source = LogSource::Nucleo;
+    fillWithActualTime(storedLog);
+
+    storeLog(std::move(storedLog));
 }
 
 void Logger::updateLoggerTimerStates()

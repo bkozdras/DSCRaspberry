@@ -8,11 +8,13 @@ class DeviceConfigurator : boost::noncopyable
     public :
 
         static void configureEnvironment();
-        static void configureSystem();
+        static bool configureSystem();
         static void shutdownSystem();
 
     private :
 
         static bool configureRaspberryPeripherals();
+        static bool configureDevicePeripheralManagers();
+        static bool startConfiguringDevicePeripherals();
         static const std::string & getLoggerPrefix();
 };

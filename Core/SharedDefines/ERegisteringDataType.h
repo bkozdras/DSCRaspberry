@@ -2,7 +2,9 @@
 
 #define _E_REGISTERING_DATA_TYPE_H_
 
-typedef enum _ERegisteringDataType
+#include "../Defines/CommonDefines.hpp"
+
+typedef enum _ERegisteringDataType : u8
 {
     ERegisteringDataType_All                                = 0,
     ERegisteringDataType_HeaterTemperature                  = 1,

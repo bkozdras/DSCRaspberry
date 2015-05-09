@@ -2,7 +2,9 @@
 
 #define _LMP90100_TYPES_H_
 
-typedef enum _ELMP90100Mode
+#include "../Defines/CommonDefines.hpp"
+
+typedef enum _ELMP90100Mode : u8
 {
     ELMP90100Mode_Off               = 0,
     ELMP90100Mode_On_1_6775_SPS     = 1,
@@ -15,7 +17,7 @@ typedef enum _ELMP90100Mode
     ELMP90100Mode_On_214_65_SPS     = 8
 } ELMP90100Mode;
 
-typedef enum _ELMP90100Rtd
+typedef enum _ELMP90100Rtd : u8
 {
     ELMP90100Rtd_1  = 0,
     ELMP90100Rtd_2  = 1

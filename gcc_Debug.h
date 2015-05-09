@@ -142,6 +142,10 @@
 #define __STRICT_ANSI__ 1
 #define __LDBL_HAS_DENORM__ 1
 #define __ARM_FEATURE_LDREX 4
+//VS2005-2012 treats all files as C++, while VS2013+ can treat C files correctly.
+#if _MSC_VER < 1800 || defined(__cplusplus)
+#define __cplusplus 201300L
+#endif
 #define __DEC128_MAX__ 9.999999999999999999999999999999999E6144DL
 #define __INT_LEAST32_MAX__ 2147483647
 #define __DEC32_MIN__ 1E-95DF
@@ -345,6 +349,7 @@
 #define __UFRACT_EPSILON__ 0x1P-16UR
 #define __INTMAX_TYPE__ long long int
 #define __DEC128_MAX_EXP__ 6145
+#define RASPBERRY 1
 #define __ATOMIC_CONSUME 1
 #define __GNUC_MINOR__ 9
 #define __UINTMAX_MAX__ 18446744073709551615ULL

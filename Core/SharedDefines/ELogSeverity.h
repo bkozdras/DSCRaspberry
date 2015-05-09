@@ -2,7 +2,9 @@
 
 #define _E_LOG_SEVERITY_H_
 
-typedef enum _ELogSeverity
+#include "../Defines/CommonDefines.hpp"
+
+typedef enum _ELogSeverity : u8
 {
     ELogSeverity_DebugSystem                    = 0,
     ELogSeverity_DebugSystemMasterDataExtended  = 1,

@@ -9,8 +9,9 @@
 #include <mutex>
 #include <utility>
 #include <vector>
-#include "Core/Nucleo/UnitsDetector.hpp"
+#include "Core/DevicePeripherals/UnitsDetector.hpp"
 #include "Core/Utilities/Logger.hpp"
+#include "Core/FaultManagement/FaultManager.hpp"
 
 namespace Ui {
 class MainWindow;
@@ -34,6 +35,8 @@ private:
 
     Ui::MainWindow* ui;
     InfoDialog* mInfoDialog;
+
+    void closeEvent(QCloseEvent *event);
 
     // INFO DIALOG
     void openInfoDialog();
@@ -65,6 +68,7 @@ private:
     // FAULTS TABLE
 
     std::mutex mFaultsTableMtx;
+    FaultManager::CallbackId mNewFaultCallbackId;
     std::vector<std::pair<std::shared_ptr<SFaultIndication>, QTableWidgetItem*>> mStoredFaults;
     void setupFaultsTable();
     void addNewFaultToFaultsTable(std::shared_ptr<SFaultIndication> faultInd);
@@ -72,10 +76,10 @@ private:
 
     // AUTODETECTION TAB LABELS
     void setupAutodetectionTabLabels();
-    void changeUnitStatus(EUnitId unitId, Nucleo::UnitsDetector::Status status);
+    void changeUnitStatus(EUnitId unitId, DevicePeripherals::UnitsDetector::Status status);
     QLabel* getQLabelForUnit(EUnitId unitId);
-    const QColor & getColorForUnitStatus(Nucleo::UnitsDetector::Status status);
-    const QString & getQStringForUnitStatus(Nucleo::UnitsDetector::Status status);
+    const QString & getColorForUnitStatus(DevicePeripherals::UnitsDetector::Status status);
+    const QString & getQStringForUnitStatus(DevicePeripherals::UnitsDetector::Status status);
 };
 
 #endif // MAINWINDOW_H

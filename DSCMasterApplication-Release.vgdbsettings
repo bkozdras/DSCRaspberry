@@ -60,7 +60,7 @@
     <QMakeCommand>
       <SkipWhenRunningCommandList>false</SkipWhenRunningCommandList>
       <Command>C:\SysGCC\raspberry\Qt\v4\qmake.exe</Command>
-      <Arguments> DSCMasterApplication.pro CONFIGNAME=$(ConfigurationName)     </Arguments>
+      <Arguments> DSCMasterApplication.pro CONFIGNAME=$(ConfigurationName)       </Arguments>
       <WorkingDirectory>$(BuildDir)</WorkingDirectory>
       <Environment>
         <Records>
@@ -116,7 +116,7 @@
     <DeploymentTargetPath>/home/pi/CrossCompiling/$(TargetFileName)_Release</DeploymentTargetPath>
     <X11WindowMode>Local</X11WindowMode>
     <KeepConsoleAfterExit>false</KeepConsoleAfterExit>
-    <RunGDBUnderSudo>false</RunGDBUnderSudo>
+    <RunGDBUnderSudo>true</RunGDBUnderSudo>
     <DeploymentMode>Auto</DeploymentMode>
     <LdLibraryPath>/home/pi/boost/boost_1_58_0/stage/lib</LdLibraryPath>
     <DeployWhenLaunchedWithoutDebugging>true</DeployWhenLaunchedWithoutDebugging>

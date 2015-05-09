@@ -2,7 +2,9 @@
 
 #define _E_FAULT_INDICATION_STATE_H_
 
-typedef enum _EFaultIndicationState
+#include "../Defines/CommonDefines.hpp"
+
+typedef enum _EFaultIndicationState : u8
 {
     EFaultIndicationState_Start     = 0,
     EFaultIndicationState_Cancel    = 1
