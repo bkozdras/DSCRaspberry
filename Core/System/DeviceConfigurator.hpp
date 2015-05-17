@@ -1,7 +1,9 @@
 #pragma once
 
 #include <boost/noncopyable.hpp>
+#include <mutex>
 #include <string>
+#include "../DevicePeripherals/UnitsDetector.hpp"
 
 class DeviceConfigurator : boost::noncopyable
 {
@@ -16,5 +18,12 @@ class DeviceConfigurator : boost::noncopyable
         static bool configureRaspberryPeripherals();
         static bool configureDevicePeripheralManagers();
         static bool startConfiguringDevicePeripherals();
+        static bool configureDSCManagers();
         static const std::string & getLoggerPrefix();
+
+        static void unitReadyIndication(EUnitId unitId, DevicePeripherals::UnitsDetector::Status status);
+        static void newIcModeIndication(EUnitId unitId, u8 newMode);
+        static void updateUnitAttributeIndication(EUnitId unitId, const std::string & attribute, const std::string & value);
+
+        static std::mutex mMtx;
 };

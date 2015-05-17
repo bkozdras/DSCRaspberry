@@ -21,13 +21,16 @@ namespace DevicePeripherals
             {
                 Detected,
                 Lost,
+                Working,
                 Unknown
             };
 
             static bool initialize();
             static CallbackId registerUnitReadyNotificationCallback(std::function<void(EUnitId, Status)> callback);
             static void deregisterUnitReadyNotificationCallback(CallbackId callbackId);
-            Status getStatus(EUnitId unitId);
+            static Status getStatus(EUnitId unitId);
+            static void updateStatus(EUnitId unitId, Status status);
+            static bool areAllUnitsNotLost();
 
         private :
 
@@ -37,6 +40,7 @@ namespace DevicePeripherals
 
             static void unitReadyIndCallback(TUnitReadyInd && unitReadyInd);
             static CallbackId generateUniqueCallbackId();
+            static const std::string & getStatusString(Status status);
             static const std::string & getLoggerPrefix();
     };
 }

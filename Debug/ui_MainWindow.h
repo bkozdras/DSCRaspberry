@@ -20,6 +20,7 @@
 #include <QtGui/QLabel>
 #include <QtGui/QMainWindow>
 #include <QtGui/QMenuBar>
+#include <QtGui/QPushButton>
 #include <QtGui/QStatusBar>
 #include <QtGui/QTabWidget>
 #include <QtGui/QTableWidget>
@@ -74,12 +75,52 @@ public:
     QLabel *labelStatusStm32f401re;
     QLabel *labelStatusMcp4716Info1;
     QFrame *frame_3;
+    QLabel *labelStatusRefThermocouple;
+    QLabel *label_8;
+    QLabel *labelStatusRefThermocoupleInfo;
+    QLabel *label_16;
+    QLabel *labelStatusThermocouple1Info;
+    QLabel *labelStatusThermocouple1;
+    QLabel *label_17;
+    QLabel *labelStatusThermocouple2Info;
+    QLabel *labelStatusThermocouple2;
+    QLabel *label_18;
+    QLabel *labelStatusThermocouple3Info;
+    QLabel *labelStatusThermocouple3;
+    QLabel *label_19;
+    QLabel *labelStatusThermocouple4Info;
+    QLabel *labelStatusThermocouple4;
+    QLabel *label_20;
+    QLabel *labelStatusRtd2Pt100SmInfo;
+    QLabel *labelStatusRtd2Pt100Sm;
+    QLabel *labelStatusRtd1Pt100SmInfo;
+    QLabel *label_31;
+    QLabel *labelStatusRtd1Pt100Sm;
+    QLabel *labelStatusRtdPt1000CsInfo;
+    QLabel *label_32;
+    QLabel *labelStatusRtdPt1000Cs;
+    QLabel *labelStatusPeltierCellInfo;
+    QLabel *labelStatusPeltierCell;
+    QLabel *label_40;
     QWidget *tab;
+    QPushButton *pushButton;
     QWidget *tab_2;
     QGridLayout *gridLayout_2;
     QDockWidget *dscDataDockWidget;
     QWidget *dockWidgetContents_5;
     QGridLayout *gridLayout_8;
+    QLabel *labelHeaterPower;
+    QLabel *labelHeaterPowerInfo;
+    QLabel *labelSPHeaterTemperatureInfo;
+    QLabel *labelSMPCBTemperature;
+    QLabel *labelSPHeaterTemperature;
+    QLabel *labelHeaterTemperature;
+    QLabel *labelHeaterTemperatureInfo;
+    QLabel *labelSampleCarrierTemperature;
+    QLabel *labelSMPCBTemperatureInfo;
+    QLabel *labelSampleCarrierTemperatureInfo;
+    QLabel *labelControlModeInfo;
+    QLabel *labelControlMode;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
     QMenuBar *menuBar;
@@ -336,12 +377,127 @@ public:
         frame_3->setFrameShape(QFrame::Box);
         frame_3->setFrameShadow(QFrame::Plain);
         frame_3->setLineWidth(3);
+        labelStatusRefThermocouple = new QLabel(frame_3);
+        labelStatusRefThermocouple->setObjectName(QString::fromUtf8("labelStatusRefThermocouple"));
+        labelStatusRefThermocouple->setGeometry(QRect(240, 80, 221, 41));
+        QFont font5;
+        font5.setPointSize(14);
+        font5.setBold(false);
+        font5.setWeight(50);
+        labelStatusRefThermocouple->setFont(font5);
+        label_8 = new QLabel(frame_3);
+        label_8->setObjectName(QString::fromUtf8("label_8"));
+        label_8->setGeometry(QRect(10, 50, 210, 41));
+        label_8->setPixmap(QPixmap(QString::fromUtf8(":/qss_icons/Images/Thermocouple.gif")));
+        labelStatusRefThermocoupleInfo = new QLabel(frame_3);
+        labelStatusRefThermocoupleInfo->setObjectName(QString::fromUtf8("labelStatusRefThermocoupleInfo"));
+        labelStatusRefThermocoupleInfo->setGeometry(QRect(240, 50, 211, 41));
+        labelStatusRefThermocoupleInfo->setFont(font5);
+        label_16 = new QLabel(frame_3);
+        label_16->setObjectName(QString::fromUtf8("label_16"));
+        label_16->setGeometry(QRect(10, 130, 210, 41));
+        label_16->setPixmap(QPixmap(QString::fromUtf8(":/qss_icons/Images/Thermocouple.gif")));
+        labelStatusThermocouple1Info = new QLabel(frame_3);
+        labelStatusThermocouple1Info->setObjectName(QString::fromUtf8("labelStatusThermocouple1Info"));
+        labelStatusThermocouple1Info->setGeometry(QRect(240, 130, 211, 41));
+        labelStatusThermocouple1Info->setFont(font5);
+        labelStatusThermocouple1 = new QLabel(frame_3);
+        labelStatusThermocouple1->setObjectName(QString::fromUtf8("labelStatusThermocouple1"));
+        labelStatusThermocouple1->setGeometry(QRect(240, 160, 221, 41));
+        labelStatusThermocouple1->setFont(font5);
+        label_17 = new QLabel(frame_3);
+        label_17->setObjectName(QString::fromUtf8("label_17"));
+        label_17->setGeometry(QRect(10, 210, 210, 41));
+        label_17->setPixmap(QPixmap(QString::fromUtf8(":/qss_icons/Images/Thermocouple.gif")));
+        labelStatusThermocouple2Info = new QLabel(frame_3);
+        labelStatusThermocouple2Info->setObjectName(QString::fromUtf8("labelStatusThermocouple2Info"));
+        labelStatusThermocouple2Info->setGeometry(QRect(240, 210, 221, 41));
+        labelStatusThermocouple2Info->setFont(font5);
+        labelStatusThermocouple2 = new QLabel(frame_3);
+        labelStatusThermocouple2->setObjectName(QString::fromUtf8("labelStatusThermocouple2"));
+        labelStatusThermocouple2->setGeometry(QRect(240, 240, 231, 41));
+        labelStatusThermocouple2->setFont(font5);
+        label_18 = new QLabel(frame_3);
+        label_18->setObjectName(QString::fromUtf8("label_18"));
+        label_18->setGeometry(QRect(10, 290, 210, 41));
+        label_18->setPixmap(QPixmap(QString::fromUtf8(":/qss_icons/Images/Thermocouple.gif")));
+        labelStatusThermocouple3Info = new QLabel(frame_3);
+        labelStatusThermocouple3Info->setObjectName(QString::fromUtf8("labelStatusThermocouple3Info"));
+        labelStatusThermocouple3Info->setGeometry(QRect(240, 290, 221, 41));
+        labelStatusThermocouple3Info->setFont(font5);
+        labelStatusThermocouple3 = new QLabel(frame_3);
+        labelStatusThermocouple3->setObjectName(QString::fromUtf8("labelStatusThermocouple3"));
+        labelStatusThermocouple3->setGeometry(QRect(240, 320, 221, 41));
+        labelStatusThermocouple3->setFont(font5);
+        label_19 = new QLabel(frame_3);
+        label_19->setObjectName(QString::fromUtf8("label_19"));
+        label_19->setGeometry(QRect(10, 370, 210, 41));
+        label_19->setPixmap(QPixmap(QString::fromUtf8(":/qss_icons/Images/Thermocouple.gif")));
+        labelStatusThermocouple4Info = new QLabel(frame_3);
+        labelStatusThermocouple4Info->setObjectName(QString::fromUtf8("labelStatusThermocouple4Info"));
+        labelStatusThermocouple4Info->setGeometry(QRect(240, 370, 211, 41));
+        labelStatusThermocouple4Info->setFont(font5);
+        labelStatusThermocouple4 = new QLabel(frame_3);
+        labelStatusThermocouple4->setObjectName(QString::fromUtf8("labelStatusThermocouple4"));
+        labelStatusThermocouple4->setGeometry(QRect(240, 400, 221, 41));
+        labelStatusThermocouple4->setFont(font5);
+        label_20 = new QLabel(frame_3);
+        label_20->setObjectName(QString::fromUtf8("label_20"));
+        label_20->setGeometry(QRect(90, 460, 71, 81));
+        label_20->setPixmap(QPixmap(QString::fromUtf8(":/qss_icons/Images/RTDSMD.gif")));
+        labelStatusRtd2Pt100SmInfo = new QLabel(frame_3);
+        labelStatusRtd2Pt100SmInfo->setObjectName(QString::fromUtf8("labelStatusRtd2Pt100SmInfo"));
+        labelStatusRtd2Pt100SmInfo->setGeometry(QRect(240, 460, 211, 41));
+        labelStatusRtd2Pt100SmInfo->setFont(font5);
+        labelStatusRtd2Pt100Sm = new QLabel(frame_3);
+        labelStatusRtd2Pt100Sm->setObjectName(QString::fromUtf8("labelStatusRtd2Pt100Sm"));
+        labelStatusRtd2Pt100Sm->setGeometry(QRect(240, 490, 221, 41));
+        labelStatusRtd2Pt100Sm->setFont(font5);
+        labelStatusRtd1Pt100SmInfo = new QLabel(frame_3);
+        labelStatusRtd1Pt100SmInfo->setObjectName(QString::fromUtf8("labelStatusRtd1Pt100SmInfo"));
+        labelStatusRtd1Pt100SmInfo->setGeometry(QRect(690, 50, 211, 41));
+        labelStatusRtd1Pt100SmInfo->setFont(font5);
+        label_31 = new QLabel(frame_3);
+        label_31->setObjectName(QString::fromUtf8("label_31"));
+        label_31->setGeometry(QRect(480, 50, 181, 81));
+        label_31->setPixmap(QPixmap(QString::fromUtf8(":/qss_icons/Images/RTD.gif")));
+        labelStatusRtd1Pt100Sm = new QLabel(frame_3);
+        labelStatusRtd1Pt100Sm->setObjectName(QString::fromUtf8("labelStatusRtd1Pt100Sm"));
+        labelStatusRtd1Pt100Sm->setGeometry(QRect(690, 80, 221, 41));
+        labelStatusRtd1Pt100Sm->setFont(font5);
+        labelStatusRtdPt1000CsInfo = new QLabel(frame_3);
+        labelStatusRtdPt1000CsInfo->setObjectName(QString::fromUtf8("labelStatusRtdPt1000CsInfo"));
+        labelStatusRtdPt1000CsInfo->setGeometry(QRect(690, 160, 211, 41));
+        labelStatusRtdPt1000CsInfo->setFont(font5);
+        label_32 = new QLabel(frame_3);
+        label_32->setObjectName(QString::fromUtf8("label_32"));
+        label_32->setGeometry(QRect(480, 160, 181, 81));
+        label_32->setPixmap(QPixmap(QString::fromUtf8(":/qss_icons/Images/RTD.gif")));
+        labelStatusRtdPt1000Cs = new QLabel(frame_3);
+        labelStatusRtdPt1000Cs->setObjectName(QString::fromUtf8("labelStatusRtdPt1000Cs"));
+        labelStatusRtdPt1000Cs->setGeometry(QRect(690, 190, 221, 41));
+        labelStatusRtdPt1000Cs->setFont(font5);
+        labelStatusPeltierCellInfo = new QLabel(frame_3);
+        labelStatusPeltierCellInfo->setObjectName(QString::fromUtf8("labelStatusPeltierCellInfo"));
+        labelStatusPeltierCellInfo->setGeometry(QRect(690, 290, 211, 41));
+        labelStatusPeltierCellInfo->setFont(font5);
+        labelStatusPeltierCell = new QLabel(frame_3);
+        labelStatusPeltierCell->setObjectName(QString::fromUtf8("labelStatusPeltierCell"));
+        labelStatusPeltierCell->setGeometry(QRect(690, 320, 221, 41));
+        labelStatusPeltierCell->setFont(font5);
+        label_40 = new QLabel(frame_3);
+        label_40->setObjectName(QString::fromUtf8("label_40"));
+        label_40->setGeometry(QRect(470, 250, 201, 141));
+        label_40->setPixmap(QPixmap(QString::fromUtf8(":/qss_icons/Images/Peltier.gif")));
 
         gridLayout->addWidget(frame, 0, 0, 1, 1);
 
         applicationTabWidget->addTab(tabAutodetection, QString());
         tab = new QWidget();
         tab->setObjectName(QString::fromUtf8("tab"));
+        pushButton = new QPushButton(tab);
+        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+        pushButton->setGeometry(QRect(250, 130, 141, 51));
         applicationTabWidget->addTab(tab, QString());
         tab_2 = new QWidget();
         tab_2->setObjectName(QString::fromUtf8("tab_2"));
@@ -366,6 +522,86 @@ public:
         gridLayout_8->setSpacing(6);
         gridLayout_8->setContentsMargins(11, 11, 11, 11);
         gridLayout_8->setObjectName(QString::fromUtf8("gridLayout_8"));
+        labelHeaterPower = new QLabel(dockWidgetContents_5);
+        labelHeaterPower->setObjectName(QString::fromUtf8("labelHeaterPower"));
+        QFont font6;
+        font6.setPointSize(12);
+        font6.setBold(false);
+        font6.setWeight(50);
+        labelHeaterPower->setFont(font6);
+
+        gridLayout_8->addWidget(labelHeaterPower, 1, 1, 1, 1);
+
+        labelHeaterPowerInfo = new QLabel(dockWidgetContents_5);
+        labelHeaterPowerInfo->setObjectName(QString::fromUtf8("labelHeaterPowerInfo"));
+        labelHeaterPowerInfo->setFont(font6);
+        labelHeaterPowerInfo->setMouseTracking(true);
+
+        gridLayout_8->addWidget(labelHeaterPowerInfo, 1, 0, 1, 1);
+
+        labelSPHeaterTemperatureInfo = new QLabel(dockWidgetContents_5);
+        labelSPHeaterTemperatureInfo->setObjectName(QString::fromUtf8("labelSPHeaterTemperatureInfo"));
+        labelSPHeaterTemperatureInfo->setFont(font6);
+
+        gridLayout_8->addWidget(labelSPHeaterTemperatureInfo, 3, 0, 1, 1);
+
+        labelSMPCBTemperature = new QLabel(dockWidgetContents_5);
+        labelSMPCBTemperature->setObjectName(QString::fromUtf8("labelSMPCBTemperature"));
+        labelSMPCBTemperature->setFont(font6);
+
+        gridLayout_8->addWidget(labelSMPCBTemperature, 5, 1, 1, 1);
+
+        labelSPHeaterTemperature = new QLabel(dockWidgetContents_5);
+        labelSPHeaterTemperature->setObjectName(QString::fromUtf8("labelSPHeaterTemperature"));
+        labelSPHeaterTemperature->setFont(font6);
+
+        gridLayout_8->addWidget(labelSPHeaterTemperature, 3, 1, 1, 1);
+
+        labelHeaterTemperature = new QLabel(dockWidgetContents_5);
+        labelHeaterTemperature->setObjectName(QString::fromUtf8("labelHeaterTemperature"));
+        labelHeaterTemperature->setFont(font6);
+
+        gridLayout_8->addWidget(labelHeaterTemperature, 2, 1, 1, 1);
+
+        labelHeaterTemperatureInfo = new QLabel(dockWidgetContents_5);
+        labelHeaterTemperatureInfo->setObjectName(QString::fromUtf8("labelHeaterTemperatureInfo"));
+        labelHeaterTemperatureInfo->setFont(font6);
+        labelHeaterTemperatureInfo->setMouseTracking(true);
+
+        gridLayout_8->addWidget(labelHeaterTemperatureInfo, 2, 0, 1, 1);
+
+        labelSampleCarrierTemperature = new QLabel(dockWidgetContents_5);
+        labelSampleCarrierTemperature->setObjectName(QString::fromUtf8("labelSampleCarrierTemperature"));
+        labelSampleCarrierTemperature->setFont(font6);
+
+        gridLayout_8->addWidget(labelSampleCarrierTemperature, 4, 1, 1, 1);
+
+        labelSMPCBTemperatureInfo = new QLabel(dockWidgetContents_5);
+        labelSMPCBTemperatureInfo->setObjectName(QString::fromUtf8("labelSMPCBTemperatureInfo"));
+        labelSMPCBTemperatureInfo->setFont(font6);
+
+        gridLayout_8->addWidget(labelSMPCBTemperatureInfo, 5, 0, 1, 1);
+
+        labelSampleCarrierTemperatureInfo = new QLabel(dockWidgetContents_5);
+        labelSampleCarrierTemperatureInfo->setObjectName(QString::fromUtf8("labelSampleCarrierTemperatureInfo"));
+        labelSampleCarrierTemperatureInfo->setFont(font6);
+
+        gridLayout_8->addWidget(labelSampleCarrierTemperatureInfo, 4, 0, 1, 1);
+
+        labelControlModeInfo = new QLabel(dockWidgetContents_5);
+        labelControlModeInfo->setObjectName(QString::fromUtf8("labelControlModeInfo"));
+        labelControlModeInfo->setFont(font6);
+        labelControlModeInfo->setMouseTracking(true);
+
+        gridLayout_8->addWidget(labelControlModeInfo, 0, 0, 1, 1);
+
+        labelControlMode = new QLabel(dockWidgetContents_5);
+        labelControlMode->setObjectName(QString::fromUtf8("labelControlMode"));
+        labelControlMode->setFont(font6);
+        labelControlMode->setMouseTracking(true);
+
+        gridLayout_8->addWidget(labelControlMode, 0, 1, 1, 1);
+
         dscDataDockWidget->setWidget(dockWidgetContents_5);
         MainWindow->setCentralWidget(centralWidget);
         mainToolBar = new QToolBar(MainWindow);
@@ -380,6 +616,7 @@ public:
         MainWindow->setMenuBar(menuBar);
 
         retranslateUi(MainWindow);
+        QObject::connect(pushButton, SIGNAL(clicked()), MainWindow, SLOT(ButtonClicked()));
 
         applicationTabWidget->setCurrentIndex(0);
 
@@ -414,29 +651,69 @@ public:
         label_4->setText(QString());
         labelStatusAds1248Info1->setText(QApplication::translate("MainWindow", "ADS1248", 0, QApplication::UnicodeUTF8));
         labelStatusAds1248Info2->setText(QApplication::translate("MainWindow", "Status:", 0, QApplication::UnicodeUTF8));
-        labelStatusAds1248->setText(QApplication::translate("MainWindow", "Detection ongoing...", 0, QApplication::UnicodeUTF8));
+        labelStatusAds1248->setText(QApplication::translate("MainWindow", "Unknown", 0, QApplication::UnicodeUTF8));
         labelStatusDrv595Info1->setText(QApplication::translate("MainWindow", "DRV595", 0, QApplication::UnicodeUTF8));
-        labelStatusDrv595->setText(QApplication::translate("MainWindow", "Detection ongoing...", 0, QApplication::UnicodeUTF8));
+        labelStatusDrv595->setText(QApplication::translate("MainWindow", "Unknown", 0, QApplication::UnicodeUTF8));
         labelStatusDrv595Info2->setText(QApplication::translate("MainWindow", "Status:", 0, QApplication::UnicodeUTF8));
         labelStatusLmp90100CsInfo1->setText(QApplication::translate("MainWindow", "LMP90100 CS", 0, QApplication::UnicodeUTF8));
-        labelStatusLmp90100Cs->setText(QApplication::translate("MainWindow", "Detection ongoing...", 0, QApplication::UnicodeUTF8));
+        labelStatusLmp90100Cs->setText(QApplication::translate("MainWindow", "Unknown", 0, QApplication::UnicodeUTF8));
         labelStatusLmp90100CsInfo2->setText(QApplication::translate("MainWindow", "Status:", 0, QApplication::UnicodeUTF8));
         labelStatusMcp4716Info2->setText(QApplication::translate("MainWindow", "Status:", 0, QApplication::UnicodeUTF8));
         label_3->setText(QString());
         labelStatusStm32f401reInfo1->setText(QApplication::translate("MainWindow", "STM32F4 NUCLEO", 0, QApplication::UnicodeUTF8));
         labelStatusStm32f401reInfo2->setText(QApplication::translate("MainWindow", "Status:", 0, QApplication::UnicodeUTF8));
         labelStatusLmp90100SmInfo1->setText(QApplication::translate("MainWindow", "LMP90100 SM", 0, QApplication::UnicodeUTF8));
-        labelStatusLmp90100Sm->setText(QApplication::translate("MainWindow", "Detection ongoing...", 0, QApplication::UnicodeUTF8));
+        labelStatusLmp90100Sm->setText(QApplication::translate("MainWindow", "Unknown", 0, QApplication::UnicodeUTF8));
         label_5->setText(QString());
-        labelStatusMcp4716->setText(QApplication::translate("MainWindow", "Detection ongoing...", 0, QApplication::UnicodeUTF8));
+        labelStatusMcp4716->setText(QApplication::translate("MainWindow", "Unknown", 0, QApplication::UnicodeUTF8));
         label_6->setText(QString());
         labelStatusLmp90100SmInfo2->setText(QApplication::translate("MainWindow", "Status:", 0, QApplication::UnicodeUTF8));
-        labelStatusStm32f401re->setText(QApplication::translate("MainWindow", "Detection ongoing...", 0, QApplication::UnicodeUTF8));
+        labelStatusStm32f401re->setText(QApplication::translate("MainWindow", "Unknown", 0, QApplication::UnicodeUTF8));
         labelStatusMcp4716Info1->setText(QApplication::translate("MainWindow", "MCP4716", 0, QApplication::UnicodeUTF8));
+        labelStatusRefThermocouple->setText(QApplication::translate("MainWindow", "Unknown", 0, QApplication::UnicodeUTF8));
+        label_8->setText(QString());
+        labelStatusRefThermocoupleInfo->setText(QApplication::translate("MainWindow", "Ref. Thermocouple", 0, QApplication::UnicodeUTF8));
+        label_16->setText(QString());
+        labelStatusThermocouple1Info->setText(QApplication::translate("MainWindow", "Thermocouple 1", 0, QApplication::UnicodeUTF8));
+        labelStatusThermocouple1->setText(QApplication::translate("MainWindow", "Unknown", 0, QApplication::UnicodeUTF8));
+        label_17->setText(QString());
+        labelStatusThermocouple2Info->setText(QApplication::translate("MainWindow", "Thermocouple 2", 0, QApplication::UnicodeUTF8));
+        labelStatusThermocouple2->setText(QApplication::translate("MainWindow", "Unknown", 0, QApplication::UnicodeUTF8));
+        label_18->setText(QString());
+        labelStatusThermocouple3Info->setText(QApplication::translate("MainWindow", "Thermocouple 3", 0, QApplication::UnicodeUTF8));
+        labelStatusThermocouple3->setText(QApplication::translate("MainWindow", "Unknown", 0, QApplication::UnicodeUTF8));
+        label_19->setText(QString());
+        labelStatusThermocouple4Info->setText(QApplication::translate("MainWindow", "Thermocouple 4", 0, QApplication::UnicodeUTF8));
+        labelStatusThermocouple4->setText(QApplication::translate("MainWindow", "Unknown", 0, QApplication::UnicodeUTF8));
+        label_20->setText(QString());
+        labelStatusRtd2Pt100SmInfo->setText(QApplication::translate("MainWindow", "RTD2 Pt100 SM ", 0, QApplication::UnicodeUTF8));
+        labelStatusRtd2Pt100Sm->setText(QApplication::translate("MainWindow", "Unknown", 0, QApplication::UnicodeUTF8));
+        labelStatusRtd1Pt100SmInfo->setText(QApplication::translate("MainWindow", "RTD1 Pt100 SM", 0, QApplication::UnicodeUTF8));
+        label_31->setText(QString());
+        labelStatusRtd1Pt100Sm->setText(QApplication::translate("MainWindow", "Detection ongoing...", 0, QApplication::UnicodeUTF8));
+        labelStatusRtdPt1000CsInfo->setText(QApplication::translate("MainWindow", "RTD Pt1000 CS", 0, QApplication::UnicodeUTF8));
+        label_32->setText(QString());
+        labelStatusRtdPt1000Cs->setText(QApplication::translate("MainWindow", "Detection ongoing...", 0, QApplication::UnicodeUTF8));
+        labelStatusPeltierCellInfo->setText(QApplication::translate("MainWindow", "Peltier Cell", 0, QApplication::UnicodeUTF8));
+        labelStatusPeltierCell->setText(QApplication::translate("MainWindow", "Detection ongoing...", 0, QApplication::UnicodeUTF8));
+        label_40->setText(QString());
         applicationTabWidget->setTabText(applicationTabWidget->indexOf(tabAutodetection), QApplication::translate("MainWindow", "Autodetection", 0, QApplication::UnicodeUTF8));
+        pushButton->setText(QApplication::translate("MainWindow", "PushButton", 0, QApplication::UnicodeUTF8));
         applicationTabWidget->setTabText(applicationTabWidget->indexOf(tab), QApplication::translate("MainWindow", "Page", 0, QApplication::UnicodeUTF8));
         applicationTabWidget->setTabText(applicationTabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "Tab 2", 0, QApplication::UnicodeUTF8));
         dscDataDockWidget->setWindowTitle(QApplication::translate("MainWindow", "DSC / Device Data", 0, QApplication::UnicodeUTF8));
+        labelHeaterPower->setText(QApplication::translate("MainWindow", "50.27 %", 0, QApplication::UnicodeUTF8));
+        labelHeaterPowerInfo->setText(QApplication::translate("MainWindow", "Heater Power", 0, QApplication::UnicodeUTF8));
+        labelSPHeaterTemperatureInfo->setText(QApplication::translate("MainWindow", "<html><head/><body><p>SP Heater Temp.</p></body></html>", 0, QApplication::UnicodeUTF8));
+        labelSMPCBTemperature->setText(QApplication::translate("MainWindow", "<html><head/><body><p>59.25 <span style=\" vertical-align:super;\">o</span>C</p></body></html>", 0, QApplication::UnicodeUTF8));
+        labelSPHeaterTemperature->setText(QApplication::translate("MainWindow", "<html><head/><body><p>59.25 <span style=\" vertical-align:super;\">o</span>C</p></body></html>", 0, QApplication::UnicodeUTF8));
+        labelHeaterTemperature->setText(QApplication::translate("MainWindow", "<html><head/><body><p>59.25 <span style=\" vertical-align:super;\">o</span>C</p></body></html>", 0, QApplication::UnicodeUTF8));
+        labelHeaterTemperatureInfo->setText(QApplication::translate("MainWindow", "Heater Temp.", 0, QApplication::UnicodeUTF8));
+        labelSampleCarrierTemperature->setText(QApplication::translate("MainWindow", "<html><head/><body><p>59.25 <span style=\" vertical-align:super;\">o</span>C</p></body></html>", 0, QApplication::UnicodeUTF8));
+        labelSMPCBTemperatureInfo->setText(QApplication::translate("MainWindow", "<html><head/><body><p>SM PCB Temp.</p></body></html>", 0, QApplication::UnicodeUTF8));
+        labelSampleCarrierTemperatureInfo->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Sample Carrier</p><p>Temp.</p></body></html>", 0, QApplication::UnicodeUTF8));
+        labelControlModeInfo->setText(QApplication::translate("MainWindow", "Control Mode", 0, QApplication::UnicodeUTF8));
+        labelControlMode->setText(QApplication::translate("MainWindow", "No Control", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

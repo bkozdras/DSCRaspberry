@@ -1,6 +1,10 @@
 <RCC>
   <qresource prefix="qss_icons">
+    <file>../Images/RTDSMD.gif</file>
     <file>../Images/LMP90100.gif</file>
+    <file>../Images/Peltier.gif</file>
+    <file>../Images/Thermocouple.gif</file>
+    <file>../Images/RTD.gif</file>
     <file>../Images/DRV593.gif</file>
     <file>../Images/ADS1248.gif</file>
     <file>../Images/Nucleo.gif</file>

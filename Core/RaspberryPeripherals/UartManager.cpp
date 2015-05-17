@@ -1,5 +1,6 @@
 #include "UartManager.hpp"
 #include "../Utilities/Logger.hpp"
+#include "../Utilities/ToStringConverter.hpp"
 #include "../FaultManagement/FaultManager.hpp"
 #include "../System/ThreadPool.hpp"
 #include "UartMessageMemoryManager.hpp"
@@ -34,6 +35,12 @@ bool UartManager::initialize()
 
 void UartManager::transmitData(TMessage & message)
 {
+    Logger::debug("%s: Transmitting message: %s (Length: %u) to Nucleo device.", getLoggerPrefix().c_str(), ToStringConverter::getMessageId(message.id).c_str(), message.length);
+    for (u8 iter = 0; message.length > iter; ++iter)
+    {
+        Logger::debug("%s: Message byte [%u]: 0x%02X.", getLoggerPrefix().c_str(), iter, message.data[iter]);
+    }
+
     mAsyncSerial.write("MSG", 3);
     mAsyncSerial.write((char*) &(message.id), 1);
     mAsyncSerial.write((char*)&(message.transactionId), 1);
@@ -45,9 +52,9 @@ void UartManager::transmitData(TMessage & message)
 
     mAsyncSerial.write((char*)&(message.length), 1);
 
-    mAsyncSerial.write((char*)&(message.data), message.length);
+    mAsyncSerial.write((char*)(message.data), message.length);
 
-    mAsyncSerial.write("END\n", 4);
+    //mAsyncSerial.write("END\n", 4);
 }
 
 void UartManager::registerCallbackForNewMessage(std::function<void(std::shared_ptr<TMessage>)>callback)

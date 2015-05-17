@@ -12,6 +12,9 @@
 #include "Core/DevicePeripherals/UnitsDetector.hpp"
 #include "Core/Utilities/Logger.hpp"
 #include "Core/FaultManagement/FaultManager.hpp"
+#include "Core/DSC/EControlMode.hpp"
+#include "Core/DSC/EDataType.hpp"
+#include "Core/Defines/CommonDefines.hpp"
 
 namespace Ui {
 class MainWindow;
@@ -53,9 +56,12 @@ private:
     // LOGGER TABLE
 
     std::mutex mLoggerTableMtx;
-    
+    u8 mNumberOfDebugLogs;
+    u16 mNumberOfLogs;
+
     void setupLoggerTable();
     void addNewLogToLoggerTable(std::shared_ptr<Logger::StoredLog> log);
+    void removeTheOldestDebugLogFromLoggerTable();
     const QColor & getColorForLogSeverity(ELogSeverity severity);
     const QString & getQStringSource(Logger::LogSource source);
     const QString & getQStringSeverity(ELogSeverity severity);
@@ -80,6 +86,14 @@ private:
     QLabel* getQLabelForUnit(EUnitId unitId);
     const QString & getColorForUnitStatus(DevicePeripherals::UnitsDetector::Status status);
     const QString & getQStringForUnitStatus(DevicePeripherals::UnitsDetector::Status status);
+
+    // DSC DEVICE DATA LABELS
+    void setupDscDeviceDataLabels();
+    void changeControlMode(EControlMode controlMode);
+    const QString & getQStringForControlMode(EControlMode controlMode);
+    void changeDataValue(EDataType dataType, double value);
+    QLabel* getQLabelForDataType(EDataType dataType);
+    QString convertDataValueToQString(EDataType dataType, double value);
 };
 
 #endif // MAINWINDOW_H

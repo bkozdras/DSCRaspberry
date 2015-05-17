@@ -111,6 +111,12 @@
   <ItemGroup>
     <ClCompile Include="Core\DevicePeripherals\StateManager.cpp" />
     <ClCompile Include="Core\DevicePeripherals\UnitsDetector.cpp" />
+    <ClCompile Include="Core\DSC\DataManager.cpp" />
+    <ClCompile Include="Core\DSC\HeaterManager.cpp" />
+    <ClCompile Include="Core\DSC\IntegratedCircuitsManager.cpp" />
+    <ClCompile Include="Core\DSC\SampleCarrierManager.cpp" />
+    <ClCompile Include="Core\DSC\SegmentsManager.cpp" />
+    <ClCompile Include="Core\DSC\SMPCBTemperatureManager.cpp" />
     <ClCompile Include="Core\FaultManagement\FaultManager.cpp" />
     <ClCompile Include="Core\Nucleo\DeviceCommunicator.cpp" />
     <ClCompile Include="Core\Nucleo\MessageGateway.cpp" />
@@ -121,6 +127,7 @@
     <ClCompile Include="Core\RaspberryPeripherals\UartMessageMemoryManager.cpp" />
     <ClCompile Include="Core\System\ActiveObject.cpp" />
     <ClCompile Include="Core\System\DeviceConfigurator.cpp" />
+    <ClCompile Include="Core\System\SystemErrorsManager.cpp" />
     <ClCompile Include="Core\System\ThreadPool.cpp" />
     <ClCompile Include="Core\System\TimerManager.cpp" />
     <ClCompile Include="Core\System\Utilities\ScopedThread.cpp" />
@@ -144,6 +151,14 @@
     <ClInclude Include="Core\Defines\CommonDefines.hpp" />
     <ClInclude Include="Core\DevicePeripherals\StateManager.hpp" />
     <ClInclude Include="Core\DevicePeripherals\UnitsDetector.hpp" />
+    <ClInclude Include="Core\DSC\DataManager.hpp" />
+    <ClInclude Include="Core\DSC\EControlMode.hpp" />
+    <ClInclude Include="Core\DSC\EDataType.hpp" />
+    <ClInclude Include="Core\DSC\HeaterManager.hpp" />
+    <ClInclude Include="Core\DSC\IntegratedCircuitsManager.hpp" />
+    <ClInclude Include="Core\DSC\SampleCarrierManager.hpp" />
+    <ClInclude Include="Core\DSC\SegmentsManager.hpp" />
+    <ClInclude Include="Core\DSC\SMPCBTemperatureManager.hpp" />
     <ClInclude Include="Core\FaultManagement\FaultManager.hpp" />
     <ClInclude Include="Core\HardwareSettings\GpioDefines.hpp" />
     <ClInclude Include="Core\Nucleo\DeviceCommunicator.hpp" />
@@ -176,6 +191,7 @@
     <ClInclude Include="Core\SharedDefines\TMessage.h" />
     <ClInclude Include="Core\System\ActiveObject.hpp" />
     <ClInclude Include="Core\System\DeviceConfigurator.hpp" />
+    <ClInclude Include="Core\System\SystemErrorsManager.hpp" />
     <ClInclude Include="Core\System\ThreadPool.hpp" />
     <ClInclude Include="Core\System\TimerManager.hpp" />
     <ClInclude Include="Core\System\Types\TaskPriority.hpp" />

@@ -161,6 +161,17 @@ typedef struct _TStopRegisteringDataResponse
     bool success;
 } TStopRegisteringDataResponse;
 
+typedef struct _TSetNewDeviceModeADS1248Request
+{
+    EADS1248Mode mode;
+} TSetNewDeviceModeADS1248Request;
+
+typedef struct _TSetNewDeviceModeADS1248Response
+{
+    EADS1248Mode mode;
+    bool success;
+} TSetNewDeviceModeADS1248Response;
+
 typedef struct _TSetNewDeviceModeLMP90100ControlSystemRequest
 {
     ELMP90100Mode mode;

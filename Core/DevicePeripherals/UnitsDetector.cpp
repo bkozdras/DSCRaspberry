@@ -18,7 +18,16 @@ namespace DevicePeripherals
             std::make_pair(EUnitId_LMP90100ControlSystem, Status::Unknown),
             std::make_pair(EUnitId_LMP90100SignalsMeasurement, Status::Unknown),
             std::make_pair(EUnitId_MCP4716, Status::Unknown),
-            std::make_pair(EUnitId_Nucleo, Status::Unknown)
+            std::make_pair(EUnitId_Nucleo, Status::Unknown),
+            std::make_pair(EUnitId_ThermocoupleReference, Status::Unknown),
+            std::make_pair(EUnitId_Thermocouple1, Status::Unknown),
+            std::make_pair(EUnitId_Thermocouple2, Status::Unknown),
+            std::make_pair(EUnitId_Thermocouple3, Status::Unknown),
+            std::make_pair(EUnitId_Thermocouple4, Status::Unknown),
+            std::make_pair(EUnitId_Rtd1Pt100, Status::Unknown),
+            std::make_pair(EUnitId_Rtd2Pt100, Status::Unknown),
+            std::make_pair(EUnitId_RtdPt1000, Status::Unknown),
+            std::make_pair(EUnitId_Peltier, Status::Unknown)
         };
 
         Nucleo::DeviceCommunicator::registerIndCallback([](TUnitReadyInd && unitReadyInd){ unitReadyIndCallback(std::move(unitReadyInd)); });
@@ -55,6 +64,49 @@ namespace DevicePeripherals
         }
 
         return Status::Unknown;
+    }
+
+    void UnitsDetector::updateStatus(EUnitId unitId, UnitsDetector::Status status)
+    {
+        std::lock_guard<std::mutex> lockGuard(mMtx);
+        auto it = mUnitsStatus.find(unitId);
+        if (std::end(mUnitsStatus) != it)
+        {
+            it->second = status;
+            Logger::info("%s: New unit: %s status: %s.", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(unitId).c_str(), getStatusString(status).c_str());
+
+            {
+                auto unitId = it->first;
+                auto status = it->second;
+                for (auto & callbackPair : mUnitsStatusObservers)
+                {
+                    ThreadPool::submit
+                    (
+                        TaskPriority::High,
+                        [unitId, status, callbackPair]()
+                        {
+                            callbackPair.second(unitId, status);
+                        }
+                    );
+                }
+            }
+        }
+    }
+
+    bool UnitsDetector::areAllUnitsNotLost()
+    {
+        std::lock_guard<std::mutex> lockGuard(mMtx);
+        auto notLost = true;
+        for (const auto & unitStatus : mUnitsStatus)
+        {
+            if (Status::Lost == unitStatus.second || Status::Unknown == unitStatus.second)
+            {
+                notLost = false;
+                break;
+            }
+        }
+
+        return notLost;
     }
 
     void UnitsDetector::unitReadyIndCallback(TUnitReadyInd && unitReadyInd)
@@ -102,6 +154,19 @@ namespace DevicePeripherals
     {
         static CallbackId callbackId = 0;
         return callbackId++;
+    }
+
+    const std::string & UnitsDetector::getStatusString(Status status)
+    {
+        static std::map<Status, std::string> statusToStringMap = decltype(statusToStringMap)
+        {
+            { Status::Detected, "Detected" },
+            { Status::Lost, "Lost" },
+            { Status::Unknown, "Unknown" },
+            { Status::Working, "Working" }
+        };
+
+        return statusToStringMap[status];
     }
 
     const std::string & UnitsDetector::getLoggerPrefix()

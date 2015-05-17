@@ -53,6 +53,9 @@
     <Filter Include="Core\DevicePeripherals">
       <UniqueIdentifier>{c4399652-2451-46c8-aa66-c7145f7a9a18}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\DSC">
+      <UniqueIdentifier>{3c28193a-e8bc-4feb-917d-763dabe2987a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DSCMasterApplication.cpp">
@@ -117,6 +120,27 @@
     </ClCompile>
     <ClCompile Include="Core\Nucleo\DeviceCommunicator.cpp">
       <Filter>Core\Nucleo</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\DSC\DataManager.cpp">
+      <Filter>Core\DSC</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\DSC\SegmentsManager.cpp">
+      <Filter>Core\DSC</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\DSC\HeaterManager.cpp">
+      <Filter>Core\DSC</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\DSC\SampleCarrierManager.cpp">
+      <Filter>Core\DSC</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\DSC\SMPCBTemperatureManager.cpp">
+      <Filter>Core\DSC</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\DSC\IntegratedCircuitsManager.cpp">
+      <Filter>Core\DSC</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\System\SystemErrorsManager.cpp">
+      <Filter>Core\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -278,6 +302,33 @@
     </ClInclude>
     <ClInclude Include="Core\Nucleo\DeviceCommunicator.hpp">
       <Filter>Core\Nucleo</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\DSC\DataManager.hpp">
+      <Filter>Core\DSC</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\DSC\EControlMode.hpp">
+      <Filter>Core\DSC</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\DSC\SegmentsManager.hpp">
+      <Filter>Core\DSC</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\DSC\EDataType.hpp">
+      <Filter>Core\DSC</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\DSC\HeaterManager.hpp">
+      <Filter>Core\DSC</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\DSC\SampleCarrierManager.hpp">
+      <Filter>Core\DSC</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\DSC\SMPCBTemperatureManager.hpp">
+      <Filter>Core\DSC</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\DSC\IntegratedCircuitsManager.hpp">
+      <Filter>Core\DSC</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\System\SystemErrorsManager.hpp">
+      <Filter>Core\System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

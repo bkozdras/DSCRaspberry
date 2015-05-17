@@ -110,4 +110,82 @@ namespace ToStringConverter
 
         return messageIdToString[messageId];
     }
+
+    const std::string & getADS1248Mode(EADS1248Mode mode)
+    {
+        static std::map<EADS1248Mode, std::string> modeToString = decltype(modeToString)
+        {
+            std::make_pair(EADS1248Mode_Off, "Off"),
+            std::make_pair(EADS1248Mode_On, "On")
+        };
+
+        return modeToString[mode];
+    }
+
+    const std::string & getADS1248CallibrationType(EADS1248CallibrationType type)
+    {
+        static std::map<EADS1248CallibrationType, std::string> typeToString = decltype(typeToString)
+        {
+            std::make_pair(EADS1248CallibrationType_Idle, "Idle"),
+            std::make_pair(EADS1248CallibrationType_OffsetSystem, "Offset System"),
+            std::make_pair(EADS1248CallibrationType_SystemGain, "System Gain"),
+            std::make_pair(EADS1248CallibrationType_SelfOffset, "Self Offset")
+        };
+
+        return typeToString[type];
+    }
+
+    const std::string & getADS1248GainValue(EADS1248GainValue value)
+    {
+        static std::map<EADS1248GainValue, std::string> valueToString = decltype(valueToString)
+        {
+            std::make_pair(EADS1248GainValue_1, "1"),
+            std::make_pair(EADS1248GainValue_2, "2"),
+            std::make_pair(EADS1248GainValue_4, "4"),
+            std::make_pair(EADS1248GainValue_8, "8"),
+            std::make_pair(EADS1248GainValue_16, "16"),
+            std::make_pair(EADS1248GainValue_32, "32"),
+            std::make_pair(EADS1248GainValue_64, "64"),
+            std::make_pair(EADS1248GainValue_128, "128")
+        };
+
+        return valueToString[value];
+    }
+
+    const std::string & getADS1248SamplingSpeed(EADS1248SamplingSpeed speed)
+    {
+        static std::map<EADS1248SamplingSpeed, std::string> speedToString = decltype(speedToString)
+        {
+            std::make_pair(EADS1248SamplingSpeed_5SPS, "5 SPS"),
+            std::make_pair(EADS1248SamplingSpeed_10SPS, "10 SPS"),
+            std::make_pair(EADS1248SamplingSpeed_20SPS, "20 SPS"),
+            std::make_pair(EADS1248SamplingSpeed_40SPS, "40 SPS"),
+            std::make_pair(EADS1248SamplingSpeed_80SPS, "80 SPS"),
+            std::make_pair(EADS1248SamplingSpeed_160SPS, "160 SPS"),
+            std::make_pair(EADS1248SamplingSpeed_320SPS, "320 SPS"),
+            std::make_pair(EADS1248SamplingSpeed_640SPS, "640 SPS"),
+            std::make_pair(EADS1248SamplingSpeed_1000SPS, "1000 SPS"),
+            std::make_pair(EADS1248SamplingSpeed_2000SPS, "2000 SPS")
+        };
+
+        return speedToString[speed];
+    }
+
+    const std::string & getLMP90100Mode(ELMP90100Mode mode)
+    {
+        static std::map<ELMP90100Mode, std::string> modeToString = decltype(modeToString)
+        {
+            std::make_pair(ELMP90100Mode_Off, "Off"),
+            std::make_pair(ELMP90100Mode_On_1_6775_SPS, "On 1.6775 SPS"),
+            std::make_pair(ELMP90100Mode_On_3_355_SPS, "On 3.355 SPS"),
+            std::make_pair(ELMP90100Mode_On_6_71_SPS, "On 6.71 SPS"),
+            std::make_pair(ELMP90100Mode_On_13_42_SPS, "On 13.42 SPS"),
+            std::make_pair(ELMP90100Mode_On_26_83125_SPS, "On 26.83125 SPS"),
+            std::make_pair(ELMP90100Mode_On_53_6625_SPS, "On 53.6625 SPS"),
+            std::make_pair(ELMP90100Mode_On_107_325_SPS, "On 107.325 SPS"),
+            std::make_pair(ELMP90100Mode_On_214_65_SPS, "On 214.65 SPS")
+        };
+
+        return modeToString[mode];
+    }
 }

@@ -68,6 +68,11 @@ namespace Nucleo
         SEND_IMPL(StopRegisteringData);
     }
 
+    SEND_MACRO_IMPL(SetNewDeviceModeADS1248)
+    {
+        SEND_IMPL(SetNewDeviceModeADS1248);
+    }
+
     SEND_MACRO_IMPL(SetNewDeviceModeLMP90100ControlSystem)
     {
         SEND_IMPL(SetNewDeviceModeLMP90100ControlSystem);

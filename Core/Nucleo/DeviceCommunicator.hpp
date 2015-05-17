@@ -29,6 +29,7 @@ namespace Nucleo
             SEND_MACRO(SetChannelSamplingSpeedADS1248);
             SEND_MACRO(StartRegisteringData);
             SEND_MACRO(StopRegisteringData);
+            SEND_MACRO(SetNewDeviceModeADS1248);
             SEND_MACRO(SetNewDeviceModeLMP90100ControlSystem);
             SEND_MACRO(SetNewDeviceModeLMP90100SignalsMeasurement);
             SEND_MACRO(SetControlSystemType);
