@@ -120,7 +120,14 @@ namespace DevicePeripherals
             {
                 if (unitReadyInd.success)
                 {
-                    it->second = Status::Detected;
+                    if (EUnitId_Nucleo == unitReadyInd.unitId)
+                    {
+                        it->second = Status::Working;
+                    }
+                    else
+                    {
+                        it->second = Status::Detected;
+                    }
                     Logger::info("%s: Detected new unit %s status: Detected!", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(unitReadyInd.unitId).c_str());
                     FaultManager::cancel(EFaultId_Communication, unitReadyInd.unitId);
                 }

@@ -219,7 +219,7 @@ void AsyncSerial::doWrite()
         boost::lock_guard<boost::mutex> l(pimpl->writeQueueMutex);
         for (u8 iter = 0; pimpl->writeBufferSize > iter; ++iter)
         {
-            Logger::debug("AsyncSerial: DoWrite: Transmitting byte [%u]: 0x%02X.", iter, pimpl->writeBuffer[iter]);
+            //Logger::debug("AsyncSerial: DoWrite: Transmitting byte [%u]: 0x%02X.", iter, pimpl->writeBuffer[iter]);
         }
         pimpl->writeBufferSize=pimpl->writeQueue.size();
         pimpl->writeBuffer.reset(new char[pimpl->writeQueue.size()]);
@@ -239,7 +239,7 @@ void AsyncSerial::writeEnd(const boost::system::error_code& error)
         boost::lock_guard<boost::mutex> l(pimpl->writeQueueMutex);
         for (u8 iter = 0; pimpl->writeBufferSize > iter; ++iter)
         {
-            Logger::debug("AsyncSerial: WriteEnd: Transmitting byte [%u]: 0x%02X.", iter, pimpl->writeBuffer[iter]);
+            //Logger::debug("AsyncSerial: WriteEnd: Transmitting byte [%u]: 0x%02X.", iter, pimpl->writeBuffer[iter]);
         }
         if(pimpl->writeQueue.empty())
         {

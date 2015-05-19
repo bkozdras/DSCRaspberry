@@ -2,6 +2,7 @@
 
 #include "AsyncSerial.hpp"
 #include "../SharedDefines/TMessage.h"
+#include "../Defines/CommonDefines.hpp"
 #include <boost/circular_buffer.hpp>
 #include <boost/noncopyable.hpp>
 #include <functional>
@@ -34,6 +35,8 @@ class UartManager : public boost::noncopyable
         static std::shared_ptr<TMessage> mHandlingMessage;
         static std::mutex mReceivedDataMtx;
         static std::function<void(std::shared_ptr<TMessage>)> mNewMessageCallback;
+        static bool mIsCommunicationFailureGenerated;
+        static u8 mWrongMessagesCount;
 
         static void initializeInternalData();
         static void initializeTerminal();

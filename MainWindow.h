@@ -31,8 +31,8 @@ public:
     ~MainWindow();
 
 protected slots:
-    void ButtonClicked();
     void run();
+    void applicationTabWidgetChanged();
 
 private:
 
@@ -94,6 +94,19 @@ private:
     void changeDataValue(EDataType dataType, double value);
     QLabel* getQLabelForDataType(EDataType dataType);
     QString convertDataValueToQString(EDataType dataType, double value);
+
+    // Units Data Viewer
+
+    std::mutex mUnitsDataViewerMtx;
+    bool mIsUnitsDataViewerWorking;
+    std::map<EDataType, TimerManager::TimerId> mUnitsDataViewerQLabelToTimerId;
+
+    void setupUnitsDataViewer();
+    void unitsDataViewerStartWorking();
+    void unitsDataViewerStopWorking();
+    void changeUnitsDataViewerDataValue(EDataType dataType, double value);
+    QLabel* getQLabelForUnitsDataViewer(EDataType dataType);
+    QString convertUnitsDataViewerDataValueToQString(EDataType dataType, double value);
 };
 
 #endif // MAINWINDOW_H

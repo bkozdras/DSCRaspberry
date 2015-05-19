@@ -20,7 +20,6 @@
 #include <QtGui/QLabel>
 #include <QtGui/QMainWindow>
 #include <QtGui/QMenuBar>
-#include <QtGui/QPushButton>
 #include <QtGui/QStatusBar>
 #include <QtGui/QTabWidget>
 #include <QtGui/QTableWidget>
@@ -102,10 +101,46 @@ public:
     QLabel *labelStatusPeltierCellInfo;
     QLabel *labelStatusPeltierCell;
     QLabel *label_40;
-    QWidget *tab;
-    QPushButton *pushButton;
-    QWidget *tab_2;
+    QWidget *tabUnitsDataViewer;
+    QLabel *labelDevice;
+    QLabel *labelUnitsDataSample1;
+    QLabel *labelUnitsDataSample2;
+    QLabel *labelUnitsDataRefSubst;
+    QLabel *labelUnitsDataSample3;
+    QLabel *labelUnitsDataSample4;
+    QLabel *labelUnitsDataSampleCarrierTemperature;
+    QLabel *labelUnitsDataHeaterTemperature;
+    QLabel *labelUnitsDataHeaterPower;
+    QLabel *labelUnitsDataSMPCBTemperature;
+    QLabel *labelUnitsDataFanPower;
+    QFrame *line;
+    QFrame *line_2;
+    QFrame *line_3;
+    QFrame *line_4;
+    QFrame *line_5;
+    QFrame *line_6;
+    QFrame *line_7;
+    QFrame *line_8;
+    QFrame *line_9;
+    QFrame *line_10;
+    QFrame *line_11;
+    QFrame *line_12;
+    QFrame *line_13;
+    QFrame *line_14;
+    QFrame *line_15;
+    QFrame *line_16;
+    QFrame *line_17;
+    QFrame *line_18;
+    QFrame *line_19;
+    QFrame *line_20;
+    QFrame *line_21;
+    QFrame *line_22;
+    QFrame *line_23;
+    QFrame *line_24;
+    QWidget *tabHeaterControl;
+    QWidget *tabSegmentsManager;
     QGridLayout *gridLayout_2;
+    QWidget *tabDscDataView;
     QDockWidget *dscDataDockWidget;
     QWidget *dockWidgetContents_5;
     QGridLayout *gridLayout_8;
@@ -493,22 +528,219 @@ public:
         gridLayout->addWidget(frame, 0, 0, 1, 1);
 
         applicationTabWidget->addTab(tabAutodetection, QString());
-        tab = new QWidget();
-        tab->setObjectName(QString::fromUtf8("tab"));
-        pushButton = new QPushButton(tab);
-        pushButton->setObjectName(QString::fromUtf8("pushButton"));
-        pushButton->setGeometry(QRect(250, 130, 141, 51));
-        applicationTabWidget->addTab(tab, QString());
-        tab_2 = new QWidget();
-        tab_2->setObjectName(QString::fromUtf8("tab_2"));
-        tab_2->setEnabled(false);
-        gridLayout_2 = new QGridLayout(tab_2);
+        tabUnitsDataViewer = new QWidget();
+        tabUnitsDataViewer->setObjectName(QString::fromUtf8("tabUnitsDataViewer"));
+        labelDevice = new QLabel(tabUnitsDataViewer);
+        labelDevice->setObjectName(QString::fromUtf8("labelDevice"));
+        labelDevice->setGeometry(QRect(280, 10, 710, 640));
+        labelDevice->setPixmap(QPixmap(QString::fromUtf8(":/qss_icons/Images/DeviceTransparent.png")));
+        labelUnitsDataSample1 = new QLabel(tabUnitsDataViewer);
+        labelUnitsDataSample1->setObjectName(QString::fromUtf8("labelUnitsDataSample1"));
+        labelUnitsDataSample1->setGeometry(QRect(1350, 15, 180, 31));
+        QFont font6;
+        font6.setPointSize(16);
+        font6.setBold(true);
+        font6.setWeight(75);
+        labelUnitsDataSample1->setFont(font6);
+        labelUnitsDataSample1->setMouseTracking(true);
+        labelUnitsDataSample1->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        labelUnitsDataSample2 = new QLabel(tabUnitsDataViewer);
+        labelUnitsDataSample2->setObjectName(QString::fromUtf8("labelUnitsDataSample2"));
+        labelUnitsDataSample2->setGeometry(QRect(1350, 55, 180, 20));
+        labelUnitsDataSample2->setFont(font6);
+        labelUnitsDataSample2->setMouseTracking(true);
+        labelUnitsDataSample2->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        labelUnitsDataRefSubst = new QLabel(tabUnitsDataViewer);
+        labelUnitsDataRefSubst->setObjectName(QString::fromUtf8("labelUnitsDataRefSubst"));
+        labelUnitsDataRefSubst->setGeometry(QRect(1350, 95, 180, 20));
+        labelUnitsDataRefSubst->setFont(font6);
+        labelUnitsDataRefSubst->setMouseTracking(true);
+        labelUnitsDataRefSubst->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        labelUnitsDataSample3 = new QLabel(tabUnitsDataViewer);
+        labelUnitsDataSample3->setObjectName(QString::fromUtf8("labelUnitsDataSample3"));
+        labelUnitsDataSample3->setGeometry(QRect(1350, 135, 180, 20));
+        labelUnitsDataSample3->setFont(font6);
+        labelUnitsDataSample3->setMouseTracking(true);
+        labelUnitsDataSample3->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        labelUnitsDataSample4 = new QLabel(tabUnitsDataViewer);
+        labelUnitsDataSample4->setObjectName(QString::fromUtf8("labelUnitsDataSample4"));
+        labelUnitsDataSample4->setGeometry(QRect(1350, 175, 180, 20));
+        labelUnitsDataSample4->setFont(font6);
+        labelUnitsDataSample4->setMouseTracking(true);
+        labelUnitsDataSample4->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        labelUnitsDataSampleCarrierTemperature = new QLabel(tabUnitsDataViewer);
+        labelUnitsDataSampleCarrierTemperature->setObjectName(QString::fromUtf8("labelUnitsDataSampleCarrierTemperature"));
+        labelUnitsDataSampleCarrierTemperature->setGeometry(QRect(1350, 249, 180, 20));
+        labelUnitsDataSampleCarrierTemperature->setFont(font6);
+        labelUnitsDataSampleCarrierTemperature->setMouseTracking(true);
+        labelUnitsDataSampleCarrierTemperature->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        labelUnitsDataHeaterTemperature = new QLabel(tabUnitsDataViewer);
+        labelUnitsDataHeaterTemperature->setObjectName(QString::fromUtf8("labelUnitsDataHeaterTemperature"));
+        labelUnitsDataHeaterTemperature->setGeometry(QRect(1350, 297, 180, 20));
+        labelUnitsDataHeaterTemperature->setFont(font6);
+        labelUnitsDataHeaterTemperature->setMouseTracking(true);
+        labelUnitsDataHeaterTemperature->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        labelUnitsDataHeaterPower = new QLabel(tabUnitsDataViewer);
+        labelUnitsDataHeaterPower->setObjectName(QString::fromUtf8("labelUnitsDataHeaterPower"));
+        labelUnitsDataHeaterPower->setGeometry(QRect(1350, 347, 180, 20));
+        labelUnitsDataHeaterPower->setFont(font6);
+        labelUnitsDataHeaterPower->setMouseTracking(true);
+        labelUnitsDataHeaterPower->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        labelUnitsDataSMPCBTemperature = new QLabel(tabUnitsDataViewer);
+        labelUnitsDataSMPCBTemperature->setObjectName(QString::fromUtf8("labelUnitsDataSMPCBTemperature"));
+        labelUnitsDataSMPCBTemperature->setGeometry(QRect(1350, 445, 180, 20));
+        labelUnitsDataSMPCBTemperature->setFont(font6);
+        labelUnitsDataSMPCBTemperature->setMouseTracking(true);
+        labelUnitsDataSMPCBTemperature->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        labelUnitsDataFanPower = new QLabel(tabUnitsDataViewer);
+        labelUnitsDataFanPower->setObjectName(QString::fromUtf8("labelUnitsDataFanPower"));
+        labelUnitsDataFanPower->setGeometry(QRect(1350, 618, 180, 20));
+        QFont font7;
+        font7.setPointSize(16);
+        font7.setBold(true);
+        font7.setUnderline(false);
+        font7.setWeight(75);
+        font7.setStrikeOut(false);
+        labelUnitsDataFanPower->setFont(font7);
+        labelUnitsDataFanPower->setMouseTracking(true);
+        labelUnitsDataFanPower->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        line = new QFrame(tabUnitsDataViewer);
+        line->setObjectName(QString::fromUtf8("line"));
+        line->setGeometry(QRect(980, 28, 381, 1));
+        line->setFrameShadow(QFrame::Plain);
+        line->setFrameShape(QFrame::HLine);
+        line_2 = new QFrame(tabUnitsDataViewer);
+        line_2->setObjectName(QString::fromUtf8("line_2"));
+        line_2->setGeometry(QRect(980, 52, 355, 1));
+        line_2->setFrameShadow(QFrame::Plain);
+        line_2->setFrameShape(QFrame::HLine);
+        line_3 = new QFrame(tabUnitsDataViewer);
+        line_3->setObjectName(QString::fromUtf8("line_3"));
+        line_3->setGeometry(QRect(1335, 52, 1, 12));
+        line_3->setFrameShadow(QFrame::Plain);
+        line_3->setFrameShape(QFrame::VLine);
+        line_4 = new QFrame(tabUnitsDataViewer);
+        line_4->setObjectName(QString::fromUtf8("line_4"));
+        line_4->setGeometry(QRect(1335, 64, 24, 1));
+        line_4->setFrameShadow(QFrame::Plain);
+        line_4->setFrameShape(QFrame::HLine);
+        line_5 = new QFrame(tabUnitsDataViewer);
+        line_5->setObjectName(QString::fromUtf8("line_5"));
+        line_5->setGeometry(QRect(1311, 103, 51, 1));
+        line_5->setFrameShadow(QFrame::Plain);
+        line_5->setFrameShape(QFrame::HLine);
+        line_6 = new QFrame(tabUnitsDataViewer);
+        line_6->setObjectName(QString::fromUtf8("line_6"));
+        line_6->setGeometry(QRect(980, 76, 331, 1));
+        line_6->setFrameShadow(QFrame::Plain);
+        line_6->setFrameShape(QFrame::HLine);
+        line_7 = new QFrame(tabUnitsDataViewer);
+        line_7->setObjectName(QString::fromUtf8("line_7"));
+        line_7->setGeometry(QRect(1311, 76, 1, 28));
+        line_7->setFrameShadow(QFrame::Plain);
+        line_7->setFrameShape(QFrame::VLine);
+        line_8 = new QFrame(tabUnitsDataViewer);
+        line_8->setObjectName(QString::fromUtf8("line_8"));
+        line_8->setGeometry(QRect(1288, 143, 74, 1));
+        line_8->setFrameShadow(QFrame::Plain);
+        line_8->setFrameShape(QFrame::HLine);
+        line_9 = new QFrame(tabUnitsDataViewer);
+        line_9->setObjectName(QString::fromUtf8("line_9"));
+        line_9->setGeometry(QRect(1288, 100, 1, 43));
+        line_9->setFrameShadow(QFrame::Plain);
+        line_9->setFrameShape(QFrame::VLine);
+        line_10 = new QFrame(tabUnitsDataViewer);
+        line_10->setObjectName(QString::fromUtf8("line_10"));
+        line_10->setGeometry(QRect(980, 100, 308, 1));
+        line_10->setFrameShadow(QFrame::Plain);
+        line_10->setFrameShape(QFrame::HLine);
+        line_11 = new QFrame(tabUnitsDataViewer);
+        line_11->setObjectName(QString::fromUtf8("line_11"));
+        line_11->setGeometry(QRect(1260, 180, 101, 1));
+        line_11->setFrameShadow(QFrame::Plain);
+        line_11->setFrameShape(QFrame::HLine);
+        line_12 = new QFrame(tabUnitsDataViewer);
+        line_12->setObjectName(QString::fromUtf8("line_12"));
+        line_12->setGeometry(QRect(980, 120, 281, 1));
+        line_12->setFrameShadow(QFrame::Plain);
+        line_12->setFrameShape(QFrame::HLine);
+        line_13 = new QFrame(tabUnitsDataViewer);
+        line_13->setObjectName(QString::fromUtf8("line_13"));
+        line_13->setGeometry(QRect(1260, 120, 1, 61));
+        line_13->setFrameShadow(QFrame::Plain);
+        line_13->setFrameShape(QFrame::VLine);
+        line_14 = new QFrame(tabUnitsDataViewer);
+        line_14->setObjectName(QString::fromUtf8("line_14"));
+        line_14->setGeometry(QRect(920, 148, 311, 1));
+        line_14->setFrameShadow(QFrame::Plain);
+        line_14->setFrameShape(QFrame::HLine);
+        line_15 = new QFrame(tabUnitsDataViewer);
+        line_15->setObjectName(QString::fromUtf8("line_15"));
+        line_15->setGeometry(QRect(1230, 260, 131, 1));
+        line_15->setFrameShadow(QFrame::Plain);
+        line_15->setFrameShape(QFrame::HLine);
+        line_16 = new QFrame(tabUnitsDataViewer);
+        line_16->setObjectName(QString::fromUtf8("line_16"));
+        line_16->setGeometry(QRect(1230, 149, 1, 111));
+        line_16->setFrameShadow(QFrame::Plain);
+        line_16->setFrameShape(QFrame::VLine);
+        line_17 = new QFrame(tabUnitsDataViewer);
+        line_17->setObjectName(QString::fromUtf8("line_17"));
+        line_17->setGeometry(QRect(870, 207, 331, 1));
+        line_17->setFrameShadow(QFrame::Plain);
+        line_17->setFrameShape(QFrame::HLine);
+        line_18 = new QFrame(tabUnitsDataViewer);
+        line_18->setObjectName(QString::fromUtf8("line_18"));
+        line_18->setGeometry(QRect(1202, 306, 159, 1));
+        line_18->setFrameShadow(QFrame::Plain);
+        line_18->setFrameShape(QFrame::HLine);
+        line_19 = new QFrame(tabUnitsDataViewer);
+        line_19->setObjectName(QString::fromUtf8("line_19"));
+        line_19->setGeometry(QRect(1201, 207, 1, 100));
+        line_19->setFrameShadow(QFrame::Plain);
+        line_19->setFrameShape(QFrame::VLine);
+        line_20 = new QFrame(tabUnitsDataViewer);
+        line_20->setObjectName(QString::fromUtf8("line_20"));
+        line_20->setGeometry(QRect(820, 276, 341, 1));
+        line_20->setFrameShadow(QFrame::Plain);
+        line_20->setFrameShape(QFrame::HLine);
+        line_21 = new QFrame(tabUnitsDataViewer);
+        line_21->setObjectName(QString::fromUtf8("line_21"));
+        line_21->setGeometry(QRect(1161, 355, 200, 1));
+        line_21->setFrameShadow(QFrame::Plain);
+        line_21->setFrameShape(QFrame::HLine);
+        line_22 = new QFrame(tabUnitsDataViewer);
+        line_22->setObjectName(QString::fromUtf8("line_22"));
+        line_22->setGeometry(QRect(1161, 276, 1, 80));
+        line_22->setFrameShadow(QFrame::Plain);
+        line_22->setFrameShape(QFrame::VLine);
+        line_23 = new QFrame(tabUnitsDataViewer);
+        line_23->setObjectName(QString::fromUtf8("line_23"));
+        line_23->setGeometry(QRect(880, 455, 481, 1));
+        line_23->setFrameShadow(QFrame::Plain);
+        line_23->setFrameShape(QFrame::HLine);
+        line_24 = new QFrame(tabUnitsDataViewer);
+        line_24->setObjectName(QString::fromUtf8("line_24"));
+        line_24->setGeometry(QRect(800, 627, 561, 1));
+        line_24->setFrameShadow(QFrame::Plain);
+        line_24->setFrameShape(QFrame::HLine);
+        applicationTabWidget->addTab(tabUnitsDataViewer, QString());
+        tabHeaterControl = new QWidget();
+        tabHeaterControl->setObjectName(QString::fromUtf8("tabHeaterControl"));
+        applicationTabWidget->addTab(tabHeaterControl, QString());
+        tabSegmentsManager = new QWidget();
+        tabSegmentsManager->setObjectName(QString::fromUtf8("tabSegmentsManager"));
+        tabSegmentsManager->setEnabled(false);
+        gridLayout_2 = new QGridLayout(tabSegmentsManager);
         gridLayout_2->setSpacing(6);
         gridLayout_2->setContentsMargins(11, 11, 11, 11);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
-        applicationTabWidget->addTab(tab_2, QString());
+        applicationTabWidget->addTab(tabSegmentsManager, QString());
+        tabDscDataView = new QWidget();
+        tabDscDataView->setObjectName(QString::fromUtf8("tabDscDataView"));
+        applicationTabWidget->addTab(tabDscDataView, QString());
 
-        gridLayout_5->addWidget(applicationTabWidget, 0, 0, 1, 1);
+        gridLayout_5->addWidget(applicationTabWidget, 1, 0, 1, 1);
 
         applicationDockWidget->setWidget(dockWidgetContents_4);
         dscDataDockWidget = new QDockWidget(centralWidget);
@@ -524,80 +756,80 @@ public:
         gridLayout_8->setObjectName(QString::fromUtf8("gridLayout_8"));
         labelHeaterPower = new QLabel(dockWidgetContents_5);
         labelHeaterPower->setObjectName(QString::fromUtf8("labelHeaterPower"));
-        QFont font6;
-        font6.setPointSize(12);
-        font6.setBold(false);
-        font6.setWeight(50);
-        labelHeaterPower->setFont(font6);
+        QFont font8;
+        font8.setPointSize(12);
+        font8.setBold(false);
+        font8.setWeight(50);
+        labelHeaterPower->setFont(font8);
 
         gridLayout_8->addWidget(labelHeaterPower, 1, 1, 1, 1);
 
         labelHeaterPowerInfo = new QLabel(dockWidgetContents_5);
         labelHeaterPowerInfo->setObjectName(QString::fromUtf8("labelHeaterPowerInfo"));
-        labelHeaterPowerInfo->setFont(font6);
+        labelHeaterPowerInfo->setFont(font8);
         labelHeaterPowerInfo->setMouseTracking(true);
 
         gridLayout_8->addWidget(labelHeaterPowerInfo, 1, 0, 1, 1);
 
         labelSPHeaterTemperatureInfo = new QLabel(dockWidgetContents_5);
         labelSPHeaterTemperatureInfo->setObjectName(QString::fromUtf8("labelSPHeaterTemperatureInfo"));
-        labelSPHeaterTemperatureInfo->setFont(font6);
+        labelSPHeaterTemperatureInfo->setFont(font8);
 
         gridLayout_8->addWidget(labelSPHeaterTemperatureInfo, 3, 0, 1, 1);
 
         labelSMPCBTemperature = new QLabel(dockWidgetContents_5);
         labelSMPCBTemperature->setObjectName(QString::fromUtf8("labelSMPCBTemperature"));
-        labelSMPCBTemperature->setFont(font6);
+        labelSMPCBTemperature->setFont(font8);
 
         gridLayout_8->addWidget(labelSMPCBTemperature, 5, 1, 1, 1);
 
         labelSPHeaterTemperature = new QLabel(dockWidgetContents_5);
         labelSPHeaterTemperature->setObjectName(QString::fromUtf8("labelSPHeaterTemperature"));
-        labelSPHeaterTemperature->setFont(font6);
+        labelSPHeaterTemperature->setFont(font8);
 
         gridLayout_8->addWidget(labelSPHeaterTemperature, 3, 1, 1, 1);
 
         labelHeaterTemperature = new QLabel(dockWidgetContents_5);
         labelHeaterTemperature->setObjectName(QString::fromUtf8("labelHeaterTemperature"));
-        labelHeaterTemperature->setFont(font6);
+        labelHeaterTemperature->setFont(font8);
 
         gridLayout_8->addWidget(labelHeaterTemperature, 2, 1, 1, 1);
 
         labelHeaterTemperatureInfo = new QLabel(dockWidgetContents_5);
         labelHeaterTemperatureInfo->setObjectName(QString::fromUtf8("labelHeaterTemperatureInfo"));
-        labelHeaterTemperatureInfo->setFont(font6);
+        labelHeaterTemperatureInfo->setFont(font8);
         labelHeaterTemperatureInfo->setMouseTracking(true);
 
         gridLayout_8->addWidget(labelHeaterTemperatureInfo, 2, 0, 1, 1);
 
         labelSampleCarrierTemperature = new QLabel(dockWidgetContents_5);
         labelSampleCarrierTemperature->setObjectName(QString::fromUtf8("labelSampleCarrierTemperature"));
-        labelSampleCarrierTemperature->setFont(font6);
+        labelSampleCarrierTemperature->setFont(font8);
 
         gridLayout_8->addWidget(labelSampleCarrierTemperature, 4, 1, 1, 1);
 
         labelSMPCBTemperatureInfo = new QLabel(dockWidgetContents_5);
         labelSMPCBTemperatureInfo->setObjectName(QString::fromUtf8("labelSMPCBTemperatureInfo"));
-        labelSMPCBTemperatureInfo->setFont(font6);
+        labelSMPCBTemperatureInfo->setFont(font8);
 
         gridLayout_8->addWidget(labelSMPCBTemperatureInfo, 5, 0, 1, 1);
 
         labelSampleCarrierTemperatureInfo = new QLabel(dockWidgetContents_5);
         labelSampleCarrierTemperatureInfo->setObjectName(QString::fromUtf8("labelSampleCarrierTemperatureInfo"));
-        labelSampleCarrierTemperatureInfo->setFont(font6);
+        labelSampleCarrierTemperatureInfo->setFont(font8);
 
         gridLayout_8->addWidget(labelSampleCarrierTemperatureInfo, 4, 0, 1, 1);
 
         labelControlModeInfo = new QLabel(dockWidgetContents_5);
         labelControlModeInfo->setObjectName(QString::fromUtf8("labelControlModeInfo"));
-        labelControlModeInfo->setFont(font6);
+        labelControlModeInfo->setFont(font8);
         labelControlModeInfo->setMouseTracking(true);
 
         gridLayout_8->addWidget(labelControlModeInfo, 0, 0, 1, 1);
 
         labelControlMode = new QLabel(dockWidgetContents_5);
         labelControlMode->setObjectName(QString::fromUtf8("labelControlMode"));
-        labelControlMode->setFont(font6);
+        labelControlMode->setFont(font8);
         labelControlMode->setMouseTracking(true);
 
         gridLayout_8->addWidget(labelControlMode, 0, 1, 1, 1);
@@ -616,7 +848,7 @@ public:
         MainWindow->setMenuBar(menuBar);
 
         retranslateUi(MainWindow);
-        QObject::connect(pushButton, SIGNAL(clicked()), MainWindow, SLOT(ButtonClicked()));
+        QObject::connect(applicationTabWidget, SIGNAL(currentChanged(int)), MainWindow, SLOT(applicationTabWidgetChanged()));
 
         applicationTabWidget->setCurrentIndex(0);
 
@@ -697,23 +929,35 @@ public:
         labelStatusPeltierCellInfo->setText(QApplication::translate("MainWindow", "Peltier Cell", 0, QApplication::UnicodeUTF8));
         labelStatusPeltierCell->setText(QApplication::translate("MainWindow", "Detection ongoing...", 0, QApplication::UnicodeUTF8));
         label_40->setText(QString());
-        applicationTabWidget->setTabText(applicationTabWidget->indexOf(tabAutodetection), QApplication::translate("MainWindow", "Autodetection", 0, QApplication::UnicodeUTF8));
-        pushButton->setText(QApplication::translate("MainWindow", "PushButton", 0, QApplication::UnicodeUTF8));
-        applicationTabWidget->setTabText(applicationTabWidget->indexOf(tab), QApplication::translate("MainWindow", "Page", 0, QApplication::UnicodeUTF8));
-        applicationTabWidget->setTabText(applicationTabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "Tab 2", 0, QApplication::UnicodeUTF8));
+        applicationTabWidget->setTabText(applicationTabWidget->indexOf(tabAutodetection), QApplication::translate("MainWindow", "Device Startup", 0, QApplication::UnicodeUTF8));
+        labelDevice->setText(QString());
+        labelUnitsDataSample1->setText(QApplication::translate("MainWindow", "N/A", 0, QApplication::UnicodeUTF8));
+        labelUnitsDataSample2->setText(QApplication::translate("MainWindow", "N/A", 0, QApplication::UnicodeUTF8));
+        labelUnitsDataRefSubst->setText(QApplication::translate("MainWindow", "N/A", 0, QApplication::UnicodeUTF8));
+        labelUnitsDataSample3->setText(QApplication::translate("MainWindow", "N/A", 0, QApplication::UnicodeUTF8));
+        labelUnitsDataSample4->setText(QApplication::translate("MainWindow", "N/A", 0, QApplication::UnicodeUTF8));
+        labelUnitsDataSampleCarrierTemperature->setText(QApplication::translate("MainWindow", "N/A", 0, QApplication::UnicodeUTF8));
+        labelUnitsDataHeaterTemperature->setText(QApplication::translate("MainWindow", "N/A", 0, QApplication::UnicodeUTF8));
+        labelUnitsDataHeaterPower->setText(QApplication::translate("MainWindow", "N/A", 0, QApplication::UnicodeUTF8));
+        labelUnitsDataSMPCBTemperature->setText(QApplication::translate("MainWindow", "N/A", 0, QApplication::UnicodeUTF8));
+        labelUnitsDataFanPower->setText(QApplication::translate("MainWindow", "N/A", 0, QApplication::UnicodeUTF8));
+        applicationTabWidget->setTabText(applicationTabWidget->indexOf(tabUnitsDataViewer), QApplication::translate("MainWindow", "Units Data Viewer", 0, QApplication::UnicodeUTF8));
+        applicationTabWidget->setTabText(applicationTabWidget->indexOf(tabHeaterControl), QApplication::translate("MainWindow", "Heater Power Control", 0, QApplication::UnicodeUTF8));
+        applicationTabWidget->setTabText(applicationTabWidget->indexOf(tabSegmentsManager), QApplication::translate("MainWindow", "Segments Configurator", 0, QApplication::UnicodeUTF8));
+        applicationTabWidget->setTabText(applicationTabWidget->indexOf(tabDscDataView), QApplication::translate("MainWindow", "DSC Data Viewer", 0, QApplication::UnicodeUTF8));
         dscDataDockWidget->setWindowTitle(QApplication::translate("MainWindow", "DSC / Device Data", 0, QApplication::UnicodeUTF8));
-        labelHeaterPower->setText(QApplication::translate("MainWindow", "50.27 %", 0, QApplication::UnicodeUTF8));
+        labelHeaterPower->setText(QApplication::translate("MainWindow", "N/A", 0, QApplication::UnicodeUTF8));
         labelHeaterPowerInfo->setText(QApplication::translate("MainWindow", "Heater Power", 0, QApplication::UnicodeUTF8));
         labelSPHeaterTemperatureInfo->setText(QApplication::translate("MainWindow", "<html><head/><body><p>SP Heater Temp.</p></body></html>", 0, QApplication::UnicodeUTF8));
-        labelSMPCBTemperature->setText(QApplication::translate("MainWindow", "<html><head/><body><p>59.25 <span style=\" vertical-align:super;\">o</span>C</p></body></html>", 0, QApplication::UnicodeUTF8));
-        labelSPHeaterTemperature->setText(QApplication::translate("MainWindow", "<html><head/><body><p>59.25 <span style=\" vertical-align:super;\">o</span>C</p></body></html>", 0, QApplication::UnicodeUTF8));
-        labelHeaterTemperature->setText(QApplication::translate("MainWindow", "<html><head/><body><p>59.25 <span style=\" vertical-align:super;\">o</span>C</p></body></html>", 0, QApplication::UnicodeUTF8));
+        labelSMPCBTemperature->setText(QApplication::translate("MainWindow", "<html><head/><body><p>N/A</p></body></html>", 0, QApplication::UnicodeUTF8));
+        labelSPHeaterTemperature->setText(QApplication::translate("MainWindow", "<html><head/><body><p>N/A</p></body></html>", 0, QApplication::UnicodeUTF8));
+        labelHeaterTemperature->setText(QApplication::translate("MainWindow", "<html><head/><body><p>N/A</p></body></html>", 0, QApplication::UnicodeUTF8));
         labelHeaterTemperatureInfo->setText(QApplication::translate("MainWindow", "Heater Temp.", 0, QApplication::UnicodeUTF8));
-        labelSampleCarrierTemperature->setText(QApplication::translate("MainWindow", "<html><head/><body><p>59.25 <span style=\" vertical-align:super;\">o</span>C</p></body></html>", 0, QApplication::UnicodeUTF8));
+        labelSampleCarrierTemperature->setText(QApplication::translate("MainWindow", "<html><head/><body><p>N/A</p></body></html>", 0, QApplication::UnicodeUTF8));
         labelSMPCBTemperatureInfo->setText(QApplication::translate("MainWindow", "<html><head/><body><p>SM PCB Temp.</p></body></html>", 0, QApplication::UnicodeUTF8));
         labelSampleCarrierTemperatureInfo->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Sample Carrier</p><p>Temp.</p></body></html>", 0, QApplication::UnicodeUTF8));
         labelControlModeInfo->setText(QApplication::translate("MainWindow", "Control Mode", 0, QApplication::UnicodeUTF8));
-        labelControlMode->setText(QApplication::translate("MainWindow", "No Control", 0, QApplication::UnicodeUTF8));
+        labelControlMode->setText(QApplication::translate("MainWindow", "N/A", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

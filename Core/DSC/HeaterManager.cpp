@@ -9,7 +9,7 @@ namespace DSC
     bool HeaterManager::initialize()
     {
         std::lock_guard<std::mutex> lockGuard(mMtx);
-        DataManager::updateData(EDataType::HeaterPower, DataManager::UnknownValue);
+        DataManager::updateData(EDataType::HeaterPower, 0.0);
         DataManager::updateData(EDataType::HeaterTemperature, DataManager::UnknownValue);
         DataManager::updateData(EDataType::SPHeaterTemperature, DataManager::UnknownValue);
 
@@ -115,7 +115,7 @@ namespace DSC
     void HeaterManager::heaterTemperatureIndCallback(THeaterTemperatureInd && ind)
     {
         std::lock_guard<std::mutex> lockGuard(mMtx);
-        Logger::debug("%s: Received HeaterTemperatureInd. New value: %.2f oC.", getLoggerPrefix().c_str(), ind.temperature);
+        //Logger::debug("%s: Received HeaterTemperatureInd. New value: %.2f oC.", getLoggerPrefix().c_str(), ind.temperature);
         DataManager::updateData(EDataType::HeaterTemperature, ind.temperature);
     }
 
@@ -145,6 +145,7 @@ namespace DSC
             if (response.success)
             {
                 Logger::info("%s: Started registering heater temperature value.", getLoggerPrefix().c_str());
+                DataManager::updateUnitAttribute(EUnitId_LMP90100ControlSystem, "DataRegistering", "Enabled");
             }
             else
             {
@@ -167,6 +168,7 @@ namespace DSC
             {
                 Logger::info("%s: Stopped registering heater temperature value.", getLoggerPrefix().c_str());
                 DataManager::updateData(EDataType::HeaterTemperature, DataManager::UnknownValue);
+                DataManager::updateUnitAttribute(EUnitId_LMP90100ControlSystem, "DataRegistering", "Disabled");
             }
             else
             {

@@ -18,7 +18,7 @@ namespace DSC
         public :
 
             typedef u16 CallbackId;
-            static double UnknownValue;
+            static const double UnknownValue;
 
             static void updateData(EDataType dataType, double value);
             static double getData(EDataType dataType);

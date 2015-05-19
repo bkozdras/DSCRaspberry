@@ -77,13 +77,53 @@ namespace DSC
         std::lock_guard<std::mutex> lockGuard(mMtx);
 
         Logger::debug("%s: Received SampleCarrierDataInd.", getLoggerPrefix().c_str());
-        Logger::debug("%s: Sample carrier temperature: %.2f oC.", getLoggerPrefix().c_str(), ind.data.rtdTemperatureValue);
-        DataManager::updateData(EDataType::SampleCarrierTemperature, ind.data.rtdTemperatureValue);
 
-        for (u8 iter = 0; THERMOCOUPLES_COUNT > iter; ++iter)
+        switch (ind.data.unitId)
         {
-            Logger::debug("%s: Sample carrier %s value: %.4 mV.", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(ind.data.data[iter].thermocouple).c_str(), ind.data.data[iter].milliVoltVoltage);
-            DataManager::updateData(convertThermocoupleUnitIdToDataType(ind.data.data[iter].thermocouple), ind.data.data[iter].milliVoltVoltage);
+            case EUnitId_Rtd1Pt100:
+            {
+                Logger::debug("%s: Sample carrier temperature: %.2f oC.", getLoggerPrefix().c_str(), ind.data.value);
+                DataManager::updateData(EDataType::SampleCarrierTemperature, ind.data.value);
+                break;
+            }
+
+            case EUnitId_ThermocoupleReference :
+            {
+                Logger::debug("%s: Sample carrier %s value: %.4f mV.", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(EUnitId_ThermocoupleReference).c_str(), ind.data.value);
+                DataManager::updateData(convertThermocoupleUnitIdToDataType(EUnitId_ThermocoupleReference), ind.data.value);
+                break;
+            }
+
+            case EUnitId_Thermocouple1 :
+            {
+                Logger::debug("%s: Sample carrier %s value: %.4f mV.", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(EUnitId_Thermocouple1).c_str(), ind.data.value);
+                DataManager::updateData(convertThermocoupleUnitIdToDataType(EUnitId_Thermocouple1), ind.data.value);
+                break;
+            }
+
+            case EUnitId_Thermocouple2 :
+            {
+                Logger::debug("%s: Sample carrier %s value: %.4f mV.", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(EUnitId_Thermocouple2).c_str(), ind.data.value);
+                DataManager::updateData(convertThermocoupleUnitIdToDataType(EUnitId_Thermocouple2), ind.data.value);
+                break;
+            }
+
+            case EUnitId_Thermocouple3 :
+            {
+                Logger::debug("%s: Sample carrier %s value: %.4f mV.", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(EUnitId_Thermocouple3).c_str(), ind.data.value);
+                DataManager::updateData(convertThermocoupleUnitIdToDataType(EUnitId_Thermocouple3), ind.data.value);
+                break;
+            }
+
+            case EUnitId_Thermocouple4 :
+            {
+                Logger::debug("%s: Sample carrier %s value: %.4f mV.", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(EUnitId_Thermocouple4).c_str(), ind.data.value);
+                DataManager::updateData(convertThermocoupleUnitIdToDataType(EUnitId_Thermocouple4), ind.data.value);
+                break;
+            }
+
+            default :
+                break;
         }
     }
 
@@ -96,6 +136,7 @@ namespace DSC
             if (response.success)
             {
                 Logger::info("%s: Started registering Sample Carrier data values.", getLoggerPrefix().c_str());
+                DataManager::updateUnitAttribute(EUnitId_ADS1248, "DataRegistering", "Enabled");
             }
             else
             {
@@ -117,6 +158,7 @@ namespace DSC
             if (response.success)
             {
                 Logger::info("%s: Stopped registering Sample Carrier data values.", getLoggerPrefix().c_str());
+                DataManager::updateUnitAttribute(EUnitId_LMP90100ControlSystem, "DataRegistering", "Disabled");
             }
             else
             {

@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="qss_icons">
+    <file>../Images/DeviceTransparent.png</file>
     <file>../Images/RTDSMD.gif</file>
     <file>../Images/LMP90100.gif</file>
     <file>../Images/Peltier.gif</file>
@@ -34,6 +35,9 @@
     <file>rc/Vsepartoolbar.png</file>
     <file>rc/down_arrow_disabled.png</file>
     <file>rc/undock.png</file>
+  </qresource>
+  <qresource prefix="newPrefix">
+    <file>../Images/DeviceTransparent.gif</file>
   </qresource>
   <qresource prefix="qdarkstyle">
     <file>style.qss</file>

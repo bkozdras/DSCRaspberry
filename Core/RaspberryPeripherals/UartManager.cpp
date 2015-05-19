@@ -35,7 +35,7 @@ bool UartManager::initialize()
 
 void UartManager::transmitData(TMessage & message)
 {
-    Logger::debug("%s: Transmitting message: %s (Length: %u) to Nucleo device.", getLoggerPrefix().c_str(), ToStringConverter::getMessageId(message.id).c_str(), message.length);
+    Logger::info("%s: Transmitting message: %s (Length: %u) to Nucleo device.", getLoggerPrefix().c_str(), ToStringConverter::getMessageId(message.id).c_str(), message.length);
     for (u8 iter = 0; message.length > iter; ++iter)
     {
         Logger::debug("%s: Message byte [%u]: 0x%02X.", getLoggerPrefix().c_str(), iter, message.data[iter]);
@@ -78,6 +78,8 @@ void UartManager::initializeInternalData()
     mHandlingMessage = std::make_shared<TMessage>();
 
     mNewMessageCallback = decltype(mNewMessageCallback)();
+
+    mIsCommunicationFailureGenerated = false;
 }
 
 void UartManager::initializeTerminal()
@@ -171,8 +173,13 @@ bool UartManager::headerPhaseMessageParser()
 
     if (!validateMessageHeader())
     {
-        Logger::error("%s: Message header verification failed!", getLoggerPrefix().c_str());
-        FaultManager::generate(EFaultId_Communication, EUnitId_Raspberry, EUnitId_Nucleo);
+        if (!mIsCommunicationFailureGenerated)
+        {
+            Logger::warning("%s: Message header verification failed!", getLoggerPrefix().c_str());
+            FaultManager::generate(EFaultId_Communication, EUnitId_Raspberry, EUnitId_Nucleo);
+            mIsCommunicationFailureGenerated = true;
+            //mAsyncSerial.clearCallback();
+        }
         return false;
     }
 
@@ -212,17 +219,23 @@ bool UartManager::endPhaseMessageParser()
         return false;
     }
 
+    mActualReceivingPhase = MessageReceivingPhase::Header;
+
     if (!validateMessageEnd())
     {
-        Logger::error("%s: Message end verification failed!", getLoggerPrefix().c_str());
-        FaultManager::generate(EFaultId_Communication, EUnitId_Raspberry, EUnitId_Nucleo);
+        if (!mIsCommunicationFailureGenerated)
+        {
+            Logger::warning("%s: Message end verification failed!", getLoggerPrefix().c_str());
+            Logger::warning("%s: Receiving message: %s failed.", getLoggerPrefix().c_str(), ToStringConverter::getMessageId(mHandlingMessage->id).c_str());
+            FaultManager::generate(EFaultId_Communication, EUnitId_Raspberry, EUnitId_Nucleo);
+            mIsCommunicationFailureGenerated = true;
+            //mAsyncSerial.clearCallback();
+        }
         return false;
     }
 
     processWithReceivedMessage();
     mHandlingMessage = std::make_shared<TMessage>();
-
-    mActualReceivingPhase = MessageReceivingPhase::Header;
 
     return true;
 }
@@ -249,6 +262,49 @@ bool UartManager::validateMessageHeader()
 
 bool UartManager::validateMessageEnd()
 {
+    std::vector<TByte> endMessage;
+    endMessage.push_back(getAndPopFromReceivedDataBuffer());
+    endMessage.push_back(getAndPopFromReceivedDataBuffer());
+    endMessage.push_back(getAndPopFromReceivedDataBuffer());
+    endMessage.push_back(getAndPopFromReceivedDataBuffer());
+
+    if ('E' != endMessage[0])
+    {
+        for (const auto & end : endMessage)
+        {
+            Logger::warning("%s: Message End: 0x%02X (%c).", getLoggerPrefix().c_str(), end, end);
+        }
+        return false;
+    }
+
+    if ('N' != endMessage[1])
+    {
+        for (const auto & end : endMessage)
+        {
+            Logger::warning("%s: Message End: 0x%02X (%c).", getLoggerPrefix().c_str(), end, end);
+        }
+        return false;
+    }
+
+    if ('D' != endMessage[2])
+    {
+        for (const auto & end : endMessage)
+        {
+            Logger::warning("%s: Message End: 0x%02X (%c).", getLoggerPrefix().c_str(), end, end);
+        }
+        return false;
+    }
+
+    if ('\n' != endMessage[3])
+    {
+        for (const auto & end : endMessage)
+        {
+            Logger::warning("%s: Message End: 0x%02X (%c).", getLoggerPrefix().c_str(), end, end);
+        }
+        return false;
+    }
+
+    /*
     if ('E' != getAndPopFromReceivedDataBuffer())
     {
         return false;
@@ -267,7 +323,7 @@ bool UartManager::validateMessageEnd()
     if ('\n' != getAndPopFromReceivedDataBuffer())
     {
         return false;
-    }
+    }*/
 
     return true;
 }
@@ -279,6 +335,19 @@ void UartManager::newDataReceivedCallback(const char* data, size_t length)
     mReceivedDataBuffer.insert(mReceivedDataBuffer.begin(), data, data + length);
 
     auto isParsingPassed = true;
+
+    if (mIsCommunicationFailureGenerated)
+    {
+        // Waiting for correct message to establish transmission again
+
+        // "MSG" oczekiwanie jak ok to reszta headera
+
+        // cancel fault if is Ok
+
+        // if messages count == 10 - broke transmission and report permanent error
+
+        return;
+    }
 
     while (isParsingPassed)
     {
@@ -340,3 +409,4 @@ UartManager::MessageReceivingPhase UartManager::mActualReceivingPhase;
 std::shared_ptr<TMessage> UartManager::mHandlingMessage;
 std::mutex UartManager::mReceivedDataMtx;
 std::function<void(std::shared_ptr<TMessage>)> UartManager::mNewMessageCallback;
+bool UartManager::mIsCommunicationFailureGenerated;

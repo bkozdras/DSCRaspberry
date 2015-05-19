@@ -19,6 +19,8 @@
 #include "../DSC/SMPCBTemperatureManager.hpp"
 #include "../System/SystemErrorsManager.hpp"
 
+#include "../RaspberryPeripherals/UartMessageMemoryManager.hpp"
+
 void DeviceConfigurator::configureEnvironment()
 {
     std::lock_guard<std::mutex> lockGuard(mMtx);
@@ -56,7 +58,7 @@ bool DeviceConfigurator::configureSystem()
         Logger::error("%s: Not ready for applying user settings and programs!", getLoggerPrefix().c_str());
     }
 
-    //Logger::setLevel(LoggerOutput::GuiTable, LoggerLevel::Info);
+    Logger::setLevel(LoggerOutput::GuiTable, LoggerLevel::Info);
 
     return success;
 }
@@ -166,6 +168,14 @@ bool DeviceConfigurator::configureDSCManagers()
                     newIcModeIndication(unitId, newMode);
                 }
             );
+
+            DSC::DataManager::registerNewUnitAttributeCallback
+            (
+                [](EUnitId unitId, const std::string & attributeName, const std::string & attribute)
+                {
+                    updateUnitAttributeIndication(unitId, attributeName, attribute);
+                }
+            );
         }
     }
 
@@ -216,9 +226,6 @@ void DeviceConfigurator::newIcModeIndication(EUnitId unitId, u8 newMode)
             {
                 DSC::HeaterManager::startRegisteringTemperatureValue();
             }
-            {
-                DSC::IntegratedCircuitsManager::changeLMP90100Mode(EUnitId_LMP90100SignalsMeasurement, ELMP90100Mode_On_1_6775_SPS);
-            }
 
             break;
         }
@@ -230,9 +237,6 @@ void DeviceConfigurator::newIcModeIndication(EUnitId unitId, u8 newMode)
 
             {
                 DSC::SMPCBTemperatureManager::startRegisteringTemperatureValue();
-            }
-            {
-                DSC::IntegratedCircuitsManager::changeADS1248Mode(EADS1248Mode_On);
             }
 
             break;
@@ -296,7 +300,49 @@ void DeviceConfigurator::updateUnitAttributeIndication(EUnitId unitId, const std
                 Logger::debug("%s: %s unit channels sampling speed set to %s.", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(unitId).c_str(), value.c_str());
 
                 {
-                    DSC::IntegratedCircuitsManager::callibreADS1248(EADS1248CallibrationType_SystemGain);
+                    //DSC::IntegratedCircuitsManager::callibreADS1248(EADS1248CallibrationType_SystemGain);
+                    DSC::IntegratedCircuitsManager::callibreADS1248(EADS1248CallibrationType_SelfOffset);
+                }
+            }
+            else if ("DataRegistering" == attribute)
+            {
+                if ("Enabled" == value)
+                {
+                    Logger::debug("%s: Started collecting data from %s..", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(unitId).c_str());
+                }
+            }
+
+            break;
+        }
+
+        case EUnitId_LMP90100ControlSystem:
+        {
+            if ("DataRegistering" == attribute)
+            {
+                if ("Enabled" == value)
+                {
+                    Logger::debug("%s: Started collecting data from %s..", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(unitId).c_str());
+
+                    {
+                        DSC::IntegratedCircuitsManager::changeLMP90100Mode(EUnitId_LMP90100SignalsMeasurement, ELMP90100Mode_On_1_6775_SPS);
+                    }
+                }
+            }
+
+            break;
+        }
+
+        case EUnitId_LMP90100SignalsMeasurement:
+        {
+            if ("DataRegistering" == attribute)
+            {
+                if ("Enabled" == value)
+                {
+                    Logger::debug("%s: Started collecting data from %s..", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(unitId).c_str());
+
+                    {
+                        DSC::IntegratedCircuitsManager::changeADS1248Mode(EADS1248Mode_On);
+                    }
                 }
             }
 

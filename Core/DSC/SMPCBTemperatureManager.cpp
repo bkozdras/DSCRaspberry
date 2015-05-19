@@ -115,6 +115,7 @@ namespace DSC
             if (response.success)
             {
                 Logger::info("%s: Started registering Signals Measurement PCB temperature value.", getLoggerPrefix().c_str());
+                DataManager::updateUnitAttribute(EUnitId_LMP90100SignalsMeasurement, "DataRegistering", "Enabled");
             }
             else
             {
@@ -136,6 +137,7 @@ namespace DSC
             if (response.success)
             {
                 Logger::info("%s: Stopped registering Signals Measurement PCB temperature value.", getLoggerPrefix().c_str());
+                DataManager::updateUnitAttribute(EUnitId_LMP90100SignalsMeasurement, "DataRegistering", "Disabled");
             }
             else
             {

@@ -2,7 +2,6 @@
 #include "../System/ThreadPool.hpp"
 #include "../Utilities/Logger.hpp"
 #include "../Utilities/ToStringConverter.hpp"
-#include <limits>
 
 namespace DSC
 {
@@ -28,7 +27,15 @@ namespace DSC
     double DataManager::getData(EDataType dataType)
     {
         std::lock_guard<std::mutex> lockGuard(mMtx);
-        return mDataValues[dataType];
+        auto iter = mDataValues.find(dataType);
+        if (std::end(mDataValues) != iter)
+        {
+            return iter->second;
+        }
+        else
+        {
+            return DSC::DataManager::UnknownValue;
+        }
     }
     
     void DataManager::updateControlMode(EControlMode controlMode)
@@ -244,5 +251,5 @@ namespace DSC
     std::map<DataManager::CallbackId, std::function<void(EUnitId, const std::string &, const std::string &)>> DataManager::mNewUnitAttributeCallbacks;
     EControlMode DataManager::mControlMode;
     std::mutex DataManager::mMtx;
-    double DataManager::UnknownValue = std::numeric_limits<double>::min();
+    const double DataManager::UnknownValue = 99999999999.0;
 }
