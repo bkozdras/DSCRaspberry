@@ -107,6 +107,13 @@ private:
     void changeUnitsDataViewerDataValue(EDataType dataType, double value);
     QLabel* getQLabelForUnitsDataViewer(EDataType dataType);
     QString convertUnitsDataViewerDataValueToQString(EDataType dataType, double value);
+
+    // Heater Power Control
+
+    std::mutex mHeaterPowerControlMtx;
+    bool mIsHeaterPowerControlWorking;
+
+    void setupHeaterPowerControl();
 };
 
 #endif // MAINWINDOW_H

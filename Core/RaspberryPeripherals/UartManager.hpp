@@ -26,7 +26,9 @@ class UartManager : public boost::noncopyable
         {
             Header,
             Data,
-            End
+            End,
+            HeaderMsgFailureMode,
+            HeaderDataFailureMode
         };
 
         static CallbackAsyncSerial mAsyncSerial;
@@ -45,6 +47,8 @@ class UartManager : public boost::noncopyable
         static bool headerPhaseMessageParser();
         static bool dataPhaseMessageParser();
         static bool endPhaseMessageParser();
+        static bool headerMsgFailureModePhaseMessageParser();
+        static bool headerDataFailureModePhaseMessageParser();
 
         static bool validateMessageHeader();
         static bool validateMessageEnd();

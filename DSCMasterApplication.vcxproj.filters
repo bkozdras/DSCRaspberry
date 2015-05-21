@@ -142,6 +142,9 @@
     <ClCompile Include="Core\System\SystemErrorsManager.cpp">
       <Filter>Core\System</Filter>
     </ClCompile>
+    <ClCompile Include="qcustomplot.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="MainWindow.ui">
@@ -329,6 +332,9 @@
     </ClInclude>
     <ClInclude Include="Core\System\SystemErrorsManager.hpp">
       <Filter>Core\System</Filter>
+    </ClInclude>
+    <ClInclude Include="qcustomplot.h">
+      <Filter>Header files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -137,6 +137,7 @@
     <ClCompile Include="DSCMasterApplication.cpp" />
     <ClCompile Include="InfoDialog.cpp" />
     <ClCompile Include="MainWindow.cpp" />
+    <ClCompile Include="qcustomplot.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="debug.pro" />
@@ -203,6 +204,7 @@
     <ClInclude Include="Core\Utilities\Utilities.hpp" />
     <ClInclude Include="InfoDialog.h" />
     <ClInclude Include="MainWindow.h" />
+    <ClInclude Include="qcustomplot.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

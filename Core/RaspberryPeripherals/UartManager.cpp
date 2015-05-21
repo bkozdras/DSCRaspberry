@@ -178,6 +178,7 @@ bool UartManager::headerPhaseMessageParser()
             Logger::warning("%s: Message header verification failed!", getLoggerPrefix().c_str());
             FaultManager::generate(EFaultId_Communication, EUnitId_Raspberry, EUnitId_Nucleo);
             mIsCommunicationFailureGenerated = true;
+            Logger::warning("%s: Failure mode! Searching for correct data frame...", getLoggerPrefix().c_str());
             //mAsyncSerial.clearCallback();
         }
         return false;
@@ -229,6 +230,8 @@ bool UartManager::endPhaseMessageParser()
             Logger::warning("%s: Receiving message: %s failed.", getLoggerPrefix().c_str(), ToStringConverter::getMessageId(mHandlingMessage->id).c_str());
             FaultManager::generate(EFaultId_Communication, EUnitId_Raspberry, EUnitId_Nucleo);
             mIsCommunicationFailureGenerated = true;
+            mActualReceivingPhase = MessageReceivingPhase::HeaderMsgFailureMode;
+            Logger::warning("%s: Failure mode! Searching for correct data frame...", getLoggerPrefix().c_str());
             //mAsyncSerial.clearCallback();
         }
         return false;
@@ -236,6 +239,80 @@ bool UartManager::endPhaseMessageParser()
 
     processWithReceivedMessage();
     mHandlingMessage = std::make_shared<TMessage>();
+
+    return true;
+}
+
+bool UartManager::headerMsgFailureModePhaseMessageParser()
+{
+    if (mReceivedDataBuffer.size() < 3)
+    {
+        return false;
+    }
+
+    static bool isMFound = false;
+    static bool isSFound = false;
+    bool isHeaderMsgFound = false;
+
+    while (!mReceivedDataBuffer.empty() && !isHeaderMsgFound)
+    {
+        if (!isMFound)
+        {
+            if ('M' == getAndPopFromReceivedDataBuffer())
+            {
+                isMFound = true;
+            }
+
+            continue;
+        }
+
+        if (!isSFound)
+        {
+            if ('S' == getAndPopFromReceivedDataBuffer())
+            {
+                isSFound = true;
+                continue;
+            }
+
+            isMFound = false;
+            continue;
+        }
+
+        if ('G' == getAndPopFromReceivedDataBuffer())
+        {
+            isHeaderMsgFound = true;
+        }
+        
+        isMFound = false;
+        isSFound = false;
+    }
+
+    if (isHeaderMsgFound)
+    {
+        mActualReceivingPhase = MessageReceivingPhase::HeaderDataFailureMode;
+        mIsCommunicationFailureGenerated = false;
+        Logger::warning("%s: Communication established after incorrect data receiving!", getLoggerPrefix().c_str());
+        FaultManager::cancel(EFaultId_Communication, EUnitId_Raspberry, EUnitId_Nucleo);
+    }
+
+    return isHeaderMsgFound;
+}
+
+bool UartManager::headerDataFailureModePhaseMessageParser()
+{
+    if (mReceivedDataBuffer.size() < 5)
+    {
+        return false;
+    }
+
+    mHandlingMessage->id = static_cast<EMessageId>(getAndPopFromReceivedDataBuffer());
+    mHandlingMessage->transactionId = getAndPopFromReceivedDataBuffer();
+    mHandlingMessage->crc = getAndPopFromReceivedDataBuffer();
+    mHandlingMessage->crc |= ((getAndPopFromReceivedDataBuffer() >> 8) && 0xFF);
+    mHandlingMessage->length = getAndPopFromReceivedDataBuffer();
+    mHandlingMessage->data = UartMessageMemoryManager::allocate(mHandlingMessage->id);
+
+    mActualReceivingPhase = MessageReceivingPhase::Data;
 
     return true;
 }
@@ -272,7 +349,7 @@ bool UartManager::validateMessageEnd()
     {
         for (const auto & end : endMessage)
         {
-            Logger::warning("%s: Message End: 0x%02X (%c).", getLoggerPrefix().c_str(), end, end);
+            Logger::debug("%s: Message End: 0x%02X (%c).", getLoggerPrefix().c_str(), end, end);
         }
         return false;
     }
@@ -281,7 +358,7 @@ bool UartManager::validateMessageEnd()
     {
         for (const auto & end : endMessage)
         {
-            Logger::warning("%s: Message End: 0x%02X (%c).", getLoggerPrefix().c_str(), end, end);
+            Logger::debug("%s: Message End: 0x%02X (%c).", getLoggerPrefix().c_str(), end, end);
         }
         return false;
     }
@@ -290,7 +367,7 @@ bool UartManager::validateMessageEnd()
     {
         for (const auto & end : endMessage)
         {
-            Logger::warning("%s: Message End: 0x%02X (%c).", getLoggerPrefix().c_str(), end, end);
+            Logger::debug("%s: Message End: 0x%02X (%c).", getLoggerPrefix().c_str(), end, end);
         }
         return false;
     }
@@ -299,7 +376,7 @@ bool UartManager::validateMessageEnd()
     {
         for (const auto & end : endMessage)
         {
-            Logger::warning("%s: Message End: 0x%02X (%c).", getLoggerPrefix().c_str(), end, end);
+            Logger::debug("%s: Message End: 0x%02X (%c).", getLoggerPrefix().c_str(), end, end);
         }
         return false;
     }
@@ -336,19 +413,6 @@ void UartManager::newDataReceivedCallback(const char* data, size_t length)
 
     auto isParsingPassed = true;
 
-    if (mIsCommunicationFailureGenerated)
-    {
-        // Waiting for correct message to establish transmission again
-
-        // "MSG" oczekiwanie jak ok to reszta headera
-
-        // cancel fault if is Ok
-
-        // if messages count == 10 - broke transmission and report permanent error
-
-        return;
-    }
-
     while (isParsingPassed)
     {
         switch (mActualReceivingPhase)
@@ -368,6 +432,18 @@ void UartManager::newDataReceivedCallback(const char* data, size_t length)
             case MessageReceivingPhase::End:
             {
                 isParsingPassed = endPhaseMessageParser();
+                break;
+            }
+
+            case MessageReceivingPhase::HeaderMsgFailureMode:
+            {
+                isParsingPassed = headerMsgFailureModePhaseMessageParser();
+                break;
+            }
+
+            case MessageReceivingPhase::HeaderDataFailureMode:
+            {
+                isParsingPassed = headerDataFailureModePhaseMessageParser();
                 break;
             }
         }

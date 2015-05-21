@@ -89,7 +89,7 @@ namespace DSC
 
             case EUnitId_ThermocoupleReference :
             {
-                Logger::debug("%s: Sample carrier %s value: %.4f mV.", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(EUnitId_ThermocoupleReference).c_str(), ind.data.value);
+                Logger::debug("%s: Sample carrier %s value: %.4f uV.", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(EUnitId_ThermocoupleReference).c_str(), ind.data.value);
                 DataManager::updateData(convertThermocoupleUnitIdToDataType(EUnitId_ThermocoupleReference), ind.data.value);
                 break;
             }

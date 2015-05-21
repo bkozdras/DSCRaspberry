@@ -35,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setupAutodetectionTabLabels();
     setupDscDeviceDataLabels();
     setupUnitsDataViewer();
+    setupHeaterPowerControl();
 
     this->showMaximized();
 }
@@ -117,6 +118,11 @@ void MainWindow::setupApplicationDockLogger()
         QFont font("Arial", 16);
         font.setBold(true);
         ui->applicationTabWidget->setFont(font);
+        ui->tabAutodetection->setFont(font);
+        ui->tabDscDataView->setFont(font);
+        ui->tabHeaterControl->setFont(font);
+        ui->tabSegmentsManager->setFont(font);
+        ui->tabUnitsDataViewer->setFont(font);
     }
 }
 
@@ -743,8 +749,10 @@ QString MainWindow::convertUnitsDataViewerDataValueToQString(EDataType dataType,
             case EDataType::Thermocouple3:
             case EDataType::Thermocouple4:
             {
-                precision = 6;
-                postFix = " mV";
+                precision = 3;
+                postFix += ' ';
+                postFix += QChar(0x3BC);
+                postFix += "V";
                 break;
             }
 
@@ -777,4 +785,11 @@ QString MainWindow::convertUnitsDataViewerDataValueToQString(EDataType dataType,
     str += postFix;
 
     return str;
+}
+
+void MainWindow::setupHeaterPowerControl()
+{
+    std::lock_guard<std::mutex> lockGuard(mHeaterPowerControlMtx);
+
+
 }

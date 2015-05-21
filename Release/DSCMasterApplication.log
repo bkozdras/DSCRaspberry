@@ -1,21 +1,13 @@
-﻿Build started 19/05/2015 23:06:46.
+﻿Build started 21/05/2015 22:50:04.
      1>Project "E:\Work\DSCProject\DSCMasterApplication\DSCMasterApplication\DSCMasterApplication.vcxproj" on node 2 (Build target(s)).
      1>Build:
          "C:\Program Files (x86)\Sysprogs\VisualGDB\\VisualGDB.exe" /build "E:\Work\DSCProject\DSCMasterApplication\DSCMasterApplication\DSCMasterApplication.vcxproj" "/solution:E:\Work\DSCProject\DSCMasterApplication\DSCMasterApplication.sln" "/config:Release" "/platform:Win32"
          VisualGDB: Run "C:\SysGCC\raspberry\Qt\v4\qmake.exe  DSCMasterApplication.pro CONFIGNAME=Release        " in directory "E:\Work\DSCProject\DSCMasterApplication\DSCMasterApplication" on local computer
      1>EXEC : warning : e:\Work\DSCProject\DSCMasterApplication\DSCMasterApplication\release.pro:9: Unescaped backslashes are deprecated.
          VisualGDB: Run "cmd.exe /c "C:\SysGCC\raspberry\bin\make.exe"" in directory "E:\Work\DSCProject\DSCMasterApplication\DSCMasterApplication" on local computer
-         C:/SysGCC/raspberry/bin/arm-linux-gnueabihf-g++.exe -c -pipe -Wno-psabi -std=c++14 -std=c++14 -O2 -Wall -W -D_REENTRANT -DQT_WEBKIT -DQT_WEBKIT -DRASPBERRY -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -Ic:/sysgcc/raspberry/arm-linux-gnueabihf/sysroot/usr/share/qt4/mkspecs/arm-linux-gnueabihf -I. -Ic:/sysgcc/raspberry/arm-linux-gnueabihf/sysroot/usr/include/qt4/QtCore -Ic:/sysgcc/raspberry/arm-linux-gnueabihf/sysroot/usr/include/qt4/QtGui -Ic:/sysgcc/raspberry/arm-linux-gnueabihf/sysroot/usr/include/qt4 -I../../../LibrariesCPlusPlus/boost_1_58_0_ARM7 -IRelease -IRelease -o Release/UartManager.o Core/RaspberryPeripherals/UartManager.cpp
-         In file included from ../../../LibrariesCPlusPlus/boost_1_58_0_ARM7/boost/thread.hpp:24:0,
-                          from Core/RaspberryPeripherals/AsyncSerial.hpp:13,
-                          from Core/RaspberryPeripherals/UartManager.hpp:3,
-                          from Core/RaspberryPeripherals/UartManager.cpp:1:
-     1>E:\Work\DSCProject\DSCMasterApplication\DSCMasterApplication\..\..\..\LibrariesCPlusPlus\boost_1_58_0_ARM7\boost\thread\future.hpp(410,77): warning : unused parameter 'lk' [-Wunused-parameter]
-                      future_state::state get_state(boost::unique_lock<boost::mutex>& lk) const
-                                                                                      ^
-         C:/SysGCC/raspberry/bin/arm-linux-gnueabihf-g++.exe -Wl,-O1 -o Release/DSCMasterApplication Release/StateManager.o Release/UnitsDetector.o Release/DataManager.o Release/HeaterManager.o Release/IntegratedCircuitsManager.o Release/SampleCarrierManager.o Release/SegmentsManager.o Release/SMPCBTemperatureManager.o Release/FaultManager.o Release/DeviceCommunicator.o Release/MessageGateway.o Release/AsyncSerial.o Release/GPIOClass.o Release/GpioManager.o Release/UartManager.o Release/UartMessageMemoryManager.o Release/ActiveObject.o Release/DeviceConfigurator.o Release/SystemErrorsManager.o Release/ThreadPool.o Release/TimerManager.o Release/ScopedThread.o Release/Logger.o Release/ToStringConverter.o Release/Utilities.o Release/DSCMasterApplication.o Release/InfoDialog.o Release/MainWindow.o Release/moc_InfoDialog.o Release/moc_MainWindow.o Release/qrc_style.o    -Lc:/sysgcc/raspberry/arm-linux-gnueabihf/sysroot/usr/lib -LE:\Work\LibrariesCPlusPlus\boost_1_58_0_ARM7\stage\lib -lboost_system -lboost_thread -lQtGui -lQtCore -lpthread 
+         make: Nothing to be done for `first'.
      1>Done Building Project "E:\Work\DSCProject\DSCMasterApplication\DSCMasterApplication\DSCMasterApplication.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:06.78
+Time Elapsed 00:00:01.65
