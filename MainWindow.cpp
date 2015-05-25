@@ -3,6 +3,7 @@
 #include "InfoDialog.h"
 #include <QMessageBox>
 #include <algorithm>
+#include <cmath>
 #include <functional>
 #include <iomanip>
 #include <limits>
@@ -15,9 +16,13 @@
 #include "../Core/System/DeviceConfigurator.hpp"
 #include "../Core/Utilities/Logger.hpp"
 #include "../Core/Utilities/ToStringConverter.hpp"
+#include "../Core/Utilities/Utilities.hpp"
 #include "../Core/DevicePeripherals/UnitsDetector.hpp"
 #include "../Core/DSC/IntegratedCircuitsManager.hpp"
 #include "../Core/DSC/DataManager.hpp"
+#include "../Core/DSC/HeaterManager.hpp"
+#include "../Core/DSC/FileDataManager.hpp"
+#include "../WindowApp/HeaterTemperaturePlotManager.hpp"
 #include <map>
 #include <iostream>
 
@@ -65,6 +70,13 @@ void MainWindow::applicationTabWidgetChanged()
         case unitsDataViewerTab:
         {
             unitsDataViewerStopWorking();
+            break;
+        }
+
+        case heaterPowerControlTab:
+        {
+            heaterPowerControlStopWorking();
+            break;
         }
 
         default :
@@ -76,6 +88,12 @@ void MainWindow::applicationTabWidgetChanged()
         case unitsDataViewerTab:
         {
             unitsDataViewerStartWorking();
+            break;
+        }
+
+        case heaterPowerControlTab:
+        {
+            heaterPowerControlStartWorking();
         }
 
         default:
@@ -543,8 +561,9 @@ const QString & MainWindow::getQStringForControlMode(EControlMode controlMode)
 {
     static std::map<EControlMode, QString> modeToQString = decltype(modeToQString)
     {
-        { EControlMode::Feedback, "Feedback" },
-        { EControlMode::NoControl, "No Control" },
+        { EControlMode::NotSet, "Not Set" },
+        { EControlMode::SimpleFeedback, "Simple Feedback" },
+        { EControlMode::MFCFeedback, "MFC Feedback" },
         { EControlMode::OpenLoop, "Open Loop" }
     };
 
@@ -791,5 +810,502 @@ void MainWindow::setupHeaterPowerControl()
 {
     std::lock_guard<std::mutex> lockGuard(mHeaterPowerControlMtx);
 
+    mIsHeaterPowerControlWorking = false;
+
+    auto setLightGreenTextColor =
+        [this](QLabel* label)
+    {
+        label->setStyleSheet("QLabel { color:rgb(153,255,51) }");
+    };
+
+    auto setLightRedTextColor =
+        [this](QLabel* label)
+    {
+        label->setStyleSheet("QLabel { color:rgb(255,51,51) }");
+    };
+
+    setLightGreenTextColor(ui->labelHeaterPowerControlModeTemperatureInfo);
+    setLightRedTextColor(ui->labelHeaterPowerControlModePowerInfo);
+
+    mHeaterPowerControlPlotTimer = std::make_shared<QTimer>(this);
+    QObject::connect(mHeaterPowerControlPlotTimer.get(), SIGNAL(timeout()), this, SLOT(heaterPowerControlPlotData()));
+    HeaterTemperaturePlotManager::initialize(ui->heaterTemperaturePlot, mHeaterPowerControlPlotTimer);
+
+    QObject::connect(this, SIGNAL(signalHeaterPowerControlPlotNewSamplingCallback()), this, SLOT(heaterPowerControlPlotNewSamplingCallback()));
+    QObject::connect(this, SIGNAL(signalHeaterPowerControlPlotNewControlModeCallback()), this, SLOT(heaterPowerControlPlotNewControlModeCallback()));
+}
+
+void MainWindow::heaterPowerControlStartWorking()
+{
+    std::lock_guard<std::mutex> lockGuard(mHeaterPowerControlMtx);
+
+    auto startUpdatingData =
+        [this](EDataType dataType)
+        {
+            auto timerId = TimerManager::create
+            (
+                1000U,
+                1000U,
+                [this, dataType]()
+                {
+                    changeHeaterPowerControlDataValue(dataType, DSC::DataManager::getData(dataType));
+                }
+            );
+
+            mHeaterPowerQLabelToTimerId[dataType] = timerId;
+        };
+
+    startUpdatingData(EDataType::HeaterPower);
+    startUpdatingData(EDataType::HeaterTemperature);
+
+    mHeaterPowerControlFileNewFilenameCallbackId = DSC::DataManager::registerNewUnitAttributeCallback
+    (
+        [this](EUnitId unitId, const std::string & attribute, const std::string & value)
+        {
+            if (EUnitId_Raspberry == unitId && "HeaterPowerControlDataFileName" == attribute)
+            {
+                heaterPowerNewFilenameCallback(value);
+            }
+        }
+    );
+
+    QMetaObject::invokeMethod(ui->textEditHeaterPowerControlValue, "setText", Qt::QueuedConnection, Q_ARG(QString, convertHeaterPowerToQString(DSC::DataManager::getData(EDataType::HeaterPower))));
+
+    setActiveHeaterPowerTab();
+    setActiveHeaterPowerComboBoxMode();
+    setActiveHeaterPowerComboBoxFileSps();
+    setActiveHeaterPowerComboBoxPlotSps();
+    setHeaterPowerCVSlider();
+
+    mIsHeaterPowerControlWorking = true;
+}
+
+void MainWindow::heaterPowerControlStopWorking()
+{
+    std::lock_guard<std::mutex> lockGuard(mHeaterPowerControlMtx);
+
+    for (const auto timerPair : mHeaterPowerQLabelToTimerId)
+    {
+        TimerManager::destroy(timerPair.second);
+    }
+
+    mHeaterPowerQLabelToTimerId.clear();
+
+    DSC::DataManager::deregisterNewUnitAttributeCallback(mHeaterPowerControlFileNewFilenameCallbackId);
+
+    mIsHeaterPowerControlWorking = false;
+}
+
+void MainWindow::changeHeaterPowerControlDataValue(EDataType dataType, double value)
+{
+    std::lock_guard<std::mutex> lockGuard(mHeaterPowerControlMtx);
+
+    auto* qLabel = getQLabelForHeaterPowerControl(dataType);
+    if (qLabel)
+    {
+        QMetaObject::invokeMethod(qLabel, "setText", Qt::QueuedConnection, Q_ARG(QString, convertHeaterPowerControlDataValueToQString(dataType, value)));
+    }
+}
+
+QLabel* MainWindow::getQLabelForHeaterPowerControl(EDataType dataType)
+{
+    static std::map<EDataType, QLabel*> dataTypeToQLabel = decltype(dataTypeToQLabel)
+    {
+        { EDataType::HeaterPower, ui->labelHeaterPowerControlModePower },
+        { EDataType::HeaterTemperature, ui->labelHeaterPowerControlModeTemperature }
+    };
+
+    auto it = dataTypeToQLabel.find(dataType);
+    if (std::end(dataTypeToQLabel) != it)
+    {
+        return it->second;
+    }
+
+    return nullptr;
+}
+
+QString MainWindow::convertHeaterPowerControlDataValueToQString(EDataType dataType, double value)
+{
+    if (DSC::DataManager::UnknownValue == value)
+    {
+        return "N/A";
+    }
+
+    std::stringstream stream;
+    QString postFix;
+
+    switch (dataType)
+    {
+        case EDataType::HeaterPower:
+        {
+            postFix = " %";
+            break;
+        }
+
+        case EDataType::HeaterTemperature:
+        {
+            postFix = " <sup>o</sup>C";
+            break;
+        }
+
+        default:
+        {
+            return QString("Invalid type!");
+        }
+    }
+
+    stream << std::fixed << std::setprecision(2) << value;
+    QString str = QString::fromStdString(stream.str());
+    str += postFix;
+
+    return str;
+}
+
+void MainWindow::heaterPowerNewFilenameCallback(const std::string & filename)
+{
+    std::lock_guard<std::mutex> lockGuard(mHeaterPowerControlMtx);
+
+    QMetaObject::invokeMethod(ui->textEditHeaterPowerFilename, "setText", Qt::QueuedConnection, Q_ARG(QString, QString::fromStdString(filename)));
+}
+
+void MainWindow::setActiveHeaterPowerTab()
+{
+    const auto openLoopIndex = 0;
+    const auto simpleFeedbackIndex = 1;
+    const auto mfcFeedbackIndex = 2;
+
+    int index = 0;
+
+    switch (DSC::DataManager::getControlMode())
+    {
+        case EControlMode::OpenLoop:
+        {
+            index = openLoopIndex;
+            break;
+        }
+
+        case EControlMode::SimpleFeedback:
+        {
+            index = simpleFeedbackIndex;
+            break;
+        }
+
+        case EControlMode::MFCFeedback:
+        {
+            index = mfcFeedbackIndex;
+            break;
+        }
+
+        default:
+            break;
+    }
+
+    ui->tabWidgetHeaterPower->setCurrentIndex(index);
+}
+
+void MainWindow::setActiveHeaterPowerComboBoxMode()
+{
+    const auto openLoopIndex = 0;
+    const auto simpleFeedbackIndex = 1;
+    const auto mfcFeedbackIndex = 2;
+
+    int index = 0;
+
+    switch (DSC::DataManager::getControlMode())
+    {
+        case EControlMode::OpenLoop:
+        {
+            index = openLoopIndex;
+            break;
+        }
+
+        case EControlMode::SimpleFeedback:
+        {
+            index = simpleFeedbackIndex;
+            break;
+        }
+
+        case EControlMode::MFCFeedback:
+        {
+            index = mfcFeedbackIndex;
+            break;
+        }
+
+        default:
+            break;
+    }
+
+    ui->comboBoxHeaterPowerControlMode->setCurrentIndex(index);
+}
+
+void MainWindow::setActiveHeaterPowerComboBoxPlotSps()
+{
+    auto speed = DSC::DataManager::getData(EDataType::HeaterPowerControlPlotDataSampling);
+    
+    ui->comboBoxHeaterPowerPlotTemperatureSps->blockSignals(true);
+
+    if (DSC::DataManager::UnknownValue == speed)
+    {
+        speed = 1.0;
+        DSC::DataManager::updateData(EDataType::HeaterPowerControlPlotDataSampling, speed);
+    }
+
+    if (1.0 == speed)
+    {
+        ui->comboBoxHeaterPowerPlotTemperatureSps->setCurrentIndex(0);
+    }
+    else if (2.0 == speed)
+    {
+        ui->comboBoxHeaterPowerPlotTemperatureSps->setCurrentIndex(1);
+    }
+    else if (5.0 == speed)
+    {
+        ui->comboBoxHeaterPowerPlotTemperatureSps->setCurrentIndex(2);
+    }
+    else if (10.0 == speed)
+    {
+        ui->comboBoxHeaterPowerPlotTemperatureSps->setCurrentIndex(3);
+    }
+
+    ui->comboBoxHeaterPowerPlotTemperatureSps->blockSignals(false);
+}
+
+void MainWindow::setActiveHeaterPowerComboBoxFileSps()
+{
+    auto speed = DSC::DataManager::getData(EDataType::HeaterPowerControlFileDataSampling);
+
+    ui->comboBoxHeaterPowerFileSps->blockSignals(true);
+
+    if (DSC::DataManager::UnknownValue == speed)
+    {
+        speed = 0.5;
+        DSC::DataManager::updateData(EDataType::HeaterPowerControlFileDataSampling, speed);
+    }
+
+    if (0.5 == speed)
+    {
+        ui->comboBoxHeaterPowerFileSps->setCurrentIndex(0);
+    }
+    else if (1.0 == speed)
+    {
+        ui->comboBoxHeaterPowerFileSps->setCurrentIndex(1);
+    }
+    else if (2.0 == speed)
+    {
+        ui->comboBoxHeaterPowerFileSps->setCurrentIndex(2);
+    }
+    else if (5.0 == speed)
+    {
+        ui->comboBoxHeaterPowerFileSps->setCurrentIndex(3);
+    }
+    else if (10.0 == speed)
+    {
+        ui->comboBoxHeaterPowerFileSps->setCurrentIndex(4);
+    }
+
+    ui->comboBoxHeaterPowerFileSps->blockSignals(false);
+}
+
+void MainWindow::setHeaterPowerCVSlider()
+{
+    auto heaterPower = static_cast<int>(std::round(DSC::DataManager::getData(EDataType::HeaterPower)));
+    ui->horizontalSliderHeaterPowerControlValue->setValue(heaterPower);
+}
+
+QString MainWindow::convertHeaterPowerToQString(double value)
+{
+    std::stringstream stream;
+    stream << std::fixed << std::setprecision(2) << value;
+    return QString::fromStdString(stream.str());
+}
+
+void MainWindow::heaterPowerControlClearDataClicked()
+{
+    std::lock_guard<std::mutex> lockGuard(mHeaterPowerControlMtx);
+
+    HeaterTemperaturePlotManager::clearDrawnData();
 
 }
+
+void MainWindow::heaterPowerControlApplyValueClicked()
+{
+    std::lock_guard<std::mutex> lockGuard(mHeaterPowerControlMtx);
+
+    auto requestedPower = ui->textEditHeaterPowerControlValue->toPlainText().toStdString();
+    if (!Utilities::isDouble(requestedPower))
+    {
+        QMessageBox msgBox;
+        QString message = "String " + QString::fromStdString(requestedPower) + " is not correct number value!";
+        msgBox.setText(message);
+        msgBox.setDefaultButton(QMessageBox::Button::Ok);
+        msgBox.exec();
+        return; 
+    }
+
+    auto powerNumber = std::stod(requestedPower);
+
+    ThreadPool::submit
+    (
+        TaskPriority::Normal,
+        [this, powerNumber]()
+        {
+            DSC::HeaterManager::setPowerInPercent(powerNumber);
+        }
+    );
+}
+
+void MainWindow::heaterPowerControlControlModeChanged()
+{
+    std::lock_guard<std::mutex> lockGuard(mHeaterPowerControlMtx);
+    switch (ui->comboBoxHeaterPowerControlMode->currentIndex())
+    {
+        case 0:
+        {
+            DSC::DataManager::updateControlMode(EControlMode::OpenLoop);
+            break;
+        }
+
+        case 1:
+        {
+            DSC::DataManager::updateControlMode(EControlMode::SimpleFeedback);
+            break;
+        }
+
+        case 2:
+        {
+            DSC::DataManager::updateControlMode(EControlMode::MFCFeedback);
+            break;
+        }
+
+        default :
+            break;
+    }
+}
+
+void MainWindow::heaterPowerControlCVSliderChanged()
+{
+    std::lock_guard<std::mutex> lockGuard(mHeaterPowerControlMtx);
+
+    auto value = ui->horizontalSliderHeaterPowerControlValue->value();
+    auto qStringValue = convertHeaterPowerToQString(static_cast<double>(value));
+
+    ui->textEditHeaterPowerControlValue->blockSignals(true);
+    ui->textEditHeaterPowerControlValue->setText(convertHeaterPowerToQString(static_cast<double>(value)));
+    ui->textEditHeaterPowerControlValue->blockSignals(false);
+}
+
+void MainWindow::heaterPowerControlSaveDataToFileClicked()
+{
+    std::lock_guard<std::mutex> lockGuard(mHeaterPowerControlMtx);
+
+    if (ui->checkBoxHeaterPowerSaveToFile->isChecked())
+    {
+        DSC::DataManager::updateUnitAttribute(EUnitId_Raspberry, "HeaterPowerControlDataFileName", ui->textEditHeaterPowerFilename->toPlainText().toStdString());
+        DSC::FileDataManager::startRegisteringHeaterControlSystemData();
+    }
+    else
+    {
+        DSC::FileDataManager::stopRegisteringHeaterControlSystemData();
+    }
+}
+
+void MainWindow::heaterPowerControPlotDataClicked()
+{
+    std::lock_guard<std::mutex> lockGuard(mHeaterPowerControlMtx);
+
+    if (ui->checkBoxHeaterPowerPlotTemperature->isChecked())
+    {
+        mHeaterPowerControlPlotNewDataCallbackId = DSC::DataManager::registerNewDataCallback
+        (
+            [this](EDataType type, double value)
+            {
+                if (EDataType::HeaterPowerControlPlotDataSampling == type)
+                {
+                    emit signalHeaterPowerControlPlotNewSamplingCallback();
+                }
+            }
+        );
+        mHeaterPowerControlPlotNewModeCallbackId = DSC::DataManager::registerNewControlModeCallback
+        (
+            [this](EControlMode mode)
+            {
+                emit signalHeaterPowerControlPlotNewControlModeCallback();
+            }
+        );
+        HeaterTemperaturePlotManager::startDrawing();
+    }
+    else
+    {
+        DSC::DataManager::deregisterNewControlModeCallback(mHeaterPowerControlPlotNewModeCallbackId);
+        DSC::DataManager::deregisterNewDataCallback(mHeaterPowerControlPlotNewDataCallbackId);
+        HeaterTemperaturePlotManager::stopDrawing();
+    }
+}
+
+void MainWindow::heaterPowerControlPlotFrequencyChanged()
+{
+    std::lock_guard<std::mutex> lockGuard(mHeaterPowerControlMtx);
+
+    auto speedString = ui->comboBoxHeaterPowerPlotTemperatureSps->currentText().toStdString();
+
+    char chars [] = "second";
+    for (unsigned int iter = 0; strlen(chars) > iter; ++iter)
+    {
+        speedString.erase(std::remove(speedString.begin(), speedString.end(), chars[iter]), speedString.end());
+    }
+
+    speedString.erase(std::remove_if(speedString.begin(), speedString.end(), ::isspace), speedString.end());
+
+    auto speed = std::stod(speedString);
+    DSC::DataManager::updateData(EDataType::HeaterPowerControlPlotDataSampling, speed);
+}
+
+void MainWindow::heaterPowerControlDataSaveFrequencyClicked()
+{
+    std::lock_guard<std::mutex> lockGuard(mHeaterPowerControlMtx);
+
+    auto speedString = ui->comboBoxHeaterPowerFileSps->currentText().toStdString();
+
+    char chars[] = "second";
+    for (unsigned int iter = 0; strlen(chars) > iter; ++iter)
+    {
+        speedString.erase(std::remove(speedString.begin(), speedString.end(), chars[iter]), speedString.end());
+    }
+
+    speedString.erase(std::remove_if(speedString.begin(), speedString.end(), ::isspace), speedString.end());
+
+    auto speed = std::stod(speedString);
+    DSC::DataManager::updateData(EDataType::HeaterPowerControlFileDataSampling, speed);
+}
+
+void MainWindow::heaterPowerControlValueTextChanged()
+{
+    std::lock_guard<std::mutex> lockGuard(mHeaterPowerControlMtx);
+    auto textValue = ui->textEditHeaterPowerControlValue->toPlainText().toStdString();
+    if (Utilities::isDouble(textValue))
+    {
+        auto value = std::stod(textValue);
+        if (0.0 <= value && 100.0 >= value)
+        {
+            ui->horizontalSliderHeaterPowerControlValue->blockSignals(true);
+            ui->horizontalSliderHeaterPowerControlValue->setValue(static_cast<int>(std::round(value)));
+            ui->horizontalSliderHeaterPowerControlValue->blockSignals(false);
+        }
+    }
+}
+
+void MainWindow::heaterPowerControlPlotData()
+{
+    HeaterTemperaturePlotManager::addNewDataToPlotCallback();
+}
+
+void MainWindow::heaterPowerControlPlotNewSamplingCallback()
+{
+    HeaterTemperaturePlotManager::newSamplingNotification();
+}
+
+void MainWindow::heaterPowerControlPlotNewControlModeCallback()
+{
+    HeaterTemperaturePlotManager::newControlModeNotification();
+}
+

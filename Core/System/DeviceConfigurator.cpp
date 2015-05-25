@@ -12,6 +12,7 @@
 #include "../DevicePeripherals/UnitsDetector.hpp"
 #include "../Nucleo/DeviceCommunicator.hpp"
 #include "../DSC/DataManager.hpp"
+#include "../DSC/FileDataManager.hpp"
 #include "../DSC/HeaterManager.hpp"
 #include "../DSC/IntegratedCircuitsManager.hpp"
 #include "../DSC/SampleCarrierManager.hpp"
@@ -146,6 +147,7 @@ bool DeviceConfigurator::configureDSCManagers()
 
     bool success = true;
     {
+        Utilities::conditionalExecutor(success, [](){ return DSC::FileDataManager::initialize(); });
         Utilities::conditionalExecutor(success, [](){ return DSC::HeaterManager::initialize(); });
         Utilities::conditionalExecutor(success, [](){ return DSC::IntegratedCircuitsManager::initialize(); });
         Utilities::conditionalExecutor(success, [](){ return DSC::SampleCarrierDataManager::initialize(); });
@@ -248,7 +250,7 @@ void DeviceConfigurator::newIcModeIndication(EUnitId unitId, u8 newMode)
             Logger::debug("%s: New %s mode %s set!", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(unitId).c_str(), ToStringConverter::getADS1248Mode(ads1248Mode).c_str());
             
             {
-                DSC::IntegratedCircuitsManager::setADS1248ChannelGainValue(EADS1248GainValue_128);
+                DSC::IntegratedCircuitsManager::setADS1248ChannelGainValue(EADS1248GainValue_1);
             }
         }
 
@@ -267,15 +269,7 @@ void DeviceConfigurator::updateUnitAttributeIndication(EUnitId unitId, const std
         {
             if ("CallibrationDone" == attribute)
             {
-                if ("System Gain" == value)
-                {
-                    Logger::debug("%s: %s unit callibration type: %s done!", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(unitId).c_str(), value.c_str());
-
-                    {
-                        DSC::IntegratedCircuitsManager::callibreADS1248(EADS1248CallibrationType_SelfOffset);
-                    }
-                }
-                else if ("Self Offset" == value)
+                if ("Self Offset" == value)
                 {
                     Logger::debug("%s: %s unit callibration type: %s done!", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(unitId).c_str(), value.c_str());
 
@@ -300,7 +294,6 @@ void DeviceConfigurator::updateUnitAttributeIndication(EUnitId unitId, const std
                 Logger::debug("%s: %s unit channels sampling speed set to %s.", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(unitId).c_str(), value.c_str());
 
                 {
-                    //DSC::IntegratedCircuitsManager::callibreADS1248(EADS1248CallibrationType_SystemGain);
                     DSC::IntegratedCircuitsManager::callibreADS1248(EADS1248CallibrationType_SelfOffset);
                 }
             }
@@ -309,6 +302,8 @@ void DeviceConfigurator::updateUnitAttributeIndication(EUnitId unitId, const std
                 if ("Enabled" == value)
                 {
                     Logger::debug("%s: Started collecting data from %s..", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(unitId).c_str());
+
+                    DSC::HeaterManager::setPowerControlMode(EControlMode::OpenLoop, [](EControlMode mode, bool result){ newControlModeSetCallback(mode, result); });
                 }
             }
 
@@ -353,6 +348,42 @@ void DeviceConfigurator::updateUnitAttributeIndication(EUnitId unitId, const std
             break;
     }
 
+}
+
+void DeviceConfigurator::newControlModeSetCallback(EControlMode mode, bool result)
+{
+    std::lock_guard<std::mutex> lockGuard(mMtx);
+
+    if (result)
+    {
+        if (EControlMode::OpenLoop == mode)
+        {
+            Logger::info("%s: Set heater power control mode to Open Loop.", getLoggerPrefix().c_str());
+
+            {
+                DSC::HeaterManager::setPowerInPercent(0.0F, [](float value, bool result){ newHeaterPowerValueSetCallback(value, result); });
+            }
+        }
+    }
+    else
+    {
+        Logger::error("%s: Setting heater power control mode failed...");
+    }
+}
+
+void DeviceConfigurator::newHeaterPowerValueSetCallback(float value, bool result)
+{
+    std::lock_guard<std::mutex> lockGuard(mMtx);
+
+    if (result)
+    {
+        Logger::info("%s: Set heater power value to %.2f %%.", getLoggerPrefix().c_str(), value);
+        Logger::info("%s: Device configured. User actions now are allowed...", getLoggerPrefix().c_str());
+    }
+    else
+    {
+        Logger::error("%s: Setting heater power value failed...");
+    }
 }
 
 std::mutex DeviceConfigurator::mMtx;

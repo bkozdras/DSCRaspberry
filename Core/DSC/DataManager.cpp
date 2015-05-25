@@ -41,20 +41,24 @@ namespace DSC
     void DataManager::updateControlMode(EControlMode controlMode)
     {
         std::lock_guard<std::mutex> lockGuard(mMtx);
-        mControlMode = controlMode;
 
-        Logger::debug("%s: Updated Control Mode with value: %u.", getLoggerPrefix().c_str(), static_cast<u8>(controlMode));
-
-        for (auto & callbackPair : mNewControlModeCallbacks)
+        if (mControlMode != controlMode)
         {
-            ThreadPool::submit
-            (
-                TaskPriority::Normal,
-                [callbackPair, controlMode]()
+            mControlMode = controlMode;
+
+            Logger::debug("%s: Updated Control Mode with value: %u.", getLoggerPrefix().c_str(), static_cast<u8>(controlMode));
+
+            for (auto & callbackPair : mNewControlModeCallbacks)
+            {
+                ThreadPool::submit
+                    (
+                    TaskPriority::Normal,
+                    [callbackPair, controlMode]()
                 {
                     callbackPair.second(controlMode);
                 }
-            );
+                );
+            }
         }
     }
     
@@ -249,7 +253,7 @@ namespace DSC
     std::map<DataManager::CallbackId, std::function<void(EControlMode)>> DataManager::mNewControlModeCallbacks;
     std::map<DataManager::CallbackId, std::function<void(EUnitId, u8)>> DataManager::mNewICModeCallbacks;
     std::map<DataManager::CallbackId, std::function<void(EUnitId, const std::string &, const std::string &)>> DataManager::mNewUnitAttributeCallbacks;
-    EControlMode DataManager::mControlMode;
+    EControlMode DataManager::mControlMode = EControlMode::NotSet;
     std::mutex DataManager::mMtx;
     const double DataManager::UnknownValue = 99999999999.0;
 }

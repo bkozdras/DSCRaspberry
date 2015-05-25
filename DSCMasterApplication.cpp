@@ -4,6 +4,7 @@
 #include <qmessagebox.h>
 #include <qtextstream.h>
 #include <qtimer.h>
+#include <iostream>
 
 #include "../Core/System/DeviceConfigurator.hpp"
 

@@ -52,6 +52,11 @@ void UartManager::transmitData(TMessage & message)
 
     mAsyncSerial.write((char*)&(message.length), 1);
 
+    if (1U < message.length)
+    {
+        usleep(200000UL);
+    }
+
     mAsyncSerial.write((char*)(message.data), message.length);
 
     //mAsyncSerial.write("END\n", 4);
@@ -179,6 +184,7 @@ bool UartManager::headerPhaseMessageParser()
             FaultManager::generate(EFaultId_Communication, EUnitId_Raspberry, EUnitId_Nucleo);
             mIsCommunicationFailureGenerated = true;
             Logger::warning("%s: Failure mode! Searching for correct data frame...", getLoggerPrefix().c_str());
+            mActualReceivingPhase = MessageReceivingPhase::HeaderMsgFailureMode;
             //mAsyncSerial.clearCallback();
         }
         return false;

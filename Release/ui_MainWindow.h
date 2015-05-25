@@ -22,6 +22,7 @@
 #include <QtGui/QLabel>
 #include <QtGui/QMainWindow>
 #include <QtGui/QMenuBar>
+#include <QtGui/QPushButton>
 #include <QtGui/QSlider>
 #include <QtGui/QStatusBar>
 #include <QtGui/QTabWidget>
@@ -150,24 +151,26 @@ public:
     QSlider *horizontalSliderHeaterPowerControlValue;
     QTextEdit *textEditHeaterPowerControlValue;
     QLabel *labelHeaterPowerOpenLoopPercent;
+    QPushButton *pushButtonHeaterPowerCVApply;
     QWidget *tabHeaterPowerSimpleFeedback;
     QWidget *tabHeaterPowerMFCFeedback;
     QFrame *frame_4;
     QLabel *labelHeaterPowerFilename;
-    QTextEdit *textEdit;
+    QTextEdit *textEditHeaterPowerFilename;
     QCheckBox *checkBoxHeaterPowerSaveToFile;
     QLabel *labelHeaterPowerFileDataSampling;
     QComboBox *comboBoxHeaterPowerFileSps;
-    QLabel *labelHeaterPowerControlMode_5;
-    QLabel *labelHeaterPowerControlMode_3;
-    QLabel *labelHeaterPowerControlMode_2;
-    QLabel *labelHeaterPowerControlMode_4;
+    QLabel *labelHeaterPowerControlModeTemperature;
+    QLabel *labelHeaterPowerControlModeTemperatureInfo;
+    QLabel *labelHeaterPowerControlModePowerInfo;
+    QLabel *labelHeaterPowerControlModePower;
     QFrame *frame_5;
     QLabel *labelHeaterPowerPlotTemperature;
     QCheckBox *checkBoxHeaterPowerPlotTemperature;
     QComboBox *comboBoxHeaterPowerPlotTemperatureSps;
+    QPushButton *pushButtonHeaterPowerClearData;
     QLabel *labelHeaterPowerControlMode;
-    QComboBox *comboBox;
+    QComboBox *comboBoxHeaterPowerControlMode;
     QWidget *tabSegmentsManager;
     QGridLayout *gridLayout_2;
     QWidget *tabDscDataView;
@@ -793,6 +796,10 @@ public:
         labelHeaterPowerOpenLoopPercent->setObjectName(QString::fromUtf8("labelHeaterPowerOpenLoopPercent"));
         labelHeaterPowerOpenLoopPercent->setGeometry(QRect(110, 95, 21, 21));
         labelHeaterPowerOpenLoopPercent->setFont(font9);
+        pushButtonHeaterPowerCVApply = new QPushButton(tabHeaterPowerOpenLoop);
+        pushButtonHeaterPowerCVApply->setObjectName(QString::fromUtf8("pushButtonHeaterPowerCVApply"));
+        pushButtonHeaterPowerCVApply->setGeometry(QRect(150, 90, 171, 31));
+        pushButtonHeaterPowerCVApply->setFont(font10);
         tabWidgetHeaterPower->addTab(tabHeaterPowerOpenLoop, QString());
         tabHeaterPowerSimpleFeedback = new QWidget();
         tabHeaterPowerSimpleFeedback->setObjectName(QString::fromUtf8("tabHeaterPowerSimpleFeedback"));
@@ -813,10 +820,10 @@ public:
         font11.setPointSize(16);
         font11.setItalic(true);
         labelHeaterPowerFilename->setFont(font11);
-        textEdit = new QTextEdit(frame_4);
-        textEdit->setObjectName(QString::fromUtf8("textEdit"));
-        textEdit->setGeometry(QRect(10, 40, 331, 31));
-        textEdit->setFont(font10);
+        textEditHeaterPowerFilename = new QTextEdit(frame_4);
+        textEditHeaterPowerFilename->setObjectName(QString::fromUtf8("textEditHeaterPowerFilename"));
+        textEditHeaterPowerFilename->setGeometry(QRect(10, 40, 331, 31));
+        textEditHeaterPowerFilename->setFont(font10);
         checkBoxHeaterPowerSaveToFile = new QCheckBox(frame_4);
         checkBoxHeaterPowerSaveToFile->setObjectName(QString::fromUtf8("checkBoxHeaterPowerSaveToFile"));
         checkBoxHeaterPowerSaveToFile->setGeometry(QRect(10, 156, 271, 21));
@@ -829,26 +836,26 @@ public:
         comboBoxHeaterPowerFileSps->setObjectName(QString::fromUtf8("comboBoxHeaterPowerFileSps"));
         comboBoxHeaterPowerFileSps->setGeometry(QRect(10, 110, 241, 31));
         comboBoxHeaterPowerFileSps->setFont(font10);
-        labelHeaterPowerControlMode_5 = new QLabel(tabHeaterControl);
-        labelHeaterPowerControlMode_5->setObjectName(QString::fromUtf8("labelHeaterPowerControlMode_5"));
-        labelHeaterPowerControlMode_5->setGeometry(QRect(160, 40, 61, 21));
-        labelHeaterPowerControlMode_5->setFont(font11);
-        labelHeaterPowerControlMode_3 = new QLabel(tabHeaterControl);
-        labelHeaterPowerControlMode_3->setObjectName(QString::fromUtf8("labelHeaterPowerControlMode_3"));
-        labelHeaterPowerControlMode_3->setGeometry(QRect(10, 40, 131, 21));
+        labelHeaterPowerControlModeTemperature = new QLabel(tabHeaterControl);
+        labelHeaterPowerControlModeTemperature->setObjectName(QString::fromUtf8("labelHeaterPowerControlModeTemperature"));
+        labelHeaterPowerControlModeTemperature->setGeometry(QRect(160, 40, 111, 21));
+        labelHeaterPowerControlModeTemperature->setFont(font9);
+        labelHeaterPowerControlModeTemperatureInfo = new QLabel(tabHeaterControl);
+        labelHeaterPowerControlModeTemperatureInfo->setObjectName(QString::fromUtf8("labelHeaterPowerControlModeTemperatureInfo"));
+        labelHeaterPowerControlModeTemperatureInfo->setGeometry(QRect(10, 40, 131, 21));
         QFont font12;
         font12.setPointSize(16);
         font12.setItalic(false);
         font12.setUnderline(true);
-        labelHeaterPowerControlMode_3->setFont(font12);
-        labelHeaterPowerControlMode_2 = new QLabel(tabHeaterControl);
-        labelHeaterPowerControlMode_2->setObjectName(QString::fromUtf8("labelHeaterPowerControlMode_2"));
-        labelHeaterPowerControlMode_2->setGeometry(QRect(10, 10, 61, 21));
-        labelHeaterPowerControlMode_2->setFont(font12);
-        labelHeaterPowerControlMode_4 = new QLabel(tabHeaterControl);
-        labelHeaterPowerControlMode_4->setObjectName(QString::fromUtf8("labelHeaterPowerControlMode_4"));
-        labelHeaterPowerControlMode_4->setGeometry(QRect(160, 10, 61, 21));
-        labelHeaterPowerControlMode_4->setFont(font11);
+        labelHeaterPowerControlModeTemperatureInfo->setFont(font12);
+        labelHeaterPowerControlModePowerInfo = new QLabel(tabHeaterControl);
+        labelHeaterPowerControlModePowerInfo->setObjectName(QString::fromUtf8("labelHeaterPowerControlModePowerInfo"));
+        labelHeaterPowerControlModePowerInfo->setGeometry(QRect(10, 10, 61, 21));
+        labelHeaterPowerControlModePowerInfo->setFont(font12);
+        labelHeaterPowerControlModePower = new QLabel(tabHeaterControl);
+        labelHeaterPowerControlModePower->setObjectName(QString::fromUtf8("labelHeaterPowerControlModePower"));
+        labelHeaterPowerControlModePower->setGeometry(QRect(160, 10, 121, 21));
+        labelHeaterPowerControlModePower->setFont(font9);
         frame_5 = new QFrame(tabHeaterControl);
         frame_5->setObjectName(QString::fromUtf8("frame_5"));
         frame_5->setGeometry(QRect(0, 70, 351, 121));
@@ -867,14 +874,18 @@ public:
         comboBoxHeaterPowerPlotTemperatureSps->setObjectName(QString::fromUtf8("comboBoxHeaterPowerPlotTemperatureSps"));
         comboBoxHeaterPowerPlotTemperatureSps->setGeometry(QRect(10, 40, 241, 31));
         comboBoxHeaterPowerPlotTemperatureSps->setFont(font10);
+        pushButtonHeaterPowerClearData = new QPushButton(frame_5);
+        pushButtonHeaterPowerClearData->setObjectName(QString::fromUtf8("pushButtonHeaterPowerClearData"));
+        pushButtonHeaterPowerClearData->setGeometry(QRect(170, 80, 161, 31));
+        pushButtonHeaterPowerClearData->setFont(font10);
         labelHeaterPowerControlMode = new QLabel(tabHeaterControl);
         labelHeaterPowerControlMode->setObjectName(QString::fromUtf8("labelHeaterPowerControlMode"));
         labelHeaterPowerControlMode->setGeometry(QRect(10, 390, 151, 21));
         labelHeaterPowerControlMode->setFont(font11);
-        comboBox = new QComboBox(tabHeaterControl);
-        comboBox->setObjectName(QString::fromUtf8("comboBox"));
-        comboBox->setGeometry(QRect(10, 420, 241, 31));
-        comboBox->setFont(font10);
+        comboBoxHeaterPowerControlMode = new QComboBox(tabHeaterControl);
+        comboBoxHeaterPowerControlMode->setObjectName(QString::fromUtf8("comboBoxHeaterPowerControlMode"));
+        comboBoxHeaterPowerControlMode->setGeometry(QRect(10, 420, 241, 31));
+        comboBoxHeaterPowerControlMode->setFont(font10);
         applicationTabWidget->addTab(tabHeaterControl, QString());
         tabSegmentsManager = new QWidget();
         tabSegmentsManager->setObjectName(QString::fromUtf8("tabSegmentsManager"));
@@ -997,6 +1008,15 @@ public:
 
         retranslateUi(MainWindow);
         QObject::connect(applicationTabWidget, SIGNAL(currentChanged(int)), MainWindow, SLOT(applicationTabWidgetChanged()));
+        QObject::connect(pushButtonHeaterPowerClearData, SIGNAL(clicked()), MainWindow, SLOT(heaterPowerControlClearDataClicked()));
+        QObject::connect(pushButtonHeaterPowerCVApply, SIGNAL(clicked()), MainWindow, SLOT(heaterPowerControlApplyValueClicked()));
+        QObject::connect(comboBoxHeaterPowerControlMode, SIGNAL(currentIndexChanged(int)), MainWindow, SLOT(heaterPowerControlControlModeChanged()));
+        QObject::connect(horizontalSliderHeaterPowerControlValue, SIGNAL(valueChanged(int)), MainWindow, SLOT(heaterPowerControlCVSliderChanged()));
+        QObject::connect(checkBoxHeaterPowerSaveToFile, SIGNAL(clicked()), MainWindow, SLOT(heaterPowerControlSaveDataToFileClicked()));
+        QObject::connect(checkBoxHeaterPowerPlotTemperature, SIGNAL(clicked()), MainWindow, SLOT(heaterPowerControPlotDataClicked()));
+        QObject::connect(comboBoxHeaterPowerPlotTemperatureSps, SIGNAL(currentIndexChanged(int)), MainWindow, SLOT(heaterPowerControlPlotFrequencyChanged()));
+        QObject::connect(comboBoxHeaterPowerFileSps, SIGNAL(currentIndexChanged(int)), MainWindow, SLOT(heaterPowerControlDataSaveFrequencyClicked()));
+        QObject::connect(textEditHeaterPowerControlValue, SIGNAL(textChanged()), MainWindow, SLOT(heaterPowerControlValueTextChanged()));
 
         applicationTabWidget->setCurrentIndex(0);
         tabWidgetHeaterPower->setCurrentIndex(0);
@@ -1098,41 +1118,43 @@ public:
 "</style></head><body style=\" font-family:'Arial'; font-size:16pt; font-weight:600; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">N/A</span></p></body></html>", 0, QApplication::UnicodeUTF8));
         labelHeaterPowerOpenLoopPercent->setText(QApplication::translate("MainWindow", "%", 0, QApplication::UnicodeUTF8));
+        pushButtonHeaterPowerCVApply->setText(QApplication::translate("MainWindow", "Apply Value", 0, QApplication::UnicodeUTF8));
         tabWidgetHeaterPower->setTabText(tabWidgetHeaterPower->indexOf(tabHeaterPowerOpenLoop), QApplication::translate("MainWindow", "Open Loop", 0, QApplication::UnicodeUTF8));
         tabWidgetHeaterPower->setTabText(tabWidgetHeaterPower->indexOf(tabHeaterPowerSimpleFeedback), QApplication::translate("MainWindow", "Simple Feedback", 0, QApplication::UnicodeUTF8));
         tabWidgetHeaterPower->setTabText(tabWidgetHeaterPower->indexOf(tabHeaterPowerMFCFeedback), QApplication::translate("MainWindow", "MFC Feedback", 0, QApplication::UnicodeUTF8));
         labelHeaterPowerFilename->setText(QApplication::translate("MainWindow", "Filename", 0, QApplication::UnicodeUTF8));
-        textEdit->setHtml(QApplication::translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        textEditHeaterPowerFilename->setHtml(QApplication::translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'Arial'; font-size:16pt; font-weight:600; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">dataFile.txt</span></p></body></html>", 0, QApplication::UnicodeUTF8));
-        checkBoxHeaterPowerSaveToFile->setText(QApplication::translate("MainWindow", "Save Heater Data To File", 0, QApplication::UnicodeUTF8));
-        labelHeaterPowerFileDataSampling->setText(QApplication::translate("MainWindow", "Data Save Frequency", 0, QApplication::UnicodeUTF8));
+        checkBoxHeaterPowerSaveToFile->setText(QApplication::translate("MainWindow", "Save Data To File", 0, QApplication::UnicodeUTF8));
+        labelHeaterPowerFileDataSampling->setText(QApplication::translate("MainWindow", "Data Saving Period", 0, QApplication::UnicodeUTF8));
         comboBoxHeaterPowerFileSps->clear();
         comboBoxHeaterPowerFileSps->insertItems(0, QStringList()
-         << QApplication::translate("MainWindow", "1 SPS", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("MainWindow", "2 SPS", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("MainWindow", "5 SPS", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("MainWindow", "10 SPS", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "0.5 second", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "1 second", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "2 seconds", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "5 seconds", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "10 seconds", 0, QApplication::UnicodeUTF8)
         );
-        labelHeaterPowerControlMode_5->setText(QApplication::translate("MainWindow", "N/A", 0, QApplication::UnicodeUTF8));
-        labelHeaterPowerControlMode_3->setText(QApplication::translate("MainWindow", "Temperature", 0, QApplication::UnicodeUTF8));
-        labelHeaterPowerControlMode_2->setText(QApplication::translate("MainWindow", "Power", 0, QApplication::UnicodeUTF8));
-        labelHeaterPowerControlMode_4->setText(QApplication::translate("MainWindow", "N/A", 0, QApplication::UnicodeUTF8));
-        labelHeaterPowerPlotTemperature->setText(QApplication::translate("MainWindow", "Plot Sampling Frequency", 0, QApplication::UnicodeUTF8));
+        labelHeaterPowerControlModeTemperature->setText(QApplication::translate("MainWindow", "N/A", 0, QApplication::UnicodeUTF8));
+        labelHeaterPowerControlModeTemperatureInfo->setText(QApplication::translate("MainWindow", "Temperature", 0, QApplication::UnicodeUTF8));
+        labelHeaterPowerControlModePowerInfo->setText(QApplication::translate("MainWindow", "Power", 0, QApplication::UnicodeUTF8));
+        labelHeaterPowerControlModePower->setText(QApplication::translate("MainWindow", "N/A", 0, QApplication::UnicodeUTF8));
+        labelHeaterPowerPlotTemperature->setText(QApplication::translate("MainWindow", "Plot Sampling Period", 0, QApplication::UnicodeUTF8));
         checkBoxHeaterPowerPlotTemperature->setText(QApplication::translate("MainWindow", "Plot Data", 0, QApplication::UnicodeUTF8));
         comboBoxHeaterPowerPlotTemperatureSps->clear();
         comboBoxHeaterPowerPlotTemperatureSps->insertItems(0, QStringList()
-         << QApplication::translate("MainWindow", "1 SPS", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("MainWindow", "2 SPS", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("MainWindow", "5 SPS", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("MainWindow", "10 SPS", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "1 second", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "2 seconds", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "5 seconds", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "10 seconds", 0, QApplication::UnicodeUTF8)
         );
+        pushButtonHeaterPowerClearData->setText(QApplication::translate("MainWindow", "Clear Data", 0, QApplication::UnicodeUTF8));
         labelHeaterPowerControlMode->setText(QApplication::translate("MainWindow", "Control Mode", 0, QApplication::UnicodeUTF8));
-        comboBox->clear();
-        comboBox->insertItems(0, QStringList()
-         << QApplication::translate("MainWindow", "No Control", 0, QApplication::UnicodeUTF8)
+        comboBoxHeaterPowerControlMode->clear();
+        comboBoxHeaterPowerControlMode->insertItems(0, QStringList()
          << QApplication::translate("MainWindow", "Open Loop", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("MainWindow", "Simple Feedback", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("MainWindow", "MFC Feedback", 0, QApplication::UnicodeUTF8)

@@ -192,4 +192,16 @@ namespace ToStringConverter
 
         return modeToString[mode];
     }
+
+    const std::string & getControlSystemType(EControlSystemType type)
+    {
+        static std::map<EControlSystemType, std::string> typeToString = decltype(typeToString)
+        {
+            std::make_pair(EControlSystemType_OpenLoop, "Open Loop"),
+            std::make_pair(EControlSystemType_SimpleFeedback, "Simple Feedback"),
+            std::make_pair(EControlSystemType_MFCFeedback, "MFC Feedback")
+        };
+
+        return typeToString[type];
+    }
 }

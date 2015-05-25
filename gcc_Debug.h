@@ -389,11 +389,10 @@
 #define __cpp_init_captures 201304
 #define __ATOMIC_ACQ_REL 4
 #define __ATOMIC_RELEASE 3
+#endif
 #define RASPBERRY 
 #undef __cplusplus
 #define __cplusplus 201300L
-#endif
-
 // --- Include directories begin --- //
 //c:/sysgcc/raspberry/arm-linux-gnueabihf/sysroot/usr/share/qt4/mkspecs/arm-linux-gnueabihf
 //.

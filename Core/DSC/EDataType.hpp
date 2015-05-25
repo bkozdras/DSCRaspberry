@@ -16,5 +16,7 @@ enum class EDataType : u8
     Thermocouple3,
     Thermocouple4,
     SMPCBTemperature,
-    FanPower
+    FanPower,
+    HeaterPowerControlPlotDataSampling,
+    HeaterPowerControlFileDataSampling
 };

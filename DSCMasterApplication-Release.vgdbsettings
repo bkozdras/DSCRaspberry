@@ -60,7 +60,7 @@
     <QMakeCommand>
       <SkipWhenRunningCommandList>false</SkipWhenRunningCommandList>
       <Command>C:\SysGCC\raspberry\Qt\v4\qmake.exe</Command>
-      <Arguments> DSCMasterApplication.pro CONFIGNAME=$(ConfigurationName)       </Arguments>
+      <Arguments> DSCMasterApplication.pro CONFIGNAME=$(ConfigurationName)        </Arguments>
       <WorkingDirectory>$(BuildDir)</WorkingDirectory>
       <Environment>
         <Records>

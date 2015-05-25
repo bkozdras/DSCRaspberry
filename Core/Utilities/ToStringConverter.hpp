@@ -6,6 +6,7 @@
 #include "../SharedDefines/EMessageId.h"
 #include "../SharedDefines/ADS1248Types.h"
 #include "../SharedDefines/LMP90100Types.h"
+#include "../SharedDefines/EControlSystemType.h"
 
 namespace ToStringConverter
 {
@@ -17,4 +18,5 @@ namespace ToStringConverter
     const std::string & getADS1248GainValue(EADS1248GainValue value);
     const std::string & getADS1248SamplingSpeed(EADS1248SamplingSpeed speed);
     const std::string & getLMP90100Mode(ELMP90100Mode mode);
+    const std::string & getControlSystemType(EControlSystemType type);
 }

@@ -4,7 +4,8 @@
 
 enum class EControlMode : u8
 {
-    NoControl,
+    NotSet,
     OpenLoop,
-    Feedback
+    SimpleFeedback,
+    MFCFeedback
 };

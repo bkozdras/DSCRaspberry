@@ -1,6 +1,7 @@
 #include "MessageGateway.hpp"
 #include "../RaspberryPeripherals/UartMessageMemoryManager.hpp"
 #include "../RaspberryPeripherals/UartManager.hpp"
+#include "../Utilities/Logger.hpp"
 
 namespace Nucleo
 {
@@ -13,6 +14,7 @@ namespace Nucleo
         message.data = data;
         message.id = messageId;
         message.length = UartMessageMemoryManager::getLength(messageId);
+
         UartManager::transmitData(message);
     }
 

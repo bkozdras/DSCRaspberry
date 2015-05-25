@@ -292,7 +292,7 @@
          <enum>QTabWidget::North</enum>
         </property>
         <property name="currentIndex">
-         <number>2</number>
+         <number>0</number>
         </property>
         <property name="tabsClosable">
          <bool>true</bool>
@@ -2119,6 +2119,24 @@ p, li { white-space: pre-wrap; }
              <string>%</string>
             </property>
            </widget>
+           <widget class="QPushButton" name="pushButtonHeaterPowerCVApply">
+            <property name="geometry">
+             <rect>
+              <x>150</x>
+              <y>90</y>
+              <width>171</width>
+              <height>31</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>16</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Apply Value</string>
+            </property>
+           </widget>
           </widget>
           <widget class="QWidget" name="tabHeaterPowerSimpleFeedback">
            <attribute name="title">
@@ -2168,7 +2186,7 @@ p, li { white-space: pre-wrap; }
             <string>Filename</string>
            </property>
           </widget>
-          <widget class="QTextEdit" name="textEdit">
+          <widget class="QTextEdit" name="textEditHeaterPowerFilename">
            <property name="geometry">
             <rect>
              <x>10</x>
@@ -2224,7 +2242,7 @@ p, li { white-space: pre-wrap; }
             </font>
            </property>
            <property name="text">
-            <string>Data Save Frequency</string>
+            <string>Data Saving Period</string>
            </property>
           </widget>
           <widget class="QComboBox" name="comboBoxHeaterPowerFileSps">
@@ -2243,46 +2261,51 @@ p, li { white-space: pre-wrap; }
            </property>
            <item>
             <property name="text">
-             <string>1 SPS</string>
+             <string>0.5 second</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>2 SPS</string>
+             <string>1 second</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>5 SPS</string>
+             <string>2 seconds</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>10 SPS</string>
+             <string>5 seconds</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>10 seconds</string>
             </property>
            </item>
           </widget>
          </widget>
-         <widget class="QLabel" name="labelHeaterPowerControlMode_5">
+         <widget class="QLabel" name="labelHeaterPowerControlModeTemperature">
           <property name="geometry">
            <rect>
             <x>160</x>
             <y>40</y>
-            <width>61</width>
+            <width>111</width>
             <height>21</height>
            </rect>
           </property>
           <property name="font">
            <font>
             <pointsize>16</pointsize>
-            <italic>true</italic>
+            <italic>false</italic>
            </font>
           </property>
           <property name="text">
            <string>N/A</string>
           </property>
          </widget>
-         <widget class="QLabel" name="labelHeaterPowerControlMode_3">
+         <widget class="QLabel" name="labelHeaterPowerControlModeTemperatureInfo">
           <property name="geometry">
            <rect>
             <x>10</x>
@@ -2302,7 +2325,7 @@ p, li { white-space: pre-wrap; }
            <string>Temperature</string>
           </property>
          </widget>
-         <widget class="QLabel" name="labelHeaterPowerControlMode_2">
+         <widget class="QLabel" name="labelHeaterPowerControlModePowerInfo">
           <property name="geometry">
            <rect>
             <x>10</x>
@@ -2322,19 +2345,19 @@ p, li { white-space: pre-wrap; }
            <string>Power</string>
           </property>
          </widget>
-         <widget class="QLabel" name="labelHeaterPowerControlMode_4">
+         <widget class="QLabel" name="labelHeaterPowerControlModePower">
           <property name="geometry">
            <rect>
             <x>160</x>
             <y>10</y>
-            <width>61</width>
+            <width>121</width>
             <height>21</height>
            </rect>
           </property>
           <property name="font">
            <font>
             <pointsize>16</pointsize>
-            <italic>true</italic>
+            <italic>false</italic>
            </font>
           </property>
           <property name="text">
@@ -2375,7 +2398,7 @@ p, li { white-space: pre-wrap; }
             </font>
            </property>
            <property name="text">
-            <string>Plot Sampling Frequency</string>
+            <string>Plot Sampling Period</string>
            </property>
           </widget>
           <widget class="QCheckBox" name="checkBoxHeaterPowerPlotTemperature">
@@ -2412,24 +2435,42 @@ p, li { white-space: pre-wrap; }
            </property>
            <item>
             <property name="text">
-             <string>1 SPS</string>
+             <string>1 second</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>2 SPS</string>
+             <string>2 seconds</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>5 SPS</string>
+             <string>5 seconds</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>10 SPS</string>
+             <string>10 seconds</string>
             </property>
            </item>
+          </widget>
+          <widget class="QPushButton" name="pushButtonHeaterPowerClearData">
+           <property name="geometry">
+            <rect>
+             <x>170</x>
+             <y>80</y>
+             <width>161</width>
+             <height>31</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>16</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Clear Data</string>
+           </property>
           </widget>
          </widget>
          <widget class="QLabel" name="labelHeaterPowerControlMode">
@@ -2451,7 +2492,7 @@ p, li { white-space: pre-wrap; }
            <string>Control Mode</string>
           </property>
          </widget>
-         <widget class="QComboBox" name="comboBox">
+         <widget class="QComboBox" name="comboBoxHeaterPowerControlMode">
           <property name="geometry">
            <rect>
             <x>10</x>
@@ -2465,11 +2506,6 @@ p, li { white-space: pre-wrap; }
             <pointsize>16</pointsize>
            </font>
           </property>
-          <item>
-           <property name="text">
-            <string>No Control</string>
-           </property>
-          </item>
           <item>
            <property name="text">
             <string>Open Loop</string>
@@ -2764,9 +2800,162 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButtonHeaterPowerClearData</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>heaterPowerControlClearDataClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>271</x>
+     <y>265</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>319</x>
+     <y>-8</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButtonHeaterPowerCVApply</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>heaterPowerControlApplyValueClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>307</x>
+     <y>688</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>362</x>
+     <y>-17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBoxHeaterPowerControlMode</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>heaterPowerControlControlModeChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>189</x>
+     <y>541</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>248</x>
+     <y>-22</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderHeaterPowerControlValue</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>heaterPowerControlCVSliderChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>141</x>
+     <y>649</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>70</x>
+     <y>-12</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBoxHeaterPowerSaveToFile</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>heaterPowerControlSaveDataToFileClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>28</x>
+     <y>459</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>121</x>
+     <y>-2</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBoxHeaterPowerPlotTemperature</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>heaterPowerControPlotDataClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>24</x>
+     <y>265</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>511</x>
+     <y>-8</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBoxHeaterPowerPlotTemperatureSps</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>heaterPowerControlPlotFrequencyChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>112</x>
+     <y>218</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>700</x>
+     <y>-6</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBoxHeaterPowerFileSps</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>heaterPowerControlDataSaveFrequencyClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>122</x>
+     <y>419</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>980</x>
+     <y>-2</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>textEditHeaterPowerControlValue</sender>
+   <signal>textChanged()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>heaterPowerControlValueTextChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>89</x>
+     <y>696</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>150</x>
+     <y>1082</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ButtonClicked()</slot>
   <slot>applicationTabWidgetChanged()</slot>
+  <slot>heaterPowerControlClearDataClicked()</slot>
+  <slot>heaterPowerControlApplyValueClicked()</slot>
+  <slot>heaterPowerControlControlModeChanged()</slot>
+  <slot>heaterPowerControlCVSliderChanged()</slot>
+  <slot>heaterPowerControlSaveDataToFileClicked()</slot>
+  <slot>heaterPowerControPlotDataClicked()</slot>
+  <slot>heaterPowerControlPlotFrequencyChanged()</slot>
+  <slot>heaterPowerControlDataSaveFrequencyClicked()</slot>
+  <slot>heaterPowerControlValueTextChanged()</slot>
  </slots>
 </ui>

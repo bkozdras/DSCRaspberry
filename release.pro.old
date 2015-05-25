@@ -6,7 +6,7 @@ DESTDIR = Release
 CONFIG += release
 
 DEFINES += RASPBERRY
-LIBS += -LE:\Work\LibrariesCPlusPlus\boost_1_58_0_ARM7\stage\lib -lboost_system -lboost_thread
+LIBS += -LE:\Work\LibrariesCPlusPlus\boost_1_58_0_ARM7\stage\lib -lboost_system -lboost_thread -lboost_filesystem
 INCLUDEPATH += E:\Work\LibrariesCPlusPlus\boost_1_58_0_ARM7
 QMAKE_CFLAGS += -std=c++14
 QMAKE_CXXFLAGS += -std=c++14

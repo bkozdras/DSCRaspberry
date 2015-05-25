@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <qlabel.h>
 #include <qtablewidget.h>
+#include <qtimer.h>
 
 #include <memory>
 #include <mutex>
@@ -15,6 +16,7 @@
 #include "Core/DSC/EControlMode.hpp"
 #include "Core/DSC/EDataType.hpp"
 #include "Core/Defines/CommonDefines.hpp"
+#include "Core/DSC/DataManager.hpp"
 
 namespace Ui {
 class MainWindow;
@@ -33,6 +35,25 @@ public:
 protected slots:
     void run();
     void applicationTabWidgetChanged();
+
+    void heaterPowerControlClearDataClicked();
+    void heaterPowerControlApplyValueClicked();
+    void heaterPowerControlControlModeChanged();
+    void heaterPowerControlCVSliderChanged();
+    void heaterPowerControlSaveDataToFileClicked();
+    void heaterPowerControPlotDataClicked();
+    void heaterPowerControlPlotFrequencyChanged();
+    void heaterPowerControlDataSaveFrequencyClicked();
+    void heaterPowerControlValueTextChanged();
+
+    void heaterPowerControlPlotData();
+    void heaterPowerControlPlotNewSamplingCallback();
+    void heaterPowerControlPlotNewControlModeCallback();
+
+signals :
+
+    void signalHeaterPowerControlPlotNewSamplingCallback();
+    void signalHeaterPowerControlPlotNewControlModeCallback();
 
 private:
 
@@ -111,9 +132,30 @@ private:
     // Heater Power Control
 
     std::mutex mHeaterPowerControlMtx;
+
     bool mIsHeaterPowerControlWorking;
+    std::map<EDataType, TimerManager::TimerId> mHeaterPowerQLabelToTimerId;
 
     void setupHeaterPowerControl();
+    void heaterPowerControlStartWorking();
+    void heaterPowerControlStopWorking();
+    void changeHeaterPowerControlDataValue(EDataType dataType, double value);
+    QLabel* getQLabelForHeaterPowerControl(EDataType dataType);
+    QString convertHeaterPowerControlDataValueToQString(EDataType dataType, double value);
+    void heaterPowerNewFilenameCallback(const std::string & filename);
+
+    void setActiveHeaterPowerTab();
+    void setActiveHeaterPowerComboBoxMode();
+    void setActiveHeaterPowerComboBoxPlotSps();
+    void setActiveHeaterPowerComboBoxFileSps();
+    void setHeaterPowerCVSlider();
+    QString convertHeaterPowerToQString(double value);
+    double convertQStringToHeaterPower(const QString & qString);
+
+    DSC::DataManager::CallbackId mHeaterPowerControlPlotNewDataCallbackId;
+    DSC::DataManager::CallbackId mHeaterPowerControlPlotNewModeCallbackId;
+    DSC::DataManager::CallbackId mHeaterPowerControlFileNewFilenameCallbackId;
+    std::shared_ptr<QTimer> mHeaterPowerControlPlotTimer;
 };
 
 #endif // MAINWINDOW_H

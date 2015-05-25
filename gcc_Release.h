@@ -7,6 +7,7 @@
 #ifdef _MSC_VER
 #define __DBL_MIN_EXP__ (-1021)
 #define __HQ_FBIT__ 15
+#define __cpp_attributes 200809
 #define __UINT_LEAST16_MAX__ 65535
 #define __ARM_SIZEOF_WCHAR_T 32
 #define __ATOMIC_ACQUIRE 2
@@ -25,6 +26,7 @@
 #define __UINT8_MAX__ 255
 #define __ACCUM_FBIT__ 15
 #define __WINT_MAX__ 4294967295U
+#define __cpp_static_assert 200410
 #define __USFRACT_FBIT__ 8
 #define QT_GUI_LIB 1
 #define __ORDER_LITTLE_ENDIAN__ 1234
@@ -42,6 +44,7 @@
 #define __LLACCUM_MAX__ 0X7FFFFFFFFFFFFFFFP-31LLK
 #define __GCC_ATOMIC_CHAR32_T_LOCK_FREE 2
 #define __FRACT_FBIT__ 15
+#define __cpp_variadic_templates 200704
 #define __UINT_FAST64_MAX__ 18446744073709551615ULL
 #define __SIG_ATOMIC_TYPE__ int
 #define __UACCUM_FBIT__ 16
@@ -125,9 +128,11 @@
 #define __FLT_HAS_DENORM__ 1
 #define __SIZEOF_LONG_DOUBLE__ 8
 #define __BIGGEST_ALIGNMENT__ 8
+#define __GNUC_STDC_INLINE__ 1
 #define __DQ_IBIT__ 0
 #define __DBL_MAX__ double(1.7976931348623157e+308L)
 #define __ULFRACT_IBIT__ 0
+#define __cpp_raw_strings 200710
 #define __INT_FAST32_MAX__ 2147483647
 #define __DBL_HAS_INFINITY__ 1
 #define __INT64_MAX__ 9223372036854775807LL
@@ -136,11 +141,12 @@
 #define __THUMB_INTERWORK__ 1
 #define __LACCUM_MAX__ 0X7FFFFFFFFFFFFFFFP-31LK
 #define __INT_FAST16_TYPE__ int
+#define __STRICT_ANSI__ 1
 #define __LDBL_HAS_DENORM__ 1
 #define __ARM_FEATURE_LDREX 4
 //VS2005-2012 treats all files as C++, while VS2013+ can treat C files correctly.
 #if _MSC_VER < 1800 || defined(__cplusplus)
-#define __cplusplus 199711L
+#define __cplusplus 201300L
 #endif
 #define __DEC128_MAX__ 9.999999999999999999999999999999999E6144DL
 #define __INT_LEAST32_MAX__ 2147483647
@@ -160,6 +166,7 @@
 #define __LONG_LONG_MAX__ 9223372036854775807LL
 #define __SIZEOF_SIZE_T__ 4
 #define __ULACCUM_MAX__ 0XFFFFFFFFFFFFFFFFP-32ULK
+#define __cpp_rvalue_reference 200610
 #define __SIZEOF_WINT_T__ 4
 #define __SA_IBIT__ 16
 #define __ULLACCUM_MIN__ 0.0ULLK
@@ -168,6 +175,7 @@
 #define __FLT_MIN_EXP__ (-125)
 #define __USFRACT_MAX__ 0XFFP-8UHR
 #define __UFRACT_IBIT__ 0
+#define __cpp_lambdas 200907
 #define __ARM_FEATURE_QBIT 1
 #define __INT_FAST64_TYPE__ long long int
 #define __DBL_MIN__ double(2.2250738585072014e-308L)
@@ -189,10 +197,12 @@
 #define __FLT_MANT_DIG__ 24
 #define __VERSION__ "4.9.1"
 #define __ULLFRACT_FBIT__ 64
+#define __cpp_unicode_characters 200704
 #define __FRACT_EPSILON__ 0x1P-15R
 #define __ULACCUM_MIN__ 0.0ULK
 #define _STDC_PREDEF_H 1
 #define __UDA_FBIT__ 32
+#define __cpp_decltype_auto 201304
 #define __LLACCUM_EPSILON__ 0x1P-31LLK
 #define __GCC_ATOMIC_INT_LOCK_FREE 2
 #define __FLOAT_WORD_ORDER__ __ORDER_LITTLE_ENDIAN__
@@ -207,12 +217,12 @@
 #define __LLACCUM_FBIT__ 31
 #define __INT_FAST32_TYPE__ int
 #define __UINT_LEAST16_TYPE__ short unsigned int
-#define unix 1
 #define __INT16_MAX__ 32767
 #define __SIZE_TYPE__ unsigned int
 #define __UINT64_MAX__ 18446744073709551615ULL
 #define __UDQ_FBIT__ 64
 #define __INT8_TYPE__ signed char
+#define __cpp_digit_separators 201309
 #define __ELF__ 1
 #define __ULFRACT_EPSILON__ 0x1P-32ULR
 #define __LLFRACT_FBIT__ 63
@@ -238,8 +248,10 @@
 #define __DEC128_SUBNORMAL_MIN__ 0.000000000000000000000000000000001E-6143DL
 #define __FLT_HAS_INFINITY__ 1
 #define __unix 1
+#define __cpp_unicode_literals 200710
 #define __USA_FBIT__ 16
 #define __UINT_FAST16_TYPE__ unsigned int
+#define __cpp_attribute_deprecated 201309
 #define __DEC64_MAX__ 9.999999999999999E384DD
 #define __ARM_32BIT_STATE 1
 #define __CHAR16_TYPE__ short unsigned int
@@ -260,7 +272,6 @@
 #define __ARM_ARCH 6
 #define __INTPTR_MAX__ 2147483647
 #define __QQ_FBIT__ 7
-#define linux 1
 #define __UTA_IBIT__ 64
 #define __EXCEPTIONS 1
 #define __LDBL_MANT_DIG__ 53
@@ -268,6 +279,7 @@
 #define __SACCUM_MIN__ (-0X1P7HK-0X1P7HK)
 #define __DBL_HAS_QUIET_NAN__ 1
 #define __SIG_ATOMIC_MIN__ (-__SIG_ATOMIC_MAX__ - 1)
+#define __cpp_return_type_deduction 201304
 #define __INTPTR_TYPE__ int
 #define __UINT16_TYPE__ short unsigned int
 #define __WCHAR_TYPE__ unsigned int
@@ -275,6 +287,7 @@
 #define __USQ_FBIT__ 32
 #define __UINTPTR_MAX__ 4294967295U
 #define __DEC64_MIN_EXP__ (-382)
+#define __cpp_decltype 200707
 #define __INT_FAST64_MAX__ 9223372036854775807LL
 #define __GCC_ATOMIC_TEST_AND_SET_TRUEVAL 1
 #define __FLT_DIG__ 6
@@ -318,8 +331,10 @@
 #define __TA_FBIT__ 63
 #define __UDQ_IBIT__ 0
 #define __ORDER_BIG_ENDIAN__ 4321
+#define __cpp_runtime_arrays 201304
 #define __ACCUM_EPSILON__ 0x1P-15K
 #define __INTMAX_MAX__ 9223372036854775807LL
+#define __cpp_alias_templates 200704
 #define __BYTE_ORDER__ __ORDER_LITTLE_ENDIAN__
 #define __FLT_DENORM_MIN__ 1.4012984643248171e-45F
 #define __LLFRACT_IBIT__ 0
@@ -327,12 +342,14 @@
 #define __UINT_FAST32_TYPE__ unsigned int
 #define __CHAR32_TYPE__ unsigned int
 #define __FLT_MAX__ 3.4028234663852886e+38F
+#define __cpp_constexpr 200704
 #define __USACCUM_FBIT__ 8
 #define __INT32_TYPE__ int
 #define __SIZEOF_DOUBLE__ 8
 #define __UFRACT_EPSILON__ 0x1P-16UR
 #define __INTMAX_TYPE__ long long int
 #define __DEC128_MAX_EXP__ 6145
+#define RASPBERRY 1
 #define __ATOMIC_CONSUME 1
 #define __GNUC_MINOR__ 9
 #define __UINTMAX_MAX__ 18446744073709551615ULL
@@ -340,6 +357,7 @@
 #define __HA_FBIT__ 7
 #define __DBL_MAX_10_EXP__ 308
 #define __LDBL_DENORM_MIN__ 4.9406564584124654e-324L
+#define __cpp_generic_lambdas 201304
 #define __STDC__ 1
 #define __PTRDIFF_TYPE__ int
 #define __LLFRACT_MIN__ (-0.5LLR-0.5LLR)
@@ -354,12 +372,12 @@
 #define __LDBL_MIN_10_EXP__ (-307)
 #define __SIZEOF_LONG_LONG__ 8
 #define __ULACCUM_EPSILON__ 0x1P-32ULK
+#define __cpp_user_defined_literals 200809
 #define __SACCUM_IBIT__ 8
 #define __GCC_ATOMIC_LLONG_LOCK_FREE 1
 #define __LDBL_DIG__ 15
 #define __FLT_DECIMAL_DIG__ 9
 #define __UINT_FAST16_MAX__ 4294967295U
-#define __GNUC_GNU_INLINE__ 1
 #define __GCC_ATOMIC_SHORT_LOCK_FREE 1
 #define __ULLFRACT_MAX__ 0XFFFFFFFFFFFFFFFFP-64ULLR
 #define __UINT_FAST8_TYPE__ unsigned char
@@ -368,23 +386,20 @@
 #define __ULACCUM_FBIT__ 32
 #define __ARM_FEATURE_DSP 1
 #define __QQ_IBIT__ 0
+#define __cpp_init_captures 201304
 #define __ATOMIC_ACQ_REL 4
 #define __ATOMIC_RELEASE 3
+#endif
 #define RASPBERRY 
-//VS2005-2012 treats all files as C++, while VS2013+ can treat C files correctly.
-#if _MSC_VER < 1800 || defined(__cplusplus)
+#undef __cplusplus
 #define __cplusplus 201300L
-#endif
-#define NDEBUG 
-#define RELEASE 
-#endif
-
 // --- Include directories begin --- //
 //c:/sysgcc/raspberry/arm-linux-gnueabihf/sysroot/usr/share/qt4/mkspecs/arm-linux-gnueabihf
 //.
 //c:/sysgcc/raspberry/arm-linux-gnueabihf/sysroot/usr/include/qt4/QtCore
 //c:/sysgcc/raspberry/arm-linux-gnueabihf/sysroot/usr/include/qt4/QtGui
 //c:/sysgcc/raspberry/arm-linux-gnueabihf/sysroot/usr/include/qt4
+//e:/Work/LibrariesCPlusPlus/boost_1_58_0_ARM7
 //c:\sysgcc\raspberry\bin\../lib/gcc/arm-linux-gnueabihf/4.9/../../../../arm-linux-gnueabihf/include/c++/4.9
 //c:\sysgcc\raspberry\bin\../lib/gcc/arm-linux-gnueabihf/4.9/../../../../arm-linux-gnueabihf/include/c++/4.9/backward
 //c:\sysgcc\raspberry\bin\../lib/gcc/arm-linux-gnueabihf/4.9/include
@@ -393,6 +408,8 @@
 //c:/sysgcc/raspberry/lib/gcc/../../lib/gcc/arm-linux-gnueabihf/4.9/../../../../arm-linux-gnueabihf/include/arm-linux-gnueabihf/c++/4.9
 //c:\sysgcc\raspberry\bin\../arm-linux-gnueabihf/sysroot/usr/include/arm-linux-gnueabihf
 //c:\sysgcc\raspberry\bin\../arm-linux-gnueabihf/sysroot/usr/include
+//$(ProjectDir)\Release
+//E:\Work\LibrariesCPlusPlus\boost_1_58_0_ARM7
 // --- Include directories end --- //
 
 

@@ -56,6 +56,9 @@
     <Filter Include="Core\DSC">
       <UniqueIdentifier>{3c28193a-e8bc-4feb-917d-763dabe2987a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="WindowApp">
+      <UniqueIdentifier>{5be953e4-098d-4ac7-8fd2-983bc213154e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DSCMasterApplication.cpp">
@@ -144,6 +147,12 @@
     </ClCompile>
     <ClCompile Include="qcustomplot.cpp">
       <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowApp\HeaterTemperaturePlotManager.cpp">
+      <Filter>WindowApp</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\DSC\FileDataManager.cpp">
+      <Filter>Core\DSC</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -335,6 +344,12 @@
     </ClInclude>
     <ClInclude Include="qcustomplot.h">
       <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowApp\HeaterTemperaturePlotManager.hpp">
+      <Filter>WindowApp</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\DSC\FileDataManager.hpp">
+      <Filter>Core\DSC</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
