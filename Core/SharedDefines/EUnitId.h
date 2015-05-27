@@ -23,6 +23,7 @@ typedef enum _EUnitId : u8
     EUnitId_Thermocouple3               = 14,
     EUnitId_Thermocouple4               = 15,
     EUnitId_Peltier                     = 16,
+    EUnitId_HeaterTemperatureController = 17,
     EUnitId_Raspberry                   = 100
 } EUnitId;
 

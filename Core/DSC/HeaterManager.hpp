@@ -24,16 +24,24 @@ namespace DSC
             static bool setPowerControlMode(EControlMode mode, std::function<void(EControlMode, bool)> newModeSetCallback = std::function<void(EControlMode, bool)>());
             static EControlMode getPowerControlMode();
 
+            static bool setTemperatureInFeedbackMode(float value);
+            static bool setControllingAlgorithmExecutionPeriod(u16 value);
+
             static void startRegisteringTemperatureValue();
             static void stopRegisteringTemperatureValue();
+            static void startRegisteringControllerValues(u16 period = 1000U);
+            static void stopRegisteringControllerValues();
 
         private :
 
             static void heaterTemperatureIndCallback(THeaterTemperatureInd && ind);
+            static void controllerDataIndCallback(TControllerDataInd && ind);
             static void heaterPowerResponseCallback(TSetHeaterPowerResponse && response);
             static void startRegisteringDataResponseCallback(TStartRegisteringDataResponse && response);
             static void stopRegisteringDataResponseCallback(TStopRegisteringDataResponse && response);
             static void setControlSystemTypeResponse(TSetControlSystemTypeResponse && response);
+            static void setHeaterTemperatureInFeedbackModeResponse(TSetHeaterTemperatureInFeedbackModeResponse && response);
+            static void setControllingAlgorithmExecutionPeriodResponse(TSetControllingAlgorithmExecutionPeriodResponse && response);
 
             static const std::string & getLoggerPrefix();
 

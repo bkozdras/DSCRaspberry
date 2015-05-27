@@ -60,6 +60,8 @@ typedef enum _EMessageId : u8
     EMessageId_SetRTDPolynomialCoefficientsRequest                          = 51,
     EMessageId_SetRTDPolynomialCoefficientsResponse                         = 52,
     EMessageId_UnitReadyInd                                                 = 53,
+    EMessageId_SetHeaterTemperatureInFeedbackModeRequest                    = 54,
+    EMessageId_SetHeaterTemperatureInFeedbackModeResponse                   = 55,
     EMessageId_UnexpectedMasterMessageInd                                   = 99
 } EMessageId;
 

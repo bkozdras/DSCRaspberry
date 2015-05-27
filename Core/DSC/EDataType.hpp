@@ -18,5 +18,6 @@ enum class EDataType : u8
     SMPCBTemperature,
     FanPower,
     HeaterPowerControlPlotDataSampling,
-    HeaterPowerControlFileDataSampling
+    HeaterPowerControlFileDataSampling,
+    HeaterTemperatureControllingAlgorithmPeriod
 };

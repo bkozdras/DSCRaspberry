@@ -27,6 +27,14 @@ namespace DSC
                     heaterTemperatureIndCallback(std::move(ind));
                 }
             );
+
+            Nucleo::DeviceCommunicator::registerIndCallback
+            (
+                [](TControllerDataInd && ind)
+                {
+                    controllerDataIndCallback(std::move(ind));
+                }
+            );
         }
 
         Logger::info("%s: Initialized!", getLoggerPrefix().c_str());
@@ -126,6 +134,36 @@ namespace DSC
         return DataManager::getControlMode();
     }
 
+    bool HeaterManager::setTemperatureInFeedbackMode(float value)
+    {
+        std::lock_guard<std::mutex> lockGuard(mMtx);
+
+        const auto controlMode = DataManager::getControlMode();
+
+        if (controlMode == EControlMode::NotSet || controlMode == EControlMode::OpenLoop)
+        {
+            Logger::warning("%s: Setting temperature in Feedback mode not allowed in actual control mode.", getLoggerPrefix().c_str());
+            return false;
+        }
+
+        TSetHeaterTemperatureInFeedbackModeRequest request;
+        request.temperature = value;
+        Nucleo::DeviceCommunicator::send(request, [](TSetHeaterTemperatureInFeedbackModeResponse && response, bool isNotTimeout){ setHeaterTemperatureInFeedbackModeResponse(std::move(response)); });
+
+        return true;
+    }
+
+    bool HeaterManager::setControllingAlgorithmExecutionPeriod(u16 value)
+    {
+        std::lock_guard<std::mutex> lockGuard(mMtx);
+
+        TSetControllingAlgorithmExecutionPeriodRequest request;
+        request.value = value;
+        Nucleo::DeviceCommunicator::send(request, [](TSetControllingAlgorithmExecutionPeriodResponse && response, bool isNotTimeout){ setControllingAlgorithmExecutionPeriodResponse(std::move(response)); });
+
+        return true;
+    }
+
     void HeaterManager::startRegisteringTemperatureValue()
     {
         std::lock_guard<std::mutex> lockGuard(mMtx);
@@ -153,11 +191,68 @@ namespace DSC
         Nucleo::DeviceCommunicator::send(request, [](TStopRegisteringDataResponse && response, bool isNotTimeout){ stopRegisteringDataResponseCallback(std::move(response)); });
     }
 
+    void HeaterManager::startRegisteringControllerValues(u16 period)
+    {
+        std::lock_guard<std::mutex> lockGuard(mMtx);
+
+        Logger::info("%s: Starting registering controller values in feedback mode (Period: %u ms).", getLoggerPrefix().c_str(), period);
+        TStartRegisteringDataRequest request;
+        request.dataType = ERegisteringDataType_ControllerData;
+        request.period = period;
+        Nucleo::DeviceCommunicator::send(request, [](TStartRegisteringDataResponse && response, bool isNotTimeout){ startRegisteringDataResponseCallback(std::move(response)); });
+    }
+
+    void HeaterManager::stopRegisteringControllerValues()
+    {
+        std::lock_guard<std::mutex> lockGuard(mMtx);
+        Logger::debug("%s: Stopping registering controller values in feedback mode.", getLoggerPrefix().c_str());
+        TStopRegisteringDataRequest request;
+        request.dataType = ERegisteringDataType_ControllerData;
+        Nucleo::DeviceCommunicator::send(request, [](TStopRegisteringDataResponse && response, bool isNotTimeout){ stopRegisteringDataResponseCallback(std::move(response)); });
+    }
+
     void HeaterManager::heaterTemperatureIndCallback(THeaterTemperatureInd && ind)
     {
         std::lock_guard<std::mutex> lockGuard(mMtx);
         Logger::debug("%s: Received HeaterTemperatureInd. New value: %.2f oC.", getLoggerPrefix().c_str(), ind.temperature);
         DataManager::updateData(EDataType::HeaterTemperature, ind.temperature);
+    }
+
+    void HeaterManager::controllerDataIndCallback(TControllerDataInd && ind)
+    {
+        std::lock_guard<std::mutex> lockGuard(mMtx);
+        
+        Logger::warning("CONTROLLER DATA IND: %u, %.2f.", ind.type, ind.value);
+
+        switch (ind.type)
+        {
+            case EControllerDataType_CV:
+            {
+                DataManager::updateData(EDataType::CVHeaterTemperature, ind.value);
+                break;
+            }
+
+            case EControllerDataType_ERR:
+            {
+                DataManager::updateData(EDataType::ERRHeaterTemperature, ind.value);
+                break;
+            }
+
+            case EControllerDataType_PV:
+            {
+                DataManager::updateData(EDataType::HeaterTemperature, ind.value);
+                break;
+            }
+
+            case EControllerDataType_SP:
+            {
+                DataManager::updateData(EDataType::SPHeaterTemperature, ind.value);
+                break;
+            }
+
+            default :
+                break;
+        }
     }
 
     void HeaterManager::heaterPowerResponseCallback(TSetHeaterPowerResponse && response)
@@ -206,6 +301,18 @@ namespace DSC
             else
             {
                 Logger::error("%s: Starting registering heater temperature value failed!", getLoggerPrefix().c_str());
+            }
+        }
+        else if (ERegisteringDataType_ControllerData == response.dataType)
+        {
+            if (response.success)
+            {
+                Logger::info("%s: Started registering controller values in feedback mode.", getLoggerPrefix().c_str());
+                DataManager::updateUnitAttribute(EUnitId_HeaterTemperatureController, "DataRegistering", "Enabled");
+            }
+            else
+            {
+                Logger::error("%s: Starting registering controller values in feedback mode failed!", getLoggerPrefix().c_str());
             }
         }
         else
@@ -264,6 +371,37 @@ namespace DSC
                     callback(convertEControlSystemTypeToEControlMode(response.type), response.success);
                 }
             );
+        }
+    }
+
+    void HeaterManager::setHeaterTemperatureInFeedbackModeResponse(TSetHeaterTemperatureInFeedbackModeResponse && response)
+    {
+        std::lock_guard<std::mutex> lockGuard(mMtx);
+
+        if (response.success)
+        {
+            Logger::info("%s: Set heater temperature value in feedback mode: %.2f oC.", getLoggerPrefix().c_str(), response.temperature);
+            DataManager::updateData(EDataType::SPHeaterTemperature, response.temperature);
+        }
+        else
+        {
+            Logger::error("%s: Setting heater temperature value in feedback mode: %.2f oC.", getLoggerPrefix().c_str(), response.temperature);
+        }
+    }
+
+    void HeaterManager::setControllingAlgorithmExecutionPeriodResponse(TSetControllingAlgorithmExecutionPeriodResponse && response)
+    {
+        std::lock_guard<std::mutex> lockGuard(mMtx);
+
+        if (response.success)
+        {
+            Logger::info("%s: Set heater temperature controlling algorithm execution period: %u ms.", getLoggerPrefix().c_str(), response.value);
+            auto stringValue = std::to_string(response.value);
+            DataManager::updateUnitAttribute(EUnitId_HeaterTemperatureController, "AlgorithmExecutionPeriod", stringValue);
+        }
+        else
+        {
+            Logger::error("%s: Setting heater temperature controlling algorithm execution period: %u ms.", getLoggerPrefix().c_str(), response.value);
         }
     }
 

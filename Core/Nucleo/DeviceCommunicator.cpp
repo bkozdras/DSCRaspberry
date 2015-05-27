@@ -43,6 +43,11 @@ namespace Nucleo
         SEND_IMPL(SetHeaterPower);
     }
 
+    SEND_MACRO_IMPL(SetHeaterTemperatureInFeedbackMode)
+    {
+        SEND_IMPL(SetHeaterTemperatureInFeedbackMode);
+    }
+
     SEND_MACRO_IMPL(CallibreADS1248)
     {
         SEND_IMPL(CallibreADS1248);

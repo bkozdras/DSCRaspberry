@@ -173,6 +173,7 @@
     <ClInclude Include="Core\RaspberryPeripherals\UartManager.hpp" />
     <ClInclude Include="Core\RaspberryPeripherals\UartMessageMemoryManager.hpp" />
     <ClInclude Include="Core\SharedDefines\ADS1248Types.h" />
+    <ClInclude Include="Core\SharedDefines\EControllerDataType.h" />
     <ClInclude Include="Core\SharedDefines\EControlSystemType.h" />
     <ClInclude Include="Core\SharedDefines\EFaultId.h" />
     <ClInclude Include="Core\SharedDefines\EFaultIndicationState.h" />

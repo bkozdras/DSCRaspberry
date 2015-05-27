@@ -351,5 +351,8 @@
     <ClInclude Include="Core\DSC\FileDataManager.hpp">
       <Filter>Core\DSC</Filter>
     </ClInclude>
+    <ClInclude Include="Core\SharedDefines\EControllerDataType.h">
+      <Filter>Core\SharedDefines</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

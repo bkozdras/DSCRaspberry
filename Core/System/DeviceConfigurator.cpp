@@ -344,6 +344,28 @@ void DeviceConfigurator::updateUnitAttributeIndication(EUnitId unitId, const std
             break;
         }
 
+        case EUnitId_HeaterTemperatureController:
+        {
+            if ("DataRegistering" == attribute)
+            {
+                if ("Enabled" == value)
+                {
+                    Logger::debug("%s: Started collecting data from %s..", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(unitId).c_str());
+
+                    {
+                        DSC::HeaterManager::setControllingAlgorithmExecutionPeriod(500U);
+                    }
+                }
+            }
+            else if ("AlgorithmExecutionPeriod" == attribute)
+            {
+                Logger::info("%s: Set heater temperature controller algorithm execution period: %s ms.", getLoggerPrefix().c_str(), value.c_str());
+
+                {
+                }
+            }
+        }
+
         default :
             break;
     }
@@ -361,7 +383,7 @@ void DeviceConfigurator::newControlModeSetCallback(EControlMode mode, bool resul
             Logger::info("%s: Set heater power control mode to Open Loop.", getLoggerPrefix().c_str());
 
             {
-                DSC::HeaterManager::setPowerInPercent(0.0F, [](float value, bool result){ newHeaterPowerValueSetCallback(value, result); });
+                DSC::HeaterManager::startRegisteringControllerValues();
             }
         }
     }
@@ -371,20 +393,4 @@ void DeviceConfigurator::newControlModeSetCallback(EControlMode mode, bool resul
     }
 }
 
-void DeviceConfigurator::newHeaterPowerValueSetCallback(float value, bool result)
-{
-    std::lock_guard<std::mutex> lockGuard(mMtx);
-
-    if (result)
-    {
-        Logger::info("%s: Set heater power value to %.2f %%.", getLoggerPrefix().c_str(), value);
-        Logger::info("%s: Device configured. User actions now are allowed...", getLoggerPrefix().c_str());
-    }
-    else
-    {
-        Logger::error("%s: Setting heater power value failed...");
-    }
-}
-
 std::mutex DeviceConfigurator::mMtx;
-

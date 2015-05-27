@@ -24,6 +24,7 @@ namespace Nucleo
             SEND_MACRO(Polling);
             SEND_MACRO(ResetUnit);
             SEND_MACRO(SetHeaterPower);
+            SEND_MACRO(SetHeaterTemperatureInFeedbackMode);
             SEND_MACRO(CallibreADS1248);
             SEND_MACRO(SetChannelGainADS1248);
             SEND_MACRO(SetChannelSamplingSpeedADS1248);
