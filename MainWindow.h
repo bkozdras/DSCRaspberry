@@ -45,6 +45,8 @@ protected slots:
     void heaterPowerControlPlotFrequencyChanged();
     void heaterPowerControlDataSaveFrequencyClicked();
     void heaterPowerControlValueTextChanged();
+    void heaterPowerControlSetTunesClicked();
+    void heaterPowerControlSetTemperatureClicked();
 
     void heaterPowerControlPlotData();
     void heaterPowerControlPlotNewSamplingCallback();
@@ -150,6 +152,7 @@ private:
     void setActiveHeaterPowerComboBoxFileSps();
     void setHeaterPowerCVSlider();
     QString convertHeaterPowerToQString(double value);
+    QString convertHeaterTemperatureToQString(double value);
     double convertQStringToHeaterPower(const QString & qString);
 
     DSC::DataManager::CallbackId mHeaterPowerControlPlotNewDataCallbackId;

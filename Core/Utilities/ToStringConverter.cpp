@@ -205,4 +205,15 @@ namespace ToStringConverter
 
         return typeToString[type];
     }
+
+    const std::string & getSegmentType(ESegmentType type)
+    {
+        static std::map<ESegmentType, std::string> typeToString = decltype(typeToString)
+        {
+            std::make_pair(ESegmentType_Dynamic, "Dynamic"),
+            std::make_pair(ESegmentType_Static, "Static")
+        };
+
+        return typeToString[type];
+    }
 }

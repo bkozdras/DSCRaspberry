@@ -189,11 +189,7 @@ void HeaterTemperaturePlotManager::addNewDataToPlotCallback()
 
     auto time = QDateTime::currentDateTime().toMSecsSinceEpoch() / 1000.0;
     auto temperature = DSC::DataManager::getData(EDataType::HeaterTemperature);
-
-    mPlot->graph(0)->addData(time, temperature);
-    mPlot->graph(0)->removeDataBefore(time - 600);
-    mPlot->graph(0)->rescaleAxes();
-
+    
     if (EControlMode::SimpleFeedback == mControlMode || EControlMode::MFCFeedback == mControlMode)
     {
         auto spTemperature = DSC::DataManager::getData(EDataType::SPHeaterTemperature);
@@ -202,7 +198,11 @@ void HeaterTemperaturePlotManager::addNewDataToPlotCallback()
         mPlot->graph(1)->rescaleAxes();
     }
 
-    mPlot->xAxis->setRange(time + 0.5, 600, Qt::AlignRight);
+    mPlot->graph(0)->addData(time, temperature);
+    mPlot->graph(0)->removeDataBefore(time - 600);
+    mPlot->graph(0)->rescaleAxes();
+
+    mPlot->xAxis->setRange(time, 600, Qt::AlignRight);
     mPlot->replot();
 }
 

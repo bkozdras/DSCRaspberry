@@ -9,12 +9,15 @@
 #include <vector>
 
 #include "../SharedDefines/SFaultIndication.h"
+#include "../SharedDefines/MessagesDefines.h"
 
 class FaultManager : boost::noncopyable
 {
     public :
 
         typedef int CallbackId;
+
+        static bool initialize();
 
         static void generate(std::shared_ptr<SFaultIndication> indication);
         static void generate(SFaultIndication && indication);
@@ -37,6 +40,7 @@ class FaultManager : boost::noncopyable
         typedef std::function<void(std::shared_ptr<SFaultIndication>)> Callback;
         static std::vector<std::tuple<FaultManager::CallbackId, Callback, Callback>> mRegisteredNotificationCallbacks;
 
+        static void newNucleoFaultIndCallback(TFaultInd && faultInd);
         static CallbackId generateNewId();
         static const std::string & getLoggerPrefix();
 };

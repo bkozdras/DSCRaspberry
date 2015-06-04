@@ -56,9 +56,10 @@ namespace DSC
             mNewPowerValueSetCallback = newPowerValueCallback;
 
             TSetHeaterPowerRequest request;
-            request.power = convertPercentPowerToU16(percent);
+            //request.power = convertPercentPowerToU16(percent);
+            request.power = percent;
 
-            Logger::info("%s: Setting heater power value to %.2f%% (%u).", getLoggerPrefix().c_str(), percent, request.power);
+            Logger::info("%s: Setting heater power value to %.2f%%.", getLoggerPrefix().c_str(), request.power);
 
             Nucleo::DeviceCommunicator::send(request, [](TSetHeaterPowerResponse && response, bool isNotTimeout){ heaterPowerResponseCallback(std::move(response)); });
         }
@@ -81,7 +82,7 @@ namespace DSC
         }
 
         TSetHeaterPowerRequest request;
-        request.power = power;
+        request.power = convertU16ToPercentPower(power);
         Nucleo::DeviceCommunicator::send(request, [](TSetHeaterPowerResponse && response, bool isNotTimeout){ heaterPowerResponseCallback(std::move(response)); });
 
         return true;
@@ -134,6 +135,26 @@ namespace DSC
         return DataManager::getControlMode();
     }
 
+    bool HeaterManager::setPowerControlProcessPidTunes(double && kp, double && ki, double && kd, double && n)
+    {
+        std::lock_guard<std::mutex> lockGuard(mMtx);
+
+        Logger::debug("%s: Setting power control process PID tunes.", getLoggerPrefix().c_str());
+
+        TSetControllerTunesRequest request;
+        request.pid = EPid_ProcessController;
+        request.tunes.kp = kp;
+        request.tunes.ki = ki;
+        request.tunes.kd = kd;
+        request.tunes.n = n;
+
+        mSettingPidTunes = std::make_unique<SPidTunes>(request.tunes);
+
+        Nucleo::DeviceCommunicator::send(request, [](TSetControllerTunesResponse && response, bool isNotTimeout){ setControllerTunesResponse(std::move(response)); });
+
+        return true;
+    }
+
     bool HeaterManager::setTemperatureInFeedbackMode(float value)
     {
         std::lock_guard<std::mutex> lockGuard(mMtx);
@@ -164,7 +185,7 @@ namespace DSC
         return true;
     }
 
-    void HeaterManager::startRegisteringTemperatureValue()
+    void HeaterManager::startRegisteringTemperatureValue(u16 period)
     {
         std::lock_guard<std::mutex> lockGuard(mMtx);
 
@@ -174,6 +195,7 @@ namespace DSC
             Logger::debug("%s: Starting registering heater temperature value...", getLoggerPrefix().c_str());
             TStartRegisteringDataRequest request;
             request.dataType = ERegisteringDataType_HeaterTemperature;
+            request.period = period;
             Nucleo::DeviceCommunicator::send(request, [](TStartRegisteringDataResponse && response, bool isNotTimeout){ startRegisteringDataResponseCallback(std::move(response)); });
         }
         else
@@ -221,14 +243,13 @@ namespace DSC
     void HeaterManager::controllerDataIndCallback(TControllerDataInd && ind)
     {
         std::lock_guard<std::mutex> lockGuard(mMtx);
-        
-        Logger::warning("CONTROLLER DATA IND: %u, %.2f.", ind.type, ind.value);
 
         switch (ind.type)
         {
             case EControllerDataType_CV:
             {
                 DataManager::updateData(EDataType::CVHeaterTemperature, ind.value);
+                DataManager::updateData(EDataType::HeaterPower, ind.value);
                 break;
             }
 
@@ -240,7 +261,7 @@ namespace DSC
 
             case EControllerDataType_PV:
             {
-                DataManager::updateData(EDataType::HeaterTemperature, ind.value);
+                DataManager::updateData(EDataType::PVHeaterTemperature, ind.value);
                 break;
             }
 
@@ -259,7 +280,7 @@ namespace DSC
     {
         std::lock_guard<std::mutex> lockGuard(mMtx);
 
-        auto powerPercent = convertU16ToPercentPower(response.power);
+        auto powerPercent = response.power;
 
         if (response.success)
         {
@@ -281,7 +302,7 @@ namespace DSC
                 [response, callback]()
                 {
                     std::lock_guard<std::mutex> lockGuard(mMtx);
-                    callback(convertU16ToPercentPower(response.power), response.success);
+                    callback(response.power, response.success);
                 }
             );
         }
@@ -351,8 +372,31 @@ namespace DSC
         if (response.success)
         {
             Logger::info("%s: Changed heater power control system type to %s.", getLoggerPrefix().c_str(), ToStringConverter::getControlSystemType(response.type).c_str());
-            DataManager::updateControlMode(convertEControlSystemTypeToEControlMode(response.type));
+            auto controlMode = convertEControlSystemTypeToEControlMode(response.type);
+            DataManager::updateControlMode(controlMode);
             DevicePeripherals::UnitsDetector::updateStatus(EUnitId_MCP4716, DevicePeripherals::UnitsDetector::Status::Working);
+
+            switch (controlMode)
+            {
+                case EControlMode::OpenLoop:
+                {
+                    DataManager::updateData(EDataType::CVHeaterTemperature, 0.0);
+                    DataManager::updateData(EDataType::ERRHeaterTemperature, DataManager::UnknownValue);
+                    DataManager::updateData(EDataType::SPHeaterTemperature, DataManager::UnknownValue);
+                    break;
+                }
+
+                case EControlMode::MFCFeedback :
+                case EControlMode::SimpleFeedback:
+                {
+                    DataManager::updateData(EDataType::SPHeaterTemperature, DataManager::getData(EDataType::HeaterTemperature));
+                    break;
+                }
+
+                default :
+                    break;
+            }
+
         }
         else
         {
@@ -371,6 +415,31 @@ namespace DSC
                     callback(convertEControlSystemTypeToEControlMode(response.type), response.success);
                 }
             );
+        }
+    }
+
+    void HeaterManager::setControllerTunesResponse(TSetControllerTunesResponse && response)
+    {
+        std::lock_guard<std::mutex> lockGuard(mMtx);
+        
+        if (response.success)
+        {
+            Logger::info("%s: Setting power control process PID tunes.", getLoggerPrefix().c_str());
+            Logger::info("%s: Process PID: Kp: %.10f.", getLoggerPrefix().c_str(), mSettingPidTunes->kp);
+            Logger::info("%s: Process PID: Ki: %.10f 1/s", getLoggerPrefix().c_str(), mSettingPidTunes->ki);
+            Logger::info("%s: Process PID: Kd: %.10f 1/s", getLoggerPrefix().c_str(), mSettingPidTunes->kd);
+            Logger::info("%s: Process PID: N: %.10f.", getLoggerPrefix().c_str(), mSettingPidTunes->n);
+
+            DataManager::updateData(EDataType::ProcessPidTuneKp, mSettingPidTunes->kp);
+            DataManager::updateData(EDataType::ProcessPidTuneKi, mSettingPidTunes->ki);
+            DataManager::updateData(EDataType::ProcessPidTuneKd, mSettingPidTunes->kd);
+            DataManager::updateData(EDataType::ProcessPidTuneN, mSettingPidTunes->n);
+
+            mSettingPidTunes.reset();
+        }
+        else
+        {
+            Logger::error("%s: Setting power control process PID tunes failed!", getLoggerPrefix().c_str());
         }
     }
 
@@ -456,4 +525,5 @@ namespace DSC
     std::mutex HeaterManager::mMtx;
     std::function<void(EControlMode, bool)> HeaterManager::mNewControlModeSetCallback;
     std::function<void(float, bool)> HeaterManager::mNewPowerValueSetCallback;
+    std::unique_ptr<SPidTunes> HeaterManager::mSettingPidTunes;
 }

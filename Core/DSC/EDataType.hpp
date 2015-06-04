@@ -7,6 +7,7 @@ enum class EDataType : u8
     HeaterPower,
     HeaterTemperature,
     SPHeaterTemperature,
+    PVHeaterTemperature,
     CVHeaterTemperature,
     ERRHeaterTemperature,
     SampleCarrierTemperature,
@@ -19,5 +20,12 @@ enum class EDataType : u8
     FanPower,
     HeaterPowerControlPlotDataSampling,
     HeaterPowerControlFileDataSampling,
-    HeaterTemperatureControllingAlgorithmPeriod
+    HeaterTemperatureControllingAlgorithmPeriod,
+    ActualRealizedSegment,
+    IsSegmentsProgramOngoing,
+    NumberOfRegisteredSegments,
+    ProcessPidTuneKp,
+    ProcessPidTuneKi,
+    ProcessPidTuneKd,
+    ProcessPidTuneN
 };

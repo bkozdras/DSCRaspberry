@@ -3,6 +3,7 @@
 #include "../Utilities/ToStringConverter.hpp"
 #include "DataManager.hpp"
 #include "../Nucleo/DeviceCommunicator.hpp"
+#include "../DevicePeripherals/UnitsDetector.hpp"
 
 namespace DSC
 {
@@ -85,10 +86,12 @@ namespace DSC
         if (response.success)
         {
             Logger::info("%s: Started controlling SM PCB temperature value.", getLoggerPrefix().c_str());
+            DevicePeripherals::UnitsDetector::updateStatus(EUnitId_DRV595, DevicePeripherals::UnitsDetector::Status::Working);
         }
         else
         {
             Logger::error("%s: Starting controlling SM PCB temperature value failed!", getLoggerPrefix().c_str());
+            DevicePeripherals::UnitsDetector::updateStatus(EUnitId_DRV595, DevicePeripherals::UnitsDetector::Status::Lost);
         }
     }
 

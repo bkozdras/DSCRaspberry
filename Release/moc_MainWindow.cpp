@@ -22,7 +22,7 @@ static const uint qt_meta_data_MainWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-      16,   14, // methods
+      18,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -46,8 +46,10 @@ static const uint qt_meta_data_MainWindow[] = {
      419,   11,   11,   11, 0x09,
      464,   11,   11,   11, 0x09,
      501,   11,   11,   11, 0x09,
-     530,   11,   11,   11, 0x09,
-     574,   11,   11,   11, 0x09,
+     537,   11,   11,   11, 0x09,
+     579,   11,   11,   11, 0x09,
+     608,   11,   11,   11, 0x09,
+     652,   11,   11,   11, 0x09,
 
        0        // eod
 };
@@ -66,6 +68,8 @@ static const char qt_meta_stringdata_MainWindow[] = {
     "heaterPowerControlPlotFrequencyChanged()\0"
     "heaterPowerControlDataSaveFrequencyClicked()\0"
     "heaterPowerControlValueTextChanged()\0"
+    "heaterPowerControlSetTunesClicked()\0"
+    "heaterPowerControlSetTemperatureClicked()\0"
     "heaterPowerControlPlotData()\0"
     "heaterPowerControlPlotNewSamplingCallback()\0"
     "heaterPowerControlPlotNewControlModeCallback()\0"
@@ -90,9 +94,11 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 10: _t->heaterPowerControlPlotFrequencyChanged(); break;
         case 11: _t->heaterPowerControlDataSaveFrequencyClicked(); break;
         case 12: _t->heaterPowerControlValueTextChanged(); break;
-        case 13: _t->heaterPowerControlPlotData(); break;
-        case 14: _t->heaterPowerControlPlotNewSamplingCallback(); break;
-        case 15: _t->heaterPowerControlPlotNewControlModeCallback(); break;
+        case 13: _t->heaterPowerControlSetTunesClicked(); break;
+        case 14: _t->heaterPowerControlSetTemperatureClicked(); break;
+        case 15: _t->heaterPowerControlPlotData(); break;
+        case 16: _t->heaterPowerControlPlotNewSamplingCallback(); break;
+        case 17: _t->heaterPowerControlPlotNewControlModeCallback(); break;
         default: ;
         }
     }
@@ -131,9 +137,9 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 16)
+        if (_id < 18)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 16;
+        _id -= 18;
     }
     return _id;
 }

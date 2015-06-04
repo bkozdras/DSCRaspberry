@@ -100,12 +100,12 @@ typedef struct _TControllerDataInd
 
 typedef struct _TSetHeaterPowerRequest
 {
-    u16 power;
+    float power;
 } TSetHeaterPowerRequest;
 
 typedef struct _TSetHeaterPowerResponse
 {
-    u16 power;
+    float power;
     bool success;
 } TSetHeaterPowerResponse;
 

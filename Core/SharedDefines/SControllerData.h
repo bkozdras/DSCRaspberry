@@ -17,7 +17,7 @@ typedef struct _SControllerData
     float SP;
     float PV;
     float ERR;
-    u16 CV;
+    float CV;
 } SControllerData;
 
 #endif

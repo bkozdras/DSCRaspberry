@@ -151,6 +151,7 @@ bool DeviceConfigurator::configureDSCManagers()
         Utilities::conditionalExecutor(success, [](){ return DSC::HeaterManager::initialize(); });
         Utilities::conditionalExecutor(success, [](){ return DSC::IntegratedCircuitsManager::initialize(); });
         Utilities::conditionalExecutor(success, [](){ return DSC::SampleCarrierDataManager::initialize(); });
+        Utilities::conditionalExecutor(success, [](){ return DSC::SegmentsManager::initialize(); });
         Utilities::conditionalExecutor(success, [](){ return DSC::SMPCBTemperatureManager::initialize(); });
 
         if (success)
@@ -209,7 +210,7 @@ void DeviceConfigurator::unitReadyIndication(EUnitId unitId, DevicePeripherals::
     {
         Logger::info("%s: All units are properly detected!", getLoggerPrefix().c_str());
         Logger::info("%s: Starting collecting DSC / Device data...", getLoggerPrefix().c_str());
-        DSC::IntegratedCircuitsManager::changeLMP90100Mode(EUnitId_LMP90100ControlSystem, ELMP90100Mode_On_1_6775_SPS);
+        DSC::IntegratedCircuitsManager::changeLMP90100Mode(EUnitId_LMP90100ControlSystem, ELMP90100Mode_On_13_42_SPS);
         areConfigured = true;
     }
 }
@@ -353,7 +354,7 @@ void DeviceConfigurator::updateUnitAttributeIndication(EUnitId unitId, const std
                     Logger::debug("%s: Started collecting data from %s..", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(unitId).c_str());
 
                     {
-                        DSC::HeaterManager::setControllingAlgorithmExecutionPeriod(500U);
+                        DSC::HeaterManager::setControllingAlgorithmExecutionPeriod(100U);
                     }
                 }
             }
@@ -362,6 +363,7 @@ void DeviceConfigurator::updateUnitAttributeIndication(EUnitId unitId, const std
                 Logger::info("%s: Set heater temperature controller algorithm execution period: %s ms.", getLoggerPrefix().c_str(), value.c_str());
 
                 {
+                    DSC::SMPCBTemperatureManager::startControlling();
                 }
             }
         }

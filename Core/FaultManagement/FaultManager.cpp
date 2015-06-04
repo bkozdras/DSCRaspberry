@@ -2,7 +2,21 @@
 #include "../Utilities/Logger.hpp"
 #include "../Utilities/ToStringConverter.hpp"
 #include "../System/ThreadPool.hpp"
+#include "../Nucleo/DeviceCommunicator.hpp"
 #include <algorithm>
+
+bool FaultManager::initialize()
+{
+    std::lock_guard<std::mutex> lockGuard(mMutex);
+
+    Nucleo::DeviceCommunicator::registerIndCallback
+    (
+        [](TFaultInd && faultInd)
+        {
+            newNucleoFaultIndCallback(std::move(faultInd));
+        }
+    );
+}
 
 void FaultManager::generate(std::shared_ptr<SFaultIndication> indication)
 {
@@ -282,6 +296,19 @@ bool FaultManager::compareFaults(const SFaultIndication & a, const SFaultIndicat
     }
 
     return true;
+}
+
+void FaultManager::newNucleoFaultIndCallback(TFaultInd && faultInd)
+{
+    Logger::warning("%s: Received fault indication from Nucleo device.", getLoggerPrefix().c_str());
+    if (EFaultIndicationState_Start == faultInd.indication.state)
+    {
+        generate(faultInd.indication.faultId, faultInd.indication.faultyUnitId, faultInd.indication.faultySubUnitId);
+    }
+    else
+    {
+        cancel(faultInd.indication.faultId, faultInd.indication.faultyUnitId, faultInd.indication.faultySubUnitId);
+    }
 }
 
 FaultManager::CallbackId FaultManager::generateNewId()

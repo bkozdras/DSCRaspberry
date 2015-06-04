@@ -21,6 +21,7 @@ void SystemErrorsManager::printStacktrace()
     for (size_t functionSymbol = 0; size > functionSymbol; ++functionSymbol)
     {
         //Logger::error("%s: Backtrace(%u): %s.", getLoggerPrefix().c_str(), functionSymbol, backtraceSymbols[functionSymbol]);
+        std::fprintf(stderr, "%s: Backtrace(%u): %s.", getLoggerPrefix().c_str(), functionSymbol, backtraceSymbols[functionSymbol]);
     }
 }
 

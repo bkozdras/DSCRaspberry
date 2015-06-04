@@ -1,26 +1,13 @@
-﻿Build started 25/05/2015 19:33:11.
+﻿Build started 31/05/2015 21:16:27.
      1>Project "E:\Work\DSCProject\DSCMasterApplication\DSCMasterApplication\DSCMasterApplication.vcxproj" on node 2 (Build target(s)).
      1>Build:
          "C:\Program Files (x86)\Sysprogs\VisualGDB\\VisualGDB.exe" /build "E:\Work\DSCProject\DSCMasterApplication\DSCMasterApplication\DSCMasterApplication.vcxproj" "/solution:E:\Work\DSCProject\DSCMasterApplication\DSCMasterApplication.sln" "/config:Debug" "/platform:Win32"
          VisualGDB: Run "C:\SysGCC\raspberry\Qt\v4\qmake.exe  DSCMasterApplication.pro CONFIGNAME=Debug                 " in directory "E:\Work\DSCProject\DSCMasterApplication\DSCMasterApplication" on (unspecified)
      1>EXEC : warning : e:\Work\DSCProject\DSCMasterApplication\DSCMasterApplication\debug.pro:9: Unescaped backslashes are deprecated.
          VisualGDB: Run "cmd.exe /c "C:\SysGCC\raspberry\bin\make.exe"" in directory "E:\Work\DSCProject\DSCMasterApplication\DSCMasterApplication" on (unspecified)
-         C:/SysGCC/raspberry/bin/arm-linux-gnueabihf-g++.exe -c -pipe -Wno-psabi -std=c++14 -std=c++14 -g -Wall -W -D_REENTRANT -DQT_WEBKIT -DQT_WEBKIT -DRASPBERRY -DQT_GUI_LIB -DQT_CORE_LIB -Ic:/sysgcc/raspberry/arm-linux-gnueabihf/sysroot/usr/share/qt4/mkspecs/arm-linux-gnueabihf -I. -Ic:/sysgcc/raspberry/arm-linux-gnueabihf/sysroot/usr/include/qt4/QtCore -Ic:/sysgcc/raspberry/arm-linux-gnueabihf/sysroot/usr/include/qt4/QtGui -Ic:/sysgcc/raspberry/arm-linux-gnueabihf/sysroot/usr/include/qt4 -I../../../LibrariesCPlusPlus/boost_1_58_0_ARM7 -IDebug -IDebug -o Debug/FileDataManager.o Core/DSC/FileDataManager.cpp
-     1>E:\Work\DSCProject\DSCMasterApplication\DSCMasterApplication\Core\DSC\FileDataManager.cpp(52,55): warning : unused parameter 'unitId' [-Wunused-parameter]
-              void FileDataManager::newAtributeCallback(EUnitId unitId, const std::string & attribute, const std::string & value)
-                                                                ^
-     1>E:\Work\DSCProject\DSCMasterApplication\DSCMasterApplication\Core\DSC\FileDataManager.cpp(52,83): warning : unused parameter 'attribute' [-Wunused-parameter]
-              void FileDataManager::newAtributeCallback(EUnitId unitId, const std::string & attribute, const std::string & value)
-                                                                                            ^
-     1>E:\Work\DSCProject\DSCMasterApplication\DSCMasterApplication\Core\DSC\FileDataManager.cpp(52,114): warning : unused parameter 'value' [-Wunused-parameter]
-              void FileDataManager::newAtributeCallback(EUnitId unitId, const std::string & attribute, const std::string & value)
-                                                                                                                           ^
-     1>E:\Work\DSCProject\DSCMasterApplication\DSCMasterApplication\Core\DSC\FileDataManager.cpp(57,63): warning : unused parameter 'mode' [-Wunused-parameter]
-              void FileDataManager::newControlModeCallback(EControlMode mode)
-                                                                        ^
-         C:/SysGCC/raspberry/bin/arm-linux-gnueabihf-g++.exe  -o Debug/DSCMasterApplication Debug/StateManager.o Debug/UnitsDetector.o Debug/DataManager.o Debug/FileDataManager.o Debug/HeaterManager.o Debug/IntegratedCircuitsManager.o Debug/SampleCarrierManager.o Debug/SegmentsManager.o Debug/SMPCBTemperatureManager.o Debug/FaultManager.o Debug/DeviceCommunicator.o Debug/MessageGateway.o Debug/AsyncSerial.o Debug/GPIOClass.o Debug/GpioManager.o Debug/UartManager.o Debug/UartMessageMemoryManager.o Debug/ActiveObject.o Debug/DeviceConfigurator.o Debug/SystemErrorsManager.o Debug/ThreadPool.o Debug/TimerManager.o Debug/ScopedThread.o Debug/Logger.o Debug/ToStringConverter.o Debug/Utilities.o Debug/DSCMasterApplication.o Debug/InfoDialog.o Debug/MainWindow.o Debug/qcustomplot.o Debug/HeaterTemperaturePlotManager.o Debug/moc_InfoDialog.o Debug/moc_MainWindow.o Debug/moc_qcustomplot.o Debug/qrc_style.o    -Lc:/sysgcc/raspberry/arm-linux-gnueabihf/sysroot/usr/lib -LE:\Work\LibrariesCPlusPlus\boost_1_58_0_ARM7\stage\lib -lboost_system -lboost_thread -lboost_filesystem -lQtGui -lQtCore -lpthread 
+         make: Nothing to be done for `first'.
      1>Done Building Project "E:\Work\DSCProject\DSCMasterApplication\DSCMasterApplication\DSCMasterApplication.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:05.56
+Time Elapsed 00:00:01.26

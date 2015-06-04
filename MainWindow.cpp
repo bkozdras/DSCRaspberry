@@ -133,7 +133,7 @@ void MainWindow::closeInfoDialog()
 void MainWindow::setupApplicationDockLogger()
 {
     {
-        QFont font("Arial", 16);
+        QFont font("Arial", 12);
         font.setBold(true);
         ui->applicationTabWidget->setFont(font);
         ui->tabAutodetection->setFont(font);
@@ -155,10 +155,10 @@ void MainWindow::setupLoggerTable()
     mNumberOfDebugLogs = 0U;
     mNumberOfLogs = 0U;
 
-    const auto timeColumnWidth = 60;
-    const auto sourceColumnWidth = 80;
+    const auto timeColumnWidth = 70;
+    const auto sourceColumnWidth = 85;
     const auto severityColumnWidth = 70;
-    const auto logColumnWidth = 972;
+    const auto logColumnWidth = 958;
     ui->loggerTable->setColumnWidth(0, timeColumnWidth);
     ui->loggerTable->setColumnWidth(1, sourceColumnWidth);
     ui->loggerTable->setColumnWidth(2, severityColumnWidth);
@@ -289,7 +289,7 @@ void MainWindow::setupFooterTable()
         //QMetaObject::invokeMethod(ui->footerDataTable, "setItem", Qt::QueuedConnection, Q_ARG(int, 0), Q_ARG(int, 70), Q_ARG(QTableWidgetItem*, new QTableWidgetItem()));
         ui->footerDataTable->item(0, 0)->setFont(font);
         ui->footerDataTable->item(0, 0)->setForeground(blackBrush);
-        ui->footerDataTable->item(0, 0)->setText("@bkozdras");
+        //  ui->footerDataTable->item(0, 0)->setText("@bkozdras");
     }
 }
 
@@ -813,19 +813,52 @@ void MainWindow::setupHeaterPowerControl()
     mIsHeaterPowerControlWorking = false;
 
     auto setLightGreenTextColor =
-        [this](QLabel* label)
-    {
-        label->setStyleSheet("QLabel { color:rgb(153,255,51) }");
-    };
+        [this](QWidget* widget)
+        {
+            widget->setStyleSheet("QLabel { color:rgb(153,255,51) }");
+        };
 
     auto setLightRedTextColor =
-        [this](QLabel* label)
-    {
-        label->setStyleSheet("QLabel { color:rgb(255,51,51) }");
-    };
+        [this](QWidget* widget)
+        {
+            widget->setStyleSheet("QLabel { color:rgb(255,51,51) }");
+        };
 
-    setLightGreenTextColor(ui->labelHeaterPowerControlModeTemperatureInfo);
-    setLightRedTextColor(ui->labelHeaterPowerControlModePowerInfo);
+    auto setBlueTextColor =
+        [this](QWidget* widget)
+        {
+            widget->setStyleSheet("QLabel { color:rgb(51,51,255) }");
+        };
+
+    auto setYellowTextColor =
+        [this](QWidget* widget)
+        {
+            widget->setStyleSheet("QLabel { color:rgb(255,255,0) }");
+        };
+
+    auto setFontForTunes =
+        [this](QWidget* widget)
+        {
+            QFont font("Arial", 8);
+            widget->setFont(font);
+        };
+
+    setLightRedTextColor(ui->labelHeaterPowerControlModeTemperatureInfo);
+    setYellowTextColor(ui->labelHeaterPowerControlModePowerInfo);
+
+    setLightGreenTextColor(ui->labelHeaterPowerControlErrInfo);
+    setLightGreenTextColor(ui->labelHeaterPowerControlErr);
+    setBlueTextColor(ui->labelHeaterPowerControlSpInfo);
+    setBlueTextColor(ui->textEditHeaterPowerControlSp);
+    setYellowTextColor(ui->labelHeaterPowerControlCvInfo);
+    setYellowTextColor(ui->labelHeaterPowerControlCv);
+    setLightRedTextColor(ui->labelHeaterPowerControlPv);
+    setLightRedTextColor(ui->labelHeaterPowerControlPvInfo);
+
+    setFontForTunes(ui->textEditHeaterPowerControlKp);
+    setFontForTunes(ui->textEditHeaterPowerControlKi);
+    setFontForTunes(ui->textEditHeaterPowerControlKd);
+    setFontForTunes(ui->textEditHeaterPowerControlN);
 
     mHeaterPowerControlPlotTimer = std::make_shared<QTimer>(this);
     QObject::connect(mHeaterPowerControlPlotTimer.get(), SIGNAL(timeout()), this, SLOT(heaterPowerControlPlotData()));
@@ -857,6 +890,9 @@ void MainWindow::heaterPowerControlStartWorking()
 
     startUpdatingData(EDataType::HeaterPower);
     startUpdatingData(EDataType::HeaterTemperature);
+    startUpdatingData(EDataType::CVHeaterTemperature);
+    startUpdatingData(EDataType::PVHeaterTemperature);
+    startUpdatingData(EDataType::ERRHeaterTemperature);
 
     mHeaterPowerControlFileNewFilenameCallbackId = DSC::DataManager::registerNewUnitAttributeCallback
     (
@@ -870,6 +906,17 @@ void MainWindow::heaterPowerControlStartWorking()
     );
 
     QMetaObject::invokeMethod(ui->textEditHeaterPowerControlValue, "setText", Qt::QueuedConnection, Q_ARG(QString, convertHeaterPowerToQString(DSC::DataManager::getData(EDataType::HeaterPower))));
+    auto spHeaterTemperature = DSC::DataManager::getData(EDataType::SPHeaterTemperature);
+    QString qSpHeaterTemperatureString = "";
+    if (DSC::DataManager::UnknownValue != spHeaterTemperature)
+    {
+        qSpHeaterTemperatureString = convertHeaterTemperatureToQString(spHeaterTemperature);
+    }
+    else
+    {
+        qSpHeaterTemperatureString = "N/A";
+    }
+    QMetaObject::invokeMethod(ui->textEditHeaterPowerControlSp, "setText", Qt::QueuedConnection, Q_ARG(QString, qSpHeaterTemperatureString));
 
     setActiveHeaterPowerTab();
     setActiveHeaterPowerComboBoxMode();
@@ -912,7 +959,10 @@ QLabel* MainWindow::getQLabelForHeaterPowerControl(EDataType dataType)
     static std::map<EDataType, QLabel*> dataTypeToQLabel = decltype(dataTypeToQLabel)
     {
         { EDataType::HeaterPower, ui->labelHeaterPowerControlModePower },
-        { EDataType::HeaterTemperature, ui->labelHeaterPowerControlModeTemperature }
+        { EDataType::HeaterTemperature, ui->labelHeaterPowerControlModeTemperature },
+        { EDataType::CVHeaterTemperature, ui->labelHeaterPowerControlCv },
+        { EDataType::ERRHeaterTemperature, ui->labelHeaterPowerControlErr },
+        { EDataType::PVHeaterTemperature, ui->labelHeaterPowerControlPv }
     };
 
     auto it = dataTypeToQLabel.find(dataType);
@@ -937,12 +987,16 @@ QString MainWindow::convertHeaterPowerControlDataValueToQString(EDataType dataTy
     switch (dataType)
     {
         case EDataType::HeaterPower:
+        case EDataType::CVHeaterTemperature :
         {
             postFix = " %";
             break;
         }
 
         case EDataType::HeaterTemperature:
+        case EDataType::ERRHeaterTemperature :
+        case EDataType::PVHeaterTemperature :
+        case EDataType::SPHeaterTemperature :
         {
             postFix = " <sup>o</sup>C";
             break;
@@ -972,7 +1026,6 @@ void MainWindow::setActiveHeaterPowerTab()
 {
     const auto openLoopIndex = 0;
     const auto simpleFeedbackIndex = 1;
-    const auto mfcFeedbackIndex = 2;
 
     int index = 0;
 
@@ -985,14 +1038,9 @@ void MainWindow::setActiveHeaterPowerTab()
         }
 
         case EControlMode::SimpleFeedback:
-        {
-            index = simpleFeedbackIndex;
-            break;
-        }
-
         case EControlMode::MFCFeedback:
         {
-            index = mfcFeedbackIndex;
+            index = simpleFeedbackIndex;
             break;
         }
 
@@ -1007,7 +1055,7 @@ void MainWindow::setActiveHeaterPowerComboBoxMode()
 {
     const auto openLoopIndex = 0;
     const auto simpleFeedbackIndex = 1;
-    const auto mfcFeedbackIndex = 2;
+    const auto mfcFeedbackIndex = 1;
 
     int index = 0;
 
@@ -1119,6 +1167,13 @@ QString MainWindow::convertHeaterPowerToQString(double value)
     return QString::fromStdString(stream.str());
 }
 
+QString MainWindow::convertHeaterTemperatureToQString(double value)
+{
+    std::stringstream stream;
+    stream << std::fixed << std::setprecision(2) << value;
+    return QString::fromStdString(stream.str());
+}
+
 void MainWindow::heaterPowerControlClearDataClicked()
 {
     std::lock_guard<std::mutex> lockGuard(mHeaterPowerControlMtx);
@@ -1161,19 +1216,19 @@ void MainWindow::heaterPowerControlControlModeChanged()
     {
         case 0:
         {
-            DSC::DataManager::updateControlMode(EControlMode::OpenLoop);
+            DSC::HeaterManager::setPowerControlMode(EControlMode::OpenLoop);
             break;
         }
 
         case 1:
         {
-            DSC::DataManager::updateControlMode(EControlMode::SimpleFeedback);
+            DSC::HeaterManager::setPowerControlMode(EControlMode::SimpleFeedback);
             break;
         }
 
         case 2:
         {
-            DSC::DataManager::updateControlMode(EControlMode::MFCFeedback);
+            DSC::HeaterManager::setPowerControlMode(EControlMode::MFCFeedback);
             break;
         }
 
@@ -1292,6 +1347,61 @@ void MainWindow::heaterPowerControlValueTextChanged()
             ui->horizontalSliderHeaterPowerControlValue->blockSignals(false);
         }
     }
+}
+
+void MainWindow::heaterPowerControlSetTunesClicked()
+{
+    std::lock_guard<std::mutex> lockGuard(mHeaterPowerControlMtx);
+
+    auto requestedKpStr = ui->textEditHeaterPowerControlKp->toPlainText().toStdString();
+    auto requestedKiStr = ui->textEditHeaterPowerControlKi->toPlainText().toStdString();
+    auto requestedKdStr = ui->textEditHeaterPowerControlKd->toPlainText().toStdString();
+    auto requestedNStr = ui->textEditHeaterPowerControlN->toPlainText().toStdString();
+
+    bool result = true;
+    Utilities::conditionalExecutor(result, [&requestedKpStr](){ return Utilities::isDouble(requestedKpStr); });
+    Utilities::conditionalExecutor(result, [&requestedKiStr](){ return Utilities::isDouble(requestedKiStr); });
+    Utilities::conditionalExecutor(result, [&requestedKdStr](){ return Utilities::isDouble(requestedKdStr); });
+    Utilities::conditionalExecutor(result, [&requestedNStr](){ return Utilities::isDouble(requestedNStr); });
+
+    if (!result)
+    {
+        QMessageBox msgBox;
+        QString message = "At least one of applied PID tunes is not correct (NaN)!";
+        msgBox.setText(message);
+        msgBox.setDefaultButton(QMessageBox::Button::Ok);
+        msgBox.exec();
+        return;
+    }
+
+    DSC::HeaterManager::setPowerControlProcessPidTunes(std::stod(requestedKpStr), std::stod(requestedKiStr), std::stod(requestedKdStr), std::stod(requestedNStr));
+}
+
+void MainWindow::heaterPowerControlSetTemperatureClicked()
+{
+    std::lock_guard<std::mutex> lockGuard(mHeaterPowerControlMtx);
+
+    auto requestedSp = ui->textEditHeaterPowerControlSp->toPlainText().toStdString();
+    if (!Utilities::isDouble(requestedSp))
+    {
+        QMessageBox msgBox;
+        QString message = "String " + QString::fromStdString(requestedSp) + " is not correct number value!";
+        msgBox.setText(message);
+        msgBox.setDefaultButton(QMessageBox::Button::Ok);
+        msgBox.exec();
+        return;
+    }
+
+    auto spNumber = std::stod(requestedSp);
+
+    ThreadPool::submit
+    (
+        TaskPriority::Normal,
+        [this, spNumber]()
+        {
+            DSC::HeaterManager::setTemperatureInFeedbackMode(spNumber);
+        }
+    );
 }
 
 void MainWindow::heaterPowerControlPlotData()
