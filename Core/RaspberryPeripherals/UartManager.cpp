@@ -35,7 +35,7 @@ bool UartManager::initialize()
 
 void UartManager::transmitData(TMessage & message)
 {
-    Logger::info("%s: Transmitting message: %s (Length: %u) to Nucleo device.", getLoggerPrefix().c_str(), ToStringConverter::getMessageId(message.id).c_str(), message.length);
+    Logger::debug("%s: Transmitting message: %s (Length: %u) to Nucleo device.", getLoggerPrefix().c_str(), ToStringConverter::getMessageId(message.id).c_str(), message.length);
     for (u8 iter = 0; message.length > iter; ++iter)
     {
         Logger::debug("%s: Message byte [%u]: 0x%02X.", getLoggerPrefix().c_str(), iter, message.data[iter]);
@@ -180,10 +180,10 @@ bool UartManager::headerPhaseMessageParser()
     {
         if (!mIsCommunicationFailureGenerated)
         {
-            Logger::warning("%s: Message header verification failed!", getLoggerPrefix().c_str());
-            FaultManager::generate(EFaultId_Communication, EUnitId_Raspberry, EUnitId_Nucleo);
+            Logger::debug("%s: Message header verification failed!", getLoggerPrefix().c_str());
+            //FaultManager::generate(EFaultId_Communication, EUnitId_Raspberry, EUnitId_Nucleo);
             mIsCommunicationFailureGenerated = true;
-            Logger::warning("%s: Failure mode! Searching for correct data frame...", getLoggerPrefix().c_str());
+            Logger::debug("%s: Failure mode! Searching for correct data frame...", getLoggerPrefix().c_str());
             mActualReceivingPhase = MessageReceivingPhase::HeaderMsgFailureMode;
             //mAsyncSerial.clearCallback();
         }
@@ -232,12 +232,12 @@ bool UartManager::endPhaseMessageParser()
     {
         if (!mIsCommunicationFailureGenerated)
         {
-            Logger::warning("%s: Message end verification failed!", getLoggerPrefix().c_str());
-            Logger::warning("%s: Receiving message: %s failed.", getLoggerPrefix().c_str(), ToStringConverter::getMessageId(mHandlingMessage->id).c_str());
-            FaultManager::generate(EFaultId_Communication, EUnitId_Raspberry, EUnitId_Nucleo);
+            Logger::debug("%s: Message end verification failed!", getLoggerPrefix().c_str());
+            Logger::debug("%s: Receiving message: %s failed.", getLoggerPrefix().c_str(), ToStringConverter::getMessageId(mHandlingMessage->id).c_str());
+            //FaultManager::generate(EFaultId_Communication, EUnitId_Raspberry, EUnitId_Nucleo);
             mIsCommunicationFailureGenerated = true;
             mActualReceivingPhase = MessageReceivingPhase::HeaderMsgFailureMode;
-            Logger::warning("%s: Failure mode! Searching for correct data frame...", getLoggerPrefix().c_str());
+            Logger::debug("%s: Failure mode! Searching for correct data frame...", getLoggerPrefix().c_str());
             //mAsyncSerial.clearCallback();
         }
         return false;
@@ -297,8 +297,8 @@ bool UartManager::headerMsgFailureModePhaseMessageParser()
     {
         mActualReceivingPhase = MessageReceivingPhase::HeaderDataFailureMode;
         mIsCommunicationFailureGenerated = false;
-        Logger::warning("%s: Communication established after incorrect data receiving!", getLoggerPrefix().c_str());
-        FaultManager::cancel(EFaultId_Communication, EUnitId_Raspberry, EUnitId_Nucleo);
+        Logger::debug("%s: Communication established after incorrect data receiving!", getLoggerPrefix().c_str());
+        //FaultManager::cancel(EFaultId_Communication, EUnitId_Raspberry, EUnitId_Nucleo);
     }
 
     return isHeaderMsgFound;

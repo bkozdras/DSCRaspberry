@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="qss_icons">
+    <file>../Images/Tick.png</file>
+    <file>../Images/Cross.png</file>
     <file>../Images/ArrowDown.png</file>
     <file>../Images/ArrowUp.png</file>
     <file>../Images/DeviceTransparent.png</file>

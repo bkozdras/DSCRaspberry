@@ -15,7 +15,7 @@ class HeaterTemperaturePlotManager : public boost::noncopyable
 {
     public :
 
-        static void initialize(QCustomPlot* plot, std::shared_ptr<QTimer> plotTimer);
+        static void initialize(QCustomPlot* plot, QTimer* plotTimer);
         static void deinitialize();
 
         static void startDrawing();
@@ -33,7 +33,7 @@ class HeaterTemperaturePlotManager : public boost::noncopyable
         static void _clearDrawnData();
 
         static std::mutex mMtx;
-        static std::shared_ptr<QTimer> mPlotTimer;
+        static QTimer* mPlotTimer;
         static QCustomPlot* mPlot;
         static std::vector<QCPPlottableLegendItem*> mActiveLegends;
         static EControlMode mControlMode;

@@ -3,8 +3,10 @@
 #include "../Utilities/Logger.hpp"
 #include "../Utilities/ToStringConverter.hpp"
 #include "../Nucleo/DeviceCommunicator.hpp"
+#include "HeaterManager.hpp"
 
 #include <algorithm>
+#include <iostream>
 
 namespace DSC
 {
@@ -20,27 +22,56 @@ namespace DSC
         DataManager::updateData(EDataType::IsSegmentsProgramOngoing, 0.0);
         DataManager::updateData(EDataType::NumberOfRegisteredSegments, 0.0);
 
+        Nucleo::DeviceCommunicator::registerIndCallback
+        (
+            [](TSegmentStartedInd && ind)
+            {
+                segmentStartedIndCallback(std::move(ind));
+            }
+        );
+
+        Nucleo::DeviceCommunicator::registerIndCallback
+        (
+            [](TSegmentsProgramDoneInd && ind)
+            {
+                segmentProgramDoneIndCallback(std::move(ind));
+            }
+        );
+
         Logger::info("%s: Initialized!", getLoggerPrefix().c_str());
         return true;
     }
 
-    u8 SegmentsManager::saveSegment(ESegmentType type, float startTemperature, float stopTemperature, u32 time, float temperatureStep)
+    u8 SegmentsManager::saveSegment(ESegmentType type, double startTemperature, double stopTemperature, double temperatureStep, double programDuration, TimeUnit programDurationUnit)
     {
         std::lock_guard<std::mutex> lockGuard(mMtx);
 
-        SSegmentData data;
-        data.number = mNextFreeSegmentNumber;
-        data.settingTimeInterval = time;
-        data.startTemperature = startTemperature;
-        data.stopTemperature = stopTemperature;
-        data.temperatureStep = temperatureStep;
-        data.type = type;
+        auto programDurationInMs = convertTimeToMilliseconds(programDurationUnit, programDuration);
+
+        SegmentData data;
+
+        data.nucleoData.number = mNextFreeSegmentNumber;
+        data.nucleoData.startTemperature = startTemperature;
+        data.nucleoData.type = type;
+        data.programDuration = programDuration;
+        data.programDurationUnit = programDurationUnit;
+
+        if (ESegmentType_Dynamic == type)
+        {
+            data.nucleoData.settingTimeInterval = static_cast<u32>(programDurationInMs / ((stopTemperature - startTemperature) / temperatureStep));
+            data.nucleoData.stopTemperature = stopTemperature;
+            data.nucleoData.temperatureStep = temperatureStep;
+        }
+        else
+        {
+            data.nucleoData.settingTimeInterval = programDurationInMs;
+        }
 
         mSegments.emplace_back(std::move(data));
 
         mNextFreeSegmentNumber = generateNextSegmentNumber();
-
-        Logger::info("%s: Saved new segment (Number: %u). Type: %s.", getLoggerPrefix().c_str(), ToStringConverter::getSegmentType(type).c_str());
+        
+        Logger::info("%s: Saved new segment (Number: %u). Type: %s.", getLoggerPrefix().c_str(), data.nucleoData.number, ToStringConverter::getSegmentType(type).c_str());
     }
 
     void SegmentsManager::deleteSegment(u8 number)
@@ -51,9 +82,9 @@ namespace DSC
         (
             std::begin(mSegments),
             std::end(mSegments),
-            [number](const SSegmentData & data)
+            [number](const SegmentData & data)
             {
-                if (data.number == number)
+                if (data.nucleoData.number == number)
                 {
                     return true;
                 }
@@ -78,7 +109,7 @@ namespace DSC
         Logger::info("%s: Registering saved segments to Nucleo device...", getLoggerPrefix().c_str());
 
         TRegisterNewSegmentToProgramRequest request;
-        request.segment = mSegments.front();
+        request.segment = mSegments.front().nucleoData;
         Logger::info("%s: Registering segment number: %u/%u.", getLoggerPrefix().c_str(), request.segment.number, mSegments.size());
         Nucleo::DeviceCommunicator::send(request, [](TRegisterNewSegmentToProgramResponse && response, bool isNotTimeout){ registerNewSegmentToProgramResponseCallback(std::move(response)); });
 
@@ -121,16 +152,22 @@ namespace DSC
         return true;
     }
 
-    const SSegmentData & SegmentsManager::getSegmentData(u8 number)
+    const SegmentsManager::SegmentData & SegmentsManager::getSegmentData(u8 number)
     {
         std::lock_guard<std::mutex> lockGuard(mMtx);
-        return mSegments.at(number);
+        return mSegments.at(number - 1);
     }
 
     u8 SegmentsManager::getNumberOfSegments()
     {
         std::lock_guard<std::mutex> lockGuard(mMtx);
         return mSegments.size();
+    }
+
+    u8 SegmentsManager::getNextFreeSegmentNumber()
+    {
+        std::lock_guard<std::mutex> lockGuard(mMtx);
+        return mNextFreeSegmentNumber;
     }
 
     void SegmentsManager::registerNewSegmentToProgramResponseCallback(TRegisterNewSegmentToProgramResponse && response)
@@ -140,14 +177,13 @@ namespace DSC
         if (response.success)
         {
             Logger::info("%s: Registered segment number: %u.", getLoggerPrefix().c_str(), response.segmentNumber);
-            Logger::info("%s: Registered segments count: %u.", getLoggerPrefix().c_str(), response.numberOfRegisteredSegments);
             mRegisteredSegmentsCount++;
             DSC::DataManager::updateData(EDataType::NumberOfRegisteredSegments, mRegisteredSegmentsCount);
 
             if (mSegments.size() != mRegisteredSegmentsCount)
             {
                 TRegisterNewSegmentToProgramRequest request;
-                request.segment = mSegments.at(mRegisteredSegmentsCount);
+                request.segment = mSegments.at(mRegisteredSegmentsCount).nucleoData;
                 Logger::info("%s: Registering segment number: %u/%u.", getLoggerPrefix().c_str(), request.segment.number, mSegments.size());
                 Nucleo::DeviceCommunicator::send(request, [](TRegisterNewSegmentToProgramResponse && response, bool isNotTimeout){ registerNewSegmentToProgramResponseCallback(std::move(response)); });
             }
@@ -171,6 +207,12 @@ namespace DSC
         {
             Logger::info("%s: Segments program started!", getLoggerPrefix().c_str());
             DataManager::updateData(EDataType::IsSegmentsProgramOngoing, 1.0);
+            DataManager::updateControlMode(EControlMode::SimpleFeedback);
+
+            //TStartRegisteringDataRequest request;
+            //request.dataType = ERegisteringDataType_ControllerData;
+            //request.period = 1000U;
+            //Nucleo::DeviceCommunicator::send(request);
         }
         else
         {
@@ -198,7 +240,7 @@ namespace DSC
         std::lock_guard<std::mutex> lockGuard(mMtx);
 
         Logger::info("%s: Segment %u started (%u segments wait in queue)!", getLoggerPrefix().c_str(), ind.segmentNumber, ind.leftRegisteredSegments);
-        DataManager::updateData(EDataType::ActualRealizedSegment, ind.segmentNumber);
+        DataManager::updateData(EDataType::ActualRealizedSegment, static_cast<double>(ind.segmentNumber));
     }
 
     void SegmentsManager::segmentProgramDoneIndCallback(TSegmentsProgramDoneInd && ind)
@@ -208,12 +250,33 @@ namespace DSC
         Logger::info("%s: Segments program done!", getLoggerPrefix().c_str());
         DataManager::updateData(EDataType::ActualRealizedSegment, 0.0);
         DataManager::updateData(EDataType::IsSegmentsProgramOngoing, 0.0);
+        DataManager::updateControlMode(EControlMode::OpenLoop);
     }
 
     u8 SegmentsManager::generateNextSegmentNumber()
     {
         static u8 counter = 0;
         return ++counter;
+    }
+
+    double SegmentsManager::convertTimeToMilliseconds(TimeUnit unit, double value)
+    {
+        switch (unit)
+        {
+            case TimeUnit::Seconds:
+                return (value * 1000.0);
+
+            case TimeUnit::Minutes :
+                return (value * 60.0 * 1000.0);
+
+            case TimeUnit::Hours :
+                return (value * 60.0 * 60.0 * 1000.0);
+
+            default :
+                break;
+        }
+
+        return 0.0;
     }
 
     const std::string & SegmentsManager::getLoggerPrefix()
@@ -223,7 +286,7 @@ namespace DSC
     }
 
     std::mutex SegmentsManager::mMtx;
-    std::vector<SSegmentData> SegmentsManager::mSegments;
+    std::vector<SegmentsManager::SegmentData> SegmentsManager::mSegments;
     u8 SegmentsManager::mNextFreeSegmentNumber;
     u8 SegmentsManager::mRegisteredSegmentsCount;
     bool SegmentsManager::mIsSegmentsRegistered;

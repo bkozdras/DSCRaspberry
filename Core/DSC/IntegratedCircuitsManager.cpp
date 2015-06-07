@@ -197,7 +197,7 @@ namespace DSC
         {
             Logger::info("%s: Set new LMP90100 CS mode: %s.", getLoggerPrefix().c_str(), ToStringConverter::getLMP90100Mode(response.mode).c_str());
             DataManager::updateICMode(EUnitId_LMP90100ControlSystem, response.mode);
-            DataManager::updateICMode(EUnitId_RtdPt1000, response.mode);
+
             if (ELMP90100Mode_Off != response.mode)
             {
                 DevicePeripherals::UnitsDetector::updateStatus(EUnitId_LMP90100ControlSystem, DevicePeripherals::UnitsDetector::Status::Working);

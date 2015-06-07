@@ -17,6 +17,7 @@
 #include "Core/DSC/EDataType.hpp"
 #include "Core/Defines/CommonDefines.hpp"
 #include "Core/DSC/DataManager.hpp"
+#include "Core/DSC/SegmentsManager.hpp"
 
 namespace Ui {
 class MainWindow;
@@ -51,6 +52,27 @@ protected slots:
     void heaterPowerControlPlotData();
     void heaterPowerControlPlotNewSamplingCallback();
     void heaterPowerControlPlotNewControlModeCallback();
+
+    void segmentsConfiguratorAddToProgramClicked();
+    void segmentsConfiguratorDeleteFromProgramClicked();
+    void segmentsConfiguratorApplyProgramClicked();
+    void segmentsConfiguratorUpClicked();
+    void segmentsConfiguratorDownClicked();
+    void segmentsConfiguratorSegmentTypeChanged();
+
+    void callibrationSettingsUpdateFilterDataClicked();
+    void callibrationSettingsThreshold1Changed();
+    void callibrationSettingsThreshold2Changed();
+    void callibrationSettingsThreshold3Changed();
+    void callibrationSettingsCoefficient1Changed();
+    void callibrationSettingsCoefficient2Changed();
+    void callibrationSettingsCoefficient3Changed();
+    void callibrationSettingsCoefficient4Changed();
+
+    void dscDataViewStartProgramClicked();
+    void dscDataViewStopProgramClicked();
+    void dscDataViewPlotDataCallback();
+    void dscDataViewSaveDataToFileClicked();
 
 signals :
 
@@ -158,7 +180,48 @@ private:
     DSC::DataManager::CallbackId mHeaterPowerControlPlotNewDataCallbackId;
     DSC::DataManager::CallbackId mHeaterPowerControlPlotNewModeCallbackId;
     DSC::DataManager::CallbackId mHeaterPowerControlFileNewFilenameCallbackId;
-    std::shared_ptr<QTimer> mHeaterPowerControlPlotTimer;
+    QTimer* mHeaterPowerControlPlotTimer;
+
+    // Segments Configurator
+
+    std::mutex mSegmentsConfiguratorMtx;
+    u8 mActiveSegment;
+
+    void setupSegmentsConfigurator();
+    void segmentsConfiguratorStartWorking();
+    void refreshDisplayedSegmentProgram();
+    QString convertDoubleToQString(const double & value, int precision = 2);
+
+    DSC::SegmentsManager::TimeUnit convertComboBoxIndexToTimeUnit(int index);
+    int convertTimeUnitToComboBoxIndex(DSC::SegmentsManager::TimeUnit timeUnit);
+    QString convertTimeUnitToQString(DSC::SegmentsManager::TimeUnit timeUnit);
+    ESegmentType convertComboBoxIndexToSegmentType(int index);
+    int convertSegmentTypeToComboBoxIndex(ESegmentType type);
+    QString convertSegmentTypeToQString(ESegmentType type);
+
+    // Callibation Settings
+
+    std::mutex mCallibrationSettingsMtx;
+
+    void setupCallibrationSettings();
+    void callibrationSettingsStartWorking();
+
+    // DSC Data View
+
+    std::mutex mDscDataViewMtx;
+    QTimer* mDscDataViewPlotTimer;
+    DSC::DataManager::CallbackId mDscDataViewNewDataCallbackId;
+    DSC::DataManager::CallbackId mDscDataViewFileNewFilenameCallbackId;
+
+    void setupDscDataView();
+    void dscDataViewStartWorking();
+    void dscDataViewStopWorking();
+
+    void changeDscViewDataValue(EDataType dataType, double value);
+    QLabel* getQLabelForDscViewData(EDataType dataType);
+    QString convertDscViewDataValueToQString(EDataType dataType, double value);
+    void updateSegmentsLabels(u8 number);
+    void dscDataNewFilenameCallback(const std::string & filename);
 };
 
 #endif // MAINWINDOW_H

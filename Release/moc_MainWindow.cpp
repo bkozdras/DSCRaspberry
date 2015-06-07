@@ -22,7 +22,7 @@ static const uint qt_meta_data_MainWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-      18,   14, // methods
+      36,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -50,6 +50,24 @@ static const uint qt_meta_data_MainWindow[] = {
      579,   11,   11,   11, 0x09,
      608,   11,   11,   11, 0x09,
      652,   11,   11,   11, 0x09,
+     699,   11,   11,   11, 0x09,
+     741,   11,   11,   11, 0x09,
+     788,   11,   11,   11, 0x09,
+     830,   11,   11,   11, 0x09,
+     862,   11,   11,   11, 0x09,
+     896,   11,   11,   11, 0x09,
+     937,   11,   11,   11, 0x09,
+     983,   11,   11,   11, 0x09,
+    1023,   11,   11,   11, 0x09,
+    1063,   11,   11,   11, 0x09,
+    1103,   11,   11,   11, 0x09,
+    1145,   11,   11,   11, 0x09,
+    1187,   11,   11,   11, 0x09,
+    1229,   11,   11,   11, 0x09,
+    1271,   11,   11,   11, 0x09,
+    1304,   11,   11,   11, 0x09,
+    1336,   11,   11,   11, 0x09,
+    1366,   11,   11,   11, 0x09,
 
        0        // eod
 };
@@ -73,6 +91,24 @@ static const char qt_meta_stringdata_MainWindow[] = {
     "heaterPowerControlPlotData()\0"
     "heaterPowerControlPlotNewSamplingCallback()\0"
     "heaterPowerControlPlotNewControlModeCallback()\0"
+    "segmentsConfiguratorAddToProgramClicked()\0"
+    "segmentsConfiguratorDeleteFromProgramClicked()\0"
+    "segmentsConfiguratorApplyProgramClicked()\0"
+    "segmentsConfiguratorUpClicked()\0"
+    "segmentsConfiguratorDownClicked()\0"
+    "segmentsConfiguratorSegmentTypeChanged()\0"
+    "callibrationSettingsUpdateFilterDataClicked()\0"
+    "callibrationSettingsThreshold1Changed()\0"
+    "callibrationSettingsThreshold2Changed()\0"
+    "callibrationSettingsThreshold3Changed()\0"
+    "callibrationSettingsCoefficient1Changed()\0"
+    "callibrationSettingsCoefficient2Changed()\0"
+    "callibrationSettingsCoefficient3Changed()\0"
+    "callibrationSettingsCoefficient4Changed()\0"
+    "dscDataViewStartProgramClicked()\0"
+    "dscDataViewStopProgramClicked()\0"
+    "dscDataViewPlotDataCallback()\0"
+    "dscDataViewSaveDataToFileClicked()\0"
 };
 
 void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -99,6 +135,24 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 15: _t->heaterPowerControlPlotData(); break;
         case 16: _t->heaterPowerControlPlotNewSamplingCallback(); break;
         case 17: _t->heaterPowerControlPlotNewControlModeCallback(); break;
+        case 18: _t->segmentsConfiguratorAddToProgramClicked(); break;
+        case 19: _t->segmentsConfiguratorDeleteFromProgramClicked(); break;
+        case 20: _t->segmentsConfiguratorApplyProgramClicked(); break;
+        case 21: _t->segmentsConfiguratorUpClicked(); break;
+        case 22: _t->segmentsConfiguratorDownClicked(); break;
+        case 23: _t->segmentsConfiguratorSegmentTypeChanged(); break;
+        case 24: _t->callibrationSettingsUpdateFilterDataClicked(); break;
+        case 25: _t->callibrationSettingsThreshold1Changed(); break;
+        case 26: _t->callibrationSettingsThreshold2Changed(); break;
+        case 27: _t->callibrationSettingsThreshold3Changed(); break;
+        case 28: _t->callibrationSettingsCoefficient1Changed(); break;
+        case 29: _t->callibrationSettingsCoefficient2Changed(); break;
+        case 30: _t->callibrationSettingsCoefficient3Changed(); break;
+        case 31: _t->callibrationSettingsCoefficient4Changed(); break;
+        case 32: _t->dscDataViewStartProgramClicked(); break;
+        case 33: _t->dscDataViewStopProgramClicked(); break;
+        case 34: _t->dscDataViewPlotDataCallback(); break;
+        case 35: _t->dscDataViewSaveDataToFileClicked(); break;
         default: ;
         }
     }
@@ -137,9 +191,9 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 18)
+        if (_id < 36)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 18;
+        _id -= 36;
     }
     return _id;
 }

@@ -6,6 +6,7 @@
 #include <cmath>
 #include <functional>
 #include <iomanip>
+#include <iostream>
 #include <limits>
 #include <map>
 #include <string>
@@ -22,7 +23,10 @@
 #include "../Core/DSC/DataManager.hpp"
 #include "../Core/DSC/HeaterManager.hpp"
 #include "../Core/DSC/FileDataManager.hpp"
+#include "../Core/DSC/SampleCarrierManager.hpp"
 #include "../WindowApp/HeaterTemperaturePlotManager.hpp"
+#include "../WindowApp/SegmentsProgramPlotManager.hpp"
+#include "../WindowApp/DscDataViewPlotManager.hpp"
 #include <map>
 #include <iostream>
 
@@ -33,6 +37,8 @@ MainWindow::MainWindow(QWidget *parent) :
     mInfoDialog = nullptr;
     ui->setupUi(this);
     
+    mActiveSegment = 1U;
+
     setupDockLogger();
     setupLoggerTable();
     setupFaultsTable();
@@ -41,6 +47,9 @@ MainWindow::MainWindow(QWidget *parent) :
     setupDscDeviceDataLabels();
     setupUnitsDataViewer();
     setupHeaterPowerControl();
+    setupSegmentsConfigurator();
+    setupCallibrationSettings();
+    setupDscDataView();
 
     this->showMaximized();
 }
@@ -61,7 +70,8 @@ void MainWindow::applicationTabWidgetChanged()
     const auto unitsDataViewerTab = 1;
     const auto heaterPowerControlTab = 2;
     const auto segmentsConfiguratorTab = 3;
-    const auto dscDataViewerTab = 4;
+    const auto callibrationSettingsTab = 4;
+    const auto dscDataViewerTab = 5;
 
     static auto actualTab = deviceStartupTab;
 
@@ -76,6 +86,22 @@ void MainWindow::applicationTabWidgetChanged()
         case heaterPowerControlTab:
         {
             heaterPowerControlStopWorking();
+            break;
+        }
+
+        case segmentsConfiguratorTab:
+        {
+            break;
+        }
+
+        case callibrationSettingsTab:
+        {
+            break;
+        }
+
+        case dscDataViewerTab:
+        {
+            dscDataViewStopWorking();
             break;
         }
 
@@ -94,6 +120,25 @@ void MainWindow::applicationTabWidgetChanged()
         case heaterPowerControlTab:
         {
             heaterPowerControlStartWorking();
+            break;
+        }
+
+        case segmentsConfiguratorTab:
+        {
+            segmentsConfiguratorStartWorking();
+            break;
+        }
+
+        case callibrationSettingsTab:
+        {
+            callibrationSettingsStartWorking();
+            break;
+        }
+
+        case dscDataViewerTab:
+        {
+            dscDataViewStartWorking();
+            break;
         }
 
         default:
@@ -139,7 +184,7 @@ void MainWindow::setupApplicationDockLogger()
         ui->tabAutodetection->setFont(font);
         ui->tabDscDataView->setFont(font);
         ui->tabHeaterControl->setFont(font);
-        ui->tabSegmentsManager->setFont(font);
+        ui->tabSegmentsConfigurator->setFont(font);
         ui->tabUnitsDataViewer->setFont(font);
     }
 }
@@ -179,7 +224,7 @@ void MainWindow::addNewLogToLoggerTable(std::shared_ptr<Logger::StoredLog> log)
 
     if (100 < mNumberOfDebugLogs)
     {
-        removeTheOldestDebugLogFromLoggerTable();
+        //removeTheOldestDebugLogFromLoggerTable();
     }
 
     {
@@ -860,8 +905,8 @@ void MainWindow::setupHeaterPowerControl()
     setFontForTunes(ui->textEditHeaterPowerControlKd);
     setFontForTunes(ui->textEditHeaterPowerControlN);
 
-    mHeaterPowerControlPlotTimer = std::make_shared<QTimer>(this);
-    QObject::connect(mHeaterPowerControlPlotTimer.get(), SIGNAL(timeout()), this, SLOT(heaterPowerControlPlotData()));
+    mHeaterPowerControlPlotTimer = new QTimer(this);
+    QObject::connect(mHeaterPowerControlPlotTimer, SIGNAL(timeout()), this, SLOT(heaterPowerControlPlotData()));
     HeaterTemperaturePlotManager::initialize(ui->heaterTemperaturePlot, mHeaterPowerControlPlotTimer);
 
     QObject::connect(this, SIGNAL(signalHeaterPowerControlPlotNewSamplingCallback()), this, SLOT(heaterPowerControlPlotNewSamplingCallback()));
@@ -1048,7 +1093,9 @@ void MainWindow::setActiveHeaterPowerTab()
             break;
     }
 
+    ui->tabWidgetHeaterPower->blockSignals(true);
     ui->tabWidgetHeaterPower->setCurrentIndex(index);
+    ui->tabWidgetHeaterPower->blockSignals(false);
 }
 
 void MainWindow::setActiveHeaterPowerComboBoxMode()
@@ -1083,7 +1130,9 @@ void MainWindow::setActiveHeaterPowerComboBoxMode()
             break;
     }
 
+    ui->comboBoxHeaterPowerControlMode->blockSignals(true);
     ui->comboBoxHeaterPowerControlMode->setCurrentIndex(index);
+    ui->comboBoxHeaterPowerControlMode->blockSignals(false);
 }
 
 void MainWindow::setActiveHeaterPowerComboBoxPlotSps()
@@ -1157,7 +1206,9 @@ void MainWindow::setActiveHeaterPowerComboBoxFileSps()
 void MainWindow::setHeaterPowerCVSlider()
 {
     auto heaterPower = static_cast<int>(std::round(DSC::DataManager::getData(EDataType::HeaterPower)));
+    ui->horizontalSliderHeaterPowerControlValue->blockSignals(true);
     ui->horizontalSliderHeaterPowerControlValue->setValue(heaterPower);
+    ui->horizontalSliderHeaterPowerControlValue->blockSignals(false);
 }
 
 QString MainWindow::convertHeaterPowerToQString(double value)
@@ -1174,12 +1225,698 @@ QString MainWindow::convertHeaterTemperatureToQString(double value)
     return QString::fromStdString(stream.str());
 }
 
+void MainWindow::setupSegmentsConfigurator()
+{
+    std::lock_guard<std::mutex> lockGuard(mSegmentsConfiguratorMtx);
+    mActiveSegment = 1U;
+
+    auto setGreyTextColor =
+        [this](QWidget* widget)
+        {
+            widget->setStyleSheet("QLabel { color:rgb(128,128,128) }");
+        };
+
+    auto setWhiteTextColor =
+        [this](QWidget* widget)
+        {
+            widget->setStyleSheet("QLabel { color:rgb(255,255,255) }");
+        };
+
+    setGreyTextColor(ui->labelSegmentsConfiguratorPreviousNumberInfo);
+    setGreyTextColor(ui->labelSegmentsConfiguratorPreviousNumber);
+    setGreyTextColor(ui->labelSegmentsConfiguratorPreviousTypeInfo);
+    setGreyTextColor(ui->labelSegmentsConfiguratorPreviousType);
+    setGreyTextColor(ui->labelSegmentsConfiguratorPreviousTemperatureStartInfo);
+    setGreyTextColor(ui->labelSegmentsConfiguratorPreviousTemperatureStart);
+    setGreyTextColor(ui->labelSegmentsConfiguratorPreviousTemperatureStopInfo);
+    setGreyTextColor(ui->labelSegmentsConfiguratorPreviousTemperatureStop);
+    setGreyTextColor(ui->labelSegmentsConfiguratorPreviousTemperatureStepInfo);
+    setGreyTextColor(ui->labelSegmentsConfiguratorPreviousTemperatureStep);
+    setGreyTextColor(ui->labelSegmentsConfiguratorPreviousProgramDurationInfo);
+    setGreyTextColor(ui->labelSegmentsConfiguratorPreviousProgramDuration);
+    setGreyTextColor(ui->labelSegmentsConfiguratorPreviousProgramDurationScale);
+    setGreyTextColor(ui->labelSegmentsConfiguratorPreviousDegree1);
+    setGreyTextColor(ui->labelSegmentsConfiguratorPreviousDegree2);
+    setGreyTextColor(ui->labelSegmentsConfiguratorPreviousDegree3);
+
+    setWhiteTextColor(ui->labelSegmentsConfiguratorActiveNumberInfo);
+    setWhiteTextColor(ui->labelSegmentsConfiguratorActiveNumber);
+    setWhiteTextColor(ui->labelSegmentsConfiguratorActiveTypeInfo);
+    setWhiteTextColor(ui->labelSegmentsConfiguratorActiveTemperatureStartInfo);
+    setWhiteTextColor(ui->labelSegmentsConfiguratorActiveTemperatureStopInfo);
+    setWhiteTextColor(ui->labelSegmentsConfiguratorActiveTemperatureStepInfo);
+    setWhiteTextColor(ui->labelSegmentsConfiguratorActiveProgramDurationInfo);
+    setWhiteTextColor(ui->labelSegmentsConfiguratorActiveDegree1);
+    setWhiteTextColor(ui->labelSegmentsConfiguratorActiveDegree2);
+    setWhiteTextColor(ui->labelSegmentsConfiguratorActiveDegree3);
+    setWhiteTextColor(ui->textEditSegmentsConfiguratorActiveProgramDuration);
+    setWhiteTextColor(ui->textEditSegmentsConfiguratorActiveTemperatureStart);
+    setWhiteTextColor(ui->textEditSegmentsConfiguratorActiveTemperatureStep);
+    setWhiteTextColor(ui->textEditSegmentsConfiguratorActiveTemperatureStop);
+    setWhiteTextColor(ui->comboBoxSegmentsConfiguratorActiveScale);
+    setWhiteTextColor(ui->comboBoxSegmentsConfiguratorActiveType);
+
+    setGreyTextColor(ui->labelSegmentsConfiguratorNextNumberInfo);
+    setGreyTextColor(ui->labelSegmentsConfiguratorNextNumber);
+    setGreyTextColor(ui->labelSegmentsConfiguratorNextTypeInfo);
+    setGreyTextColor(ui->labelSegmentsConfiguratorNextType);
+    setGreyTextColor(ui->labelSegmentsConfiguratorNextTemperatureStartInfo);
+    setGreyTextColor(ui->labelSegmentsConfiguratorNextTemperatureStart);
+    setGreyTextColor(ui->labelSegmentsConfiguratorNextTemperatureStopInfo);
+    setGreyTextColor(ui->labelSegmentsConfiguratorNextTemperatureStop);
+    setGreyTextColor(ui->labelSegmentsConfiguratorNextTemperatureStepInfo);
+    setGreyTextColor(ui->labelSegmentsConfiguratorNextTemperatureStep);
+    setGreyTextColor(ui->labelSegmentsConfiguratorNextProgramDurationInfo);
+    setGreyTextColor(ui->labelSegmentsConfiguratorNextProgramDuration);
+    setGreyTextColor(ui->labelSegmentsConfiguratorNextProgramDurationScale);
+    setGreyTextColor(ui->labelSegmentsConfiguratorNextDegree1);
+    setGreyTextColor(ui->labelSegmentsConfiguratorNextDegree2);
+    setGreyTextColor(ui->labelSegmentsConfiguratorNextDegree3);
+
+    setWhiteTextColor(ui->pushButtonSegmentsConfiguratorAddToProgram);
+    setWhiteTextColor(ui->pushButtonSegmentsConfiguratorDeleteFromProgram);
+    setWhiteTextColor(ui->pushButtonSegmentsConfiguratorApplyProgram);
+
+    ui->labelSegmentsConfiguratorTickImage->hide();
+    ui->comboBoxSegmentsConfiguratorActiveScale->setCurrentIndex(1);
+
+    SegmentsProgramPlotManager::initialize(ui->segmentsConfiguratorProgramPlot);
+}
+
+void MainWindow::segmentsConfiguratorStartWorking()
+{
+    std::lock_guard<std::mutex> lockGuard(mSegmentsConfiguratorMtx);
+    refreshDisplayedSegmentProgram();
+}
+
+void MainWindow::refreshDisplayedSegmentProgram()
+{
+    {
+        // Previous
+
+        if (1U == mActiveSegment)
+        {
+            ui->labelSegmentsConfiguratorPreviousNumber->setText("N/A");
+            ui->labelSegmentsConfiguratorPreviousType->setText("N/A");
+            ui->labelSegmentsConfiguratorPreviousTemperatureStart->setText("N/A");
+            ui->labelSegmentsConfiguratorPreviousTemperatureStop->setText("N/A");
+            ui->labelSegmentsConfiguratorPreviousTemperatureStep->setText("N/A");
+            ui->labelSegmentsConfiguratorPreviousProgramDuration->setText("N/A");
+            ui->labelSegmentsConfiguratorPreviousProgramDurationScale->setText("min.");
+        }
+        else
+        {
+            const auto & segmentData = DSC::SegmentsManager::getSegmentData(mActiveSegment - 1);
+
+            ui->labelSegmentsConfiguratorPreviousNumber->setText(QString::fromStdString(std::to_string(segmentData.nucleoData.number)));
+            ui->labelSegmentsConfiguratorPreviousType->setText(convertSegmentTypeToQString(segmentData.nucleoData.type));
+            ui->labelSegmentsConfiguratorPreviousTemperatureStart->setText(convertDoubleToQString(segmentData.nucleoData.startTemperature));
+            if (ESegmentType_Dynamic == segmentData.nucleoData.type)
+            {
+                ui->labelSegmentsConfiguratorPreviousTemperatureStop->setText(convertDoubleToQString(segmentData.nucleoData.stopTemperature));
+                ui->labelSegmentsConfiguratorPreviousTemperatureStep->setText(convertDoubleToQString(segmentData.nucleoData.temperatureStep));
+            }
+            else
+            {
+                ui->labelSegmentsConfiguratorPreviousTemperatureStop->setText("N/A");
+                ui->labelSegmentsConfiguratorPreviousTemperatureStep->setText("N/A");
+            }
+            ui->labelSegmentsConfiguratorPreviousProgramDuration->setText(convertDoubleToQString(segmentData.programDuration));
+            ui->labelSegmentsConfiguratorPreviousProgramDurationScale->setText(convertTimeUnitToQString(segmentData.programDurationUnit));
+        }
+    }
+
+    {
+        // Active
+
+        if (DSC::SegmentsManager::getNextFreeSegmentNumber() == mActiveSegment)
+        {
+            ui->labelSegmentsConfiguratorActiveNumber->setText(QString::fromStdString(std::to_string(mActiveSegment)));
+          
+            if ((0 == DSC::SegmentsManager::getNumberOfSegments()) && (1U == mActiveSegment))
+            {
+                ui->comboBoxSegmentsConfiguratorActiveType->blockSignals(true);
+                ui->comboBoxSegmentsConfiguratorActiveType->setCurrentIndex(convertSegmentTypeToComboBoxIndex(ESegmentType_Dynamic));
+                ui->comboBoxSegmentsConfiguratorActiveType->blockSignals(false);
+                ui->textEditSegmentsConfiguratorActiveTemperatureStart->setText("25.00");
+                ui->textEditSegmentsConfiguratorActiveTemperatureStop->setText("50.00");
+                ui->textEditSegmentsConfiguratorActiveTemperatureStep->setText("0.1");
+            }
+            else
+            {
+                auto segmentNumber = (1U == mActiveSegment) ? mActiveSegment : (mActiveSegment - 1);
+                const auto & segmentData = DSC::SegmentsManager::getSegmentData(segmentNumber);
+                ui->comboBoxSegmentsConfiguratorActiveType->blockSignals(true);
+                ui->comboBoxSegmentsConfiguratorActiveType->setCurrentIndex(convertSegmentTypeToComboBoxIndex(segmentData.nucleoData.type));
+                ui->comboBoxSegmentsConfiguratorActiveType->blockSignals(false);
+                if (ESegmentType_Dynamic == segmentData.nucleoData.type)
+                {
+                    ui->textEditSegmentsConfiguratorActiveTemperatureStart->setText(convertDoubleToQString(segmentData.nucleoData.stopTemperature));
+                    ui->textEditSegmentsConfiguratorActiveTemperatureStop->setText(convertDoubleToQString(segmentData.nucleoData.stopTemperature));
+                    ui->textEditSegmentsConfiguratorActiveTemperatureStep->setText(convertDoubleToQString(segmentData.nucleoData.temperatureStep));
+                }
+                else
+                {
+                    ui->textEditSegmentsConfiguratorActiveTemperatureStart->setText(convertDoubleToQString(segmentData.nucleoData.startTemperature));
+                    ui->textEditSegmentsConfiguratorActiveTemperatureStop->setText(convertDoubleToQString(segmentData.nucleoData.startTemperature));
+                    ui->textEditSegmentsConfiguratorActiveTemperatureStep->setText("0.1");
+                }
+
+                if (ESegmentType_Dynamic == segmentData.nucleoData.type)
+                {
+                    ui->textEditSegmentsConfiguratorActiveTemperatureStep->setEnabled(true);
+                    ui->textEditSegmentsConfiguratorActiveTemperatureStop->setEnabled(true);
+                }
+                else
+                {
+                    ui->textEditSegmentsConfiguratorActiveTemperatureStep->setEnabled(false);
+                    ui->textEditSegmentsConfiguratorActiveTemperatureStop->setEnabled(false);
+                }
+            }
+            ui->textEditSegmentsConfiguratorActiveProgramDuration->setText("5.00");
+            ui->comboBoxSegmentsConfiguratorActiveScale->setCurrentIndex(convertTimeUnitToComboBoxIndex(DSC::SegmentsManager::TimeUnit::Minutes));
+
+            ui->labelSegmentsConfiguratorTickImage->hide();
+            ui->labelSegmentsConfiguratorCrossImage->show();
+
+            ui->pushButtonSegmentsConfiguratorAddToProgram->setEnabled(true);
+        }
+        else
+        {
+            const auto & segmentData = DSC::SegmentsManager::getSegmentData(mActiveSegment);
+
+            ui->labelSegmentsConfiguratorActiveNumber->setText(QString::fromStdString(std::to_string(segmentData.nucleoData.number)));
+            ui->comboBoxSegmentsConfiguratorActiveType->blockSignals(true);
+            ui->comboBoxSegmentsConfiguratorActiveType->setCurrentIndex(convertSegmentTypeToComboBoxIndex(segmentData.nucleoData.type));
+            ui->comboBoxSegmentsConfiguratorActiveType->blockSignals(false);
+            if (ESegmentType_Dynamic == segmentData.nucleoData.type)
+            {
+                ui->textEditSegmentsConfiguratorActiveTemperatureStart->setText(convertDoubleToQString(segmentData.nucleoData.stopTemperature));
+                ui->textEditSegmentsConfiguratorActiveTemperatureStop->setText(convertDoubleToQString(segmentData.nucleoData.stopTemperature));
+                ui->textEditSegmentsConfiguratorActiveTemperatureStep->setText(convertDoubleToQString(segmentData.nucleoData.temperatureStep));
+            }
+            else
+            {
+                ui->textEditSegmentsConfiguratorActiveTemperatureStart->setText(convertDoubleToQString(segmentData.nucleoData.startTemperature));
+                ui->textEditSegmentsConfiguratorActiveTemperatureStop->setText(convertDoubleToQString(segmentData.nucleoData.startTemperature));
+                ui->textEditSegmentsConfiguratorActiveTemperatureStep->setText("0.0");
+            }
+            ui->textEditSegmentsConfiguratorActiveProgramDuration->setText(convertDoubleToQString(segmentData.programDuration));
+            ui->comboBoxSegmentsConfiguratorActiveScale->setCurrentIndex(convertTimeUnitToComboBoxIndex(segmentData.programDurationUnit));
+
+            ui->labelSegmentsConfiguratorCrossImage->hide();
+            ui->labelSegmentsConfiguratorTickImage->show();
+
+            ui->pushButtonSegmentsConfiguratorAddToProgram->setEnabled(false);
+        }
+    }
+
+    {
+        // Next
+
+        if (DSC::SegmentsManager::getNumberOfSegments() <= mActiveSegment)
+        {
+            ui->labelSegmentsConfiguratorNextNumber->setText("N/A");
+            ui->labelSegmentsConfiguratorNextType->setText("N/A");
+            ui->labelSegmentsConfiguratorNextTemperatureStart->setText("N/A");
+            ui->labelSegmentsConfiguratorNextTemperatureStop->setText("N/A");
+            ui->labelSegmentsConfiguratorNextTemperatureStep->setText("N/A");
+            ui->labelSegmentsConfiguratorNextProgramDuration->setText("N/A");
+            ui->labelSegmentsConfiguratorNextProgramDurationScale->setText("min.");
+        }
+        else
+        {
+            const auto & segmentData = DSC::SegmentsManager::getSegmentData(mActiveSegment + 1);
+
+            ui->labelSegmentsConfiguratorNextNumber->setText(QString::fromStdString(std::to_string(segmentData.nucleoData.number)));
+            ui->labelSegmentsConfiguratorNextType->setText(convertSegmentTypeToQString(segmentData.nucleoData.type));
+            ui->labelSegmentsConfiguratorNextTemperatureStart->setText(convertDoubleToQString(segmentData.nucleoData.startTemperature));
+            if (ESegmentType_Dynamic == segmentData.nucleoData.type)
+            {
+                ui->labelSegmentsConfiguratorNextTemperatureStop->setText(convertDoubleToQString(segmentData.nucleoData.stopTemperature));
+                ui->labelSegmentsConfiguratorNextTemperatureStep->setText(convertDoubleToQString(segmentData.nucleoData.temperatureStep));
+            }
+            else
+            {
+                ui->labelSegmentsConfiguratorNextTemperatureStart->setText(convertDoubleToQString(segmentData.nucleoData.startTemperature));
+                ui->labelSegmentsConfiguratorNextTemperatureStep->setText("0.0");
+            }
+            ui->labelSegmentsConfiguratorNextProgramDuration->setText(convertDoubleToQString(segmentData.programDuration));
+            ui->labelSegmentsConfiguratorNextProgramDurationScale->setText(convertTimeUnitToQString(segmentData.programDurationUnit));
+        }
+    }
+}
+
+QString MainWindow::convertDoubleToQString(const double & value, int precision)
+{
+    std::stringstream stream;
+    stream << std::fixed << std::setprecision(precision) << value;
+    return QString::fromStdString(stream.str());
+}
+
+DSC::SegmentsManager::TimeUnit MainWindow::convertComboBoxIndexToTimeUnit(int index)
+{
+    switch (index)
+    {
+        case 0 :
+            return DSC::SegmentsManager::TimeUnit::Seconds;
+
+        case 1:
+            return DSC::SegmentsManager::TimeUnit::Minutes;
+
+        case 2:
+            return DSC::SegmentsManager::TimeUnit::Hours;
+
+        default :
+            break;
+    }
+
+    return DSC::SegmentsManager::TimeUnit::Seconds;
+}
+
+int MainWindow::convertTimeUnitToComboBoxIndex(DSC::SegmentsManager::TimeUnit timeUnit)
+{
+    switch (timeUnit)
+    {
+        case DSC::SegmentsManager::TimeUnit::Seconds :
+            return 0;
+
+        case DSC::SegmentsManager::TimeUnit::Minutes :
+            return 1;
+
+        case DSC::SegmentsManager::TimeUnit::Hours :
+            return 2;
+
+        default :
+            break;
+    }
+
+    return 0;
+}
+
+QString MainWindow::convertTimeUnitToQString(DSC::SegmentsManager::TimeUnit timeUnit)
+{
+    switch (timeUnit)
+    {
+        case DSC::SegmentsManager::TimeUnit::Seconds:
+            return "sec.";
+
+        case DSC::SegmentsManager::TimeUnit::Minutes:
+            return "min.";
+
+        case DSC::SegmentsManager::TimeUnit::Hours:
+            return "hr.";
+
+        default:
+            break;
+    }
+
+    return "";
+}
+
+ESegmentType MainWindow::convertComboBoxIndexToSegmentType(int index)
+{
+    if (0 == index)
+    {
+        return ESegmentType_Dynamic;
+    }
+    else
+    {
+        return ESegmentType_Static;
+    }
+}
+
+int MainWindow::convertSegmentTypeToComboBoxIndex(ESegmentType type)
+{
+    if (ESegmentType_Dynamic == type)
+    {
+        return 0;
+    }
+    else
+    {
+        return 1;
+    }
+}
+
+QString MainWindow::convertSegmentTypeToQString(ESegmentType type)
+{
+    if (ESegmentType_Dynamic == type)
+    {
+        return "Dynamic";
+    }
+    else
+    {
+        return "Static";
+    }
+}
+
+void MainWindow::setupCallibrationSettings()
+{
+    std::lock_guard<std::mutex> lockGuard(mCallibrationSettingsMtx);
+}
+
+void MainWindow::callibrationSettingsStartWorking()
+{
+    std::lock_guard<std::mutex> lockGuard(mCallibrationSettingsMtx);
+
+    auto threshold1 = DSC::DataManager::getData(EDataType::FilteringThreshold1);
+    auto coefficient1 = DSC::DataManager::getData(EDataType::FilteringThreshold1Coefficient);
+    auto threshold2 = DSC::DataManager::getData(EDataType::FilteringThreshold2);
+    auto coefficient2 = DSC::DataManager::getData(EDataType::FilteringThreshold2Coefficient);
+    auto threshold3 = DSC::DataManager::getData(EDataType::FilteringThreshold3);
+    auto coefficient3 = DSC::DataManager::getData(EDataType::FilteringThreshold3Coefficient);
+    auto coefficient4 = DSC::DataManager::getData(EDataType::FilteringThreshold4Coefficient);
+
+    ui->textEditCallibrationSettingsThreshold1->setText(convertDoubleToQString(threshold1, 2));
+    ui->textEditCallibrationSettingsThreshold2->setText(convertDoubleToQString(threshold2, 2));
+    ui->textEditCallibrationSettingsThreshold3->setText(convertDoubleToQString(threshold3, 2));
+    ui->textEditCallibrationSettingsThreshold4->setText("");
+
+    ui->textEditCallibrationSettingsCoefficient1->setText(convertDoubleToQString(coefficient1, 6));
+    ui->textEditCallibrationSettingsCoefficient2->setText(convertDoubleToQString(coefficient2, 6));
+    ui->textEditCallibrationSettingsCoefficient3->setText(convertDoubleToQString(coefficient3, 6));
+    ui->textEditCallibrationSettingsCoefficient4->setText(convertDoubleToQString(coefficient4, 6));
+}
+
+void MainWindow::setupDscDataView()
+{
+    std::lock_guard<std::mutex> lockGuard(mDscDataViewMtx);
+
+    auto setBlueTextColor =
+        [](QWidget* widget)
+    {
+        widget->setStyleSheet("QLabel { color:rgb(0,128,255) }");
+    };
+
+    auto setRedTextColor =
+        [](QWidget* widget)
+    {
+        widget->setStyleSheet("QLabel { color:rgb(255,102,102) }");
+    };
+
+    auto setGreenTextColor =
+        [](QWidget* widget)
+    {
+        widget->setStyleSheet("QLabel { color:rgb(0,204,204) }");
+    };
+
+    auto setDarkOrangeTextColor =
+        [](QWidget* widget)
+    {
+        widget->setStyleSheet("QLabel { color:rgb(255,128,0) }");
+    };
+
+    auto setGreyTextColor =
+        [](QWidget* widget)
+    {
+        widget->setStyleSheet("QLabel { color:rgb(128,128,128) }");
+    };
+
+    auto setWhiteTextColor =
+        [](QWidget* widget)
+    {
+        widget->setStyleSheet("QLabel { color:rgb(255,255,255) }");
+    };
+
+    setWhiteTextColor(ui->pushButtonDscDataViewStartProgram);
+    setWhiteTextColor(ui->pushButtonDscDataViewStopProgram);
+
+    setWhiteTextColor(ui->labelDscDataViewFilename);
+    setWhiteTextColor(ui->labelDscDataViewDataSampling);
+
+    setWhiteTextColor(ui->labelDscDataViewActiveNumberInfo);
+    setWhiteTextColor(ui->labelDscDataViewActiveNumber);
+    setWhiteTextColor(ui->labelDscDataViewActiveTypeInfo);
+    setWhiteTextColor(ui->labelDscDataViewActiveType);
+    setWhiteTextColor(ui->labelDscDataViewActiveTemperatureStartInfo);
+    setWhiteTextColor(ui->labelDscDataViewActiveTemperatureStart);
+    setWhiteTextColor(ui->labelDscDataViewActiveTemperatureStopInfo);
+    setWhiteTextColor(ui->labelDscDataViewActiveTemperatureStop);
+    setWhiteTextColor(ui->labelDscDataViewActiveProgramDurationInfo);
+    setWhiteTextColor(ui->labelDscDataViewActiveProgramDuration);
+    setWhiteTextColor(ui->labelDscDataViewActiveProgramDurationScale);
+    setWhiteTextColor(ui->labelDscDataViewActiveDegree1);
+    setWhiteTextColor(ui->labelDscDataViewActiveDegree2);
+
+    setGreyTextColor(ui->labelDscDataViewNextNumberInfo);
+    setGreyTextColor(ui->labelDscDataViewNextNumber);
+    setGreyTextColor(ui->labelDscDataViewNextTypeInfo);
+    setGreyTextColor(ui->labelDscDataViewNextType);
+    setGreyTextColor(ui->labelDscDataViewNextTemperatureStartInfo);
+    setGreyTextColor(ui->labelDscDataViewNextTemperatureStart);
+    setGreyTextColor(ui->labelDscDataViewNextTemperatureStopInfo);
+    setGreyTextColor(ui->labelDscDataViewNextTemperatureStop);
+    setGreyTextColor(ui->labelDscDataViewNextProgramDurationInfo);
+    setGreyTextColor(ui->labelDscDataViewNextProgramDuration);
+    setGreyTextColor(ui->labelDscDataViewNextProgramDurationScale);
+    setGreyTextColor(ui->labelDscDataViewNextDegree1);
+    setGreyTextColor(ui->labelDscDataViewNextDegree2);
+
+    setBlueTextColor(ui->labelDscDataViewIdealHeaterTemperatureInfo);
+    setBlueTextColor(ui->labelDscDataViewIdealHeaterTemperature);
+    setRedTextColor(ui->labelDscDataViewRealHeaterTemperatureInfo);
+    setRedTextColor(ui->labelDscDataViewRealHeaterTemperature);
+    setGreenTextColor(ui->labelDscDataViewDifferenceErrorInfo);
+    setGreenTextColor(ui->labelDscDataViewDifferenceError);
+
+    setRedTextColor(ui->labelDscDataViewSampleCarrierTemperatureInfo);
+    setRedTextColor(ui->labelDscDataViewSampleCarrierTemperature);
+
+    setDarkOrangeTextColor(ui->labelDscDataViewSample1Info);
+    setDarkOrangeTextColor(ui->labelDscDataViewSample1);
+    setGreyTextColor(ui->labelDscDataViewSample1HeatFlowInfo);
+    setGreyTextColor(ui->labelDscDataViewSample1HeatFlow);
+
+    setDarkOrangeTextColor(ui->labelDscDataViewSample2Info);
+    setDarkOrangeTextColor(ui->labelDscDataViewSample2);
+    setGreyTextColor(ui->labelDscDataViewSample2HeatFlowInfo);
+    setGreyTextColor(ui->labelDscDataViewSample2HeatFlow);
+
+    setDarkOrangeTextColor(ui->labelDscDataViewSample3Info);
+    setDarkOrangeTextColor(ui->labelDscDataViewSample3);
+    setGreyTextColor(ui->labelDscDataViewSample3HeatFlowInfo);
+    setGreyTextColor(ui->labelDscDataViewSample3HeatFlow);
+
+    setDarkOrangeTextColor(ui->labelDscDataViewSample4Info);
+    setDarkOrangeTextColor(ui->labelDscDataViewSample4);
+    setGreyTextColor(ui->labelDscDataViewSample4HeatFlowInfo);
+    setGreyTextColor(ui->labelDscDataViewSample4HeatFlow);
+
+    mDscDataViewPlotTimer = new QTimer(this);
+    QObject::connect(mDscDataViewPlotTimer, SIGNAL(timeout()), this, SLOT(dscDataViewPlotDataCallback()));
+
+    ui->pushButtonDscDataViewStartProgram->setEnabled(false);
+    ui->pushButtonDscDataViewStopProgram->setEnabled(false);
+
+    DscDataViewPlotManager::initialize(ui->dscDataViewPlot, mDscDataViewPlotTimer);
+}
+
+void MainWindow::dscDataViewStartWorking()
+{
+    std::lock_guard<std::mutex> lockGuard(mDscDataViewMtx);
+
+    mDscDataViewNewDataCallbackId = DSC::DataManager::registerNewDataCallback
+    (
+        [this](EDataType dataType, double value)
+        {
+            changeDscViewDataValue(dataType, value);
+        }
+    );
+
+    mDscDataViewFileNewFilenameCallbackId = DSC::DataManager::registerNewUnitAttributeCallback
+    (
+        [this](EUnitId unitId, const std::string & attribute, const std::string & value)
+        {
+            if (EUnitId_Raspberry == unitId && "DscDataFileName" == attribute)
+            {
+                dscDataNewFilenameCallback(value);
+            }
+        }
+    );
+
+    auto actualRealizedSegment = DSC::DataManager::getData(EDataType::ActualRealizedSegment);
+    updateSegmentsLabels(static_cast<u8>(actualRealizedSegment));
+}
+
+void MainWindow::dscDataViewStopWorking()
+{
+    std::lock_guard<std::mutex> lockGuard(mDscDataViewMtx);
+
+    DSC::DataManager::deregisterNewDataCallback(mDscDataViewNewDataCallbackId);
+    DSC::DataManager::deregisterNewUnitAttributeCallback(mDscDataViewFileNewFilenameCallbackId);
+}
+
+void MainWindow::changeDscViewDataValue(EDataType dataType, double value)
+{
+    std::lock_guard<std::mutex> lockGuard(mDscDataViewMtx);
+
+    if (EDataType::ActualRealizedSegment == dataType)
+    {
+        updateSegmentsLabels(static_cast<u8>(value));
+    }
+    else if (EDataType::IsSegmentsProgramOngoing == dataType)
+    {
+        if (1.0 == value)
+        {
+            DSC::DataManager::updateUnitAttribute(EUnitId_Raspberry, "DscDataFileName", ui->textEditDscDataViewFilename->toPlainText().toStdString());
+        }
+        else
+        {
+            DSC::FileDataManager::stopRegisteringDscData();
+            ui->pushButtonDscDataViewStartProgram->setEnabled(true);
+            ui->pushButtonDscDataViewStopProgram->setEnabled(false);
+        }
+    }
+    else
+    {
+        auto* qLabel = getQLabelForDscViewData(dataType);
+        if (qLabel)
+        {
+            QMetaObject::invokeMethod(qLabel, "setText", Qt::QueuedConnection, Q_ARG(QString, convertDscViewDataValueToQString(dataType, value)));
+        }
+    }
+}
+
+QLabel* MainWindow::getQLabelForDscViewData(EDataType dataType)
+{
+    static std::map<EDataType, QLabel*> dataTypeToQLabel = decltype(dataTypeToQLabel)
+    {
+        { EDataType::SPHeaterTemperature, ui->labelDscDataViewIdealHeaterTemperature },
+        { EDataType::HeaterTemperature, ui->labelDscDataViewRealHeaterTemperature },
+        { EDataType::ERRHeaterTemperature, ui->labelDscDataViewDifferenceError },
+        { EDataType::SampleCarrierTemperature, ui->labelDscDataViewSampleCarrierTemperature },
+        { EDataType::FilteredThermocouple1, ui->labelDscDataViewSample1 },
+        { EDataType::FilteredThermocouple2, ui->labelDscDataViewSample2 },
+        { EDataType::FilteredThermocouple3, ui->labelDscDataViewSample3 },
+        { EDataType::FilteredThermocouple4, ui->labelDscDataViewSample4 }
+    };
+
+    auto it = dataTypeToQLabel.find(dataType);
+    if (std::end(dataTypeToQLabel) != it)
+    {
+        return it->second;
+    }
+
+    return nullptr;
+}
+
+QString MainWindow::convertDscViewDataValueToQString(EDataType dataType, double value)
+{
+    if (DSC::DataManager::UnknownValue == value)
+    {
+        return "N/A";
+    }
+
+    std::stringstream stream;
+    QString postFix;
+    int precision = 0;
+    postFix += ' ';
+
+    switch (dataType)
+    {
+        case EDataType::HeaterTemperature:
+        case EDataType::ERRHeaterTemperature:
+        case EDataType::SPHeaterTemperature:
+        case EDataType::SampleCarrierTemperature :
+        {
+            postFix = "<sup>o</sup>C";
+            precision = 2;
+            break;
+        }
+
+        case EDataType::FilteredThermocouple1:
+        case EDataType::FilteredThermocouple2:
+        case EDataType::FilteredThermocouple3:
+        case EDataType::FilteredThermocouple4:
+        {
+            postFix += QChar(0x3BC);
+            postFix += "V";
+            precision = 3;
+            break;
+        }
+
+        default:
+        {
+            return QString("Invalid type!");
+        }
+    }
+
+    stream << std::fixed << std::setprecision(precision) << value;
+    QString str = QString::fromStdString(stream.str());
+    str += postFix;
+
+    return str;
+}
+
+void MainWindow::updateSegmentsLabels(u8 number)
+{
+    const auto numberOfRegisteredSegments = DSC::SegmentsManager::getNumberOfSegments();
+    if ((number > numberOfRegisteredSegments) || (0 == number))
+    {
+        return;
+    }
+
+    const auto & segmentData = DSC::SegmentsManager::getSegmentData(number);
+
+    auto segmentNumberStr = std::to_string(segmentData.nucleoData.number) + "/" + std::to_string(static_cast<u8>(numberOfRegisteredSegments));
+
+    QMetaObject::invokeMethod(ui->labelDscDataViewActiveNumber, "setText", Qt::QueuedConnection, Q_ARG(QString, QString::fromStdString(segmentNumberStr)));
+    QMetaObject::invokeMethod(ui->labelDscDataViewActiveType, "setText", Qt::QueuedConnection, Q_ARG(QString, convertSegmentTypeToQString(segmentData.nucleoData.type)));
+    QMetaObject::invokeMethod(ui->labelDscDataViewActiveTemperatureStart, "setText", Qt::QueuedConnection, Q_ARG(QString, convertDoubleToQString(segmentData.nucleoData.startTemperature)));
+    if (ESegmentType_Dynamic == segmentData.nucleoData.type)
+    {
+        QMetaObject::invokeMethod(ui->labelDscDataViewActiveTemperatureStop, "setText", Qt::QueuedConnection, Q_ARG(QString, convertDoubleToQString(segmentData.nucleoData.stopTemperature)));
+    }
+    else
+    {
+        QMetaObject::invokeMethod(ui->labelDscDataViewActiveTemperatureStop, "setText", Qt::QueuedConnection, Q_ARG(QString, QString("N/A")));
+    }
+    QMetaObject::invokeMethod(ui->labelDscDataViewActiveProgramDuration, "setText", Qt::QueuedConnection, Q_ARG(QString, convertDoubleToQString(segmentData.programDuration)));
+    QMetaObject::invokeMethod(ui->labelDscDataViewActiveProgramDurationScale, "setText", Qt::QueuedConnection, Q_ARG(QString, convertTimeUnitToQString(segmentData.programDurationUnit)));
+
+    if (number != numberOfRegisteredSegments)
+    {
+        const auto & segmentData = DSC::SegmentsManager::getSegmentData(number + 1);
+
+        auto segmentNumberStr = std::to_string(segmentData.nucleoData.number) + "/" + std::to_string(static_cast<u8>(numberOfRegisteredSegments));
+
+        QMetaObject::invokeMethod(ui->labelDscDataViewNextNumber, "setText", Qt::QueuedConnection, Q_ARG(QString, QString::fromStdString(segmentNumberStr)));
+        QMetaObject::invokeMethod(ui->labelDscDataViewNextType, "setText", Qt::QueuedConnection, Q_ARG(QString, convertSegmentTypeToQString(segmentData.nucleoData.type)));
+        QMetaObject::invokeMethod(ui->labelDscDataViewNextTemperatureStart, "setText", Qt::QueuedConnection, Q_ARG(QString, convertDoubleToQString(segmentData.nucleoData.startTemperature)));
+        if (ESegmentType_Dynamic == segmentData.nucleoData.type)
+        {
+            QMetaObject::invokeMethod(ui->labelDscDataViewNextTemperatureStop, "setText", Qt::QueuedConnection, Q_ARG(QString, convertDoubleToQString(segmentData.nucleoData.stopTemperature)));
+        }
+        else
+        {
+            QMetaObject::invokeMethod(ui->labelDscDataViewNextTemperatureStop, "setText", Qt::QueuedConnection, Q_ARG(QString, QString("N/A")));
+        }
+        QMetaObject::invokeMethod(ui->labelDscDataViewNextProgramDuration, "setText", Qt::QueuedConnection, Q_ARG(QString, convertDoubleToQString(segmentData.programDuration)));
+        QMetaObject::invokeMethod(ui->labelDscDataViewNextProgramDurationScale, "setText", Qt::QueuedConnection, Q_ARG(QString, convertTimeUnitToQString(segmentData.programDurationUnit)));
+    }
+    else
+    {
+        QMetaObject::invokeMethod(ui->labelDscDataViewNextNumber, "setText", Qt::QueuedConnection, Q_ARG(QString, "N/A"));
+        QMetaObject::invokeMethod(ui->labelDscDataViewNextType, "setText", Qt::QueuedConnection, Q_ARG(QString, "N/A"));
+        QMetaObject::invokeMethod(ui->labelDscDataViewNextTemperatureStart, "setText", Qt::QueuedConnection, Q_ARG(QString, "N/A"));
+        QMetaObject::invokeMethod(ui->labelDscDataViewNextTemperatureStop, "setText", Qt::QueuedConnection, Q_ARG(QString, "N/A"));
+        QMetaObject::invokeMethod(ui->labelDscDataViewNextProgramDuration, "setText", Qt::QueuedConnection, Q_ARG(QString, "N/A"));
+        QMetaObject::invokeMethod(ui->labelDscDataViewNextProgramDurationScale, "setText", Qt::QueuedConnection, Q_ARG(QString, "N/A"));
+    }
+}
+
+void MainWindow::dscDataNewFilenameCallback(const std::string & filename)
+{
+    std::lock_guard<std::mutex> lockGuard(mDscDataViewMtx);
+
+    QMetaObject::invokeMethod(ui->textEditDscDataViewFilename, "setText", Qt::QueuedConnection, Q_ARG(QString, QString::fromStdString(filename)));
+}
+
 void MainWindow::heaterPowerControlClearDataClicked()
 {
     std::lock_guard<std::mutex> lockGuard(mHeaterPowerControlMtx);
 
     HeaterTemperaturePlotManager::clearDrawnData();
-
 }
 
 void MainWindow::heaterPowerControlApplyValueClicked()
@@ -1419,3 +2156,484 @@ void MainWindow::heaterPowerControlPlotNewControlModeCallback()
     HeaterTemperaturePlotManager::newControlModeNotification();
 }
 
+void MainWindow::segmentsConfiguratorAddToProgramClicked()
+{
+    std::lock_guard<std::mutex> lockGuard(mSegmentsConfiguratorMtx);
+
+    auto requestedStartTemperature = ui->textEditSegmentsConfiguratorActiveTemperatureStart->toPlainText().toStdString();
+    auto requestedStopTemperature = ui->textEditSegmentsConfiguratorActiveTemperatureStop->toPlainText().toStdString();
+    auto requestedStepTemperature = ui->textEditSegmentsConfiguratorActiveTemperatureStep->toPlainText().toStdString();
+    auto requestedProgramDuration = ui->textEditSegmentsConfiguratorActiveProgramDuration->toPlainText().toStdString();
+
+    bool result = true;
+    Utilities::conditionalExecutor(result, [&requestedStartTemperature](){ return Utilities::isDouble(requestedStartTemperature); });
+    Utilities::conditionalExecutor(result, [&requestedStopTemperature](){ return Utilities::isDouble(requestedStopTemperature); });
+    Utilities::conditionalExecutor(result, [&requestedStepTemperature](){ return Utilities::isDouble(requestedStepTemperature); });
+    Utilities::conditionalExecutor(result, [&requestedProgramDuration](){ return Utilities::isDouble(requestedProgramDuration); });
+
+    if (!result)
+    {
+        QMessageBox msgBox;
+        QString message = "At least one of applied segment configuration is not correct (NaN)!";
+        msgBox.setText(message);
+        msgBox.setDefaultButton(QMessageBox::Button::Ok);
+        msgBox.exec();
+        return;
+    }
+
+    ESegmentType segmentType = convertComboBoxIndexToSegmentType(ui->comboBoxSegmentsConfiguratorActiveType->currentIndex());
+    double startTemperature = std::stod(requestedStartTemperature);
+    double stopTemperature = (ESegmentType_Dynamic == segmentType) ? stod(requestedStopTemperature) : startTemperature;
+    double stepTemperature = std::stod(requestedStepTemperature);
+    double programDuration = std::stod(requestedProgramDuration);
+    DSC::SegmentsManager::TimeUnit programDurationTimeUnit = convertComboBoxIndexToTimeUnit(ui->comboBoxSegmentsConfiguratorActiveScale->currentIndex());
+
+    DSC::SegmentsManager::saveSegment(segmentType, startTemperature, stopTemperature, stepTemperature, programDuration, programDurationTimeUnit);
+
+    refreshDisplayedSegmentProgram();
+
+    if (DSC::SegmentsManager::TimeUnit::Minutes == programDurationTimeUnit)
+    {
+        programDuration *= 60.0;
+    }
+    else if (DSC::SegmentsManager::TimeUnit::Hours == programDurationTimeUnit)
+    {
+        programDuration *= 3600.0;
+    }
+
+    SegmentsProgramPlotManager::addProgramToPlot(startTemperature, stopTemperature, programDuration);
+}
+
+void MainWindow::segmentsConfiguratorDeleteFromProgramClicked()
+{
+    std::lock_guard<std::mutex> lockGuard(mSegmentsConfiguratorMtx);
+
+    QMessageBox msgBox;
+    QString message = "Functionality disabled in program release.";
+    msgBox.setText(message);
+    msgBox.setDefaultButton(QMessageBox::Button::Ok);
+    msgBox.exec();
+}
+
+void MainWindow::segmentsConfiguratorApplyProgramClicked()
+{
+    std::lock_guard<std::mutex> lockGuard(mSegmentsConfiguratorMtx);
+
+    if (0 == DSC::SegmentsManager::getNumberOfSegments())
+    {
+        QMessageBox msgBox;
+        QString message = "Lack of segments added to program.";
+        msgBox.setText(message);
+        msgBox.setDefaultButton(QMessageBox::Button::Ok);
+        msgBox.exec();
+        return;
+    }
+
+    ThreadPool::submit
+    (
+        TaskPriority::Normal,
+        []()
+        {
+            DSC::SegmentsManager::registerAllSegments();
+        }
+    );
+
+    ui->pushButtonSegmentsConfiguratorApplyProgram->setEnabled(false);
+    ui->pushButtonDscDataViewStartProgram->setEnabled(true);
+}
+
+void MainWindow::segmentsConfiguratorUpClicked()
+{
+    std::lock_guard<std::mutex> lockGuard(mSegmentsConfiguratorMtx);
+
+    if (1 == mActiveSegment)
+    {
+        return;
+    }
+
+    --mActiveSegment;
+    refreshDisplayedSegmentProgram();
+}
+
+void MainWindow::segmentsConfiguratorDownClicked()
+{
+    std::lock_guard<std::mutex> lockGuard(mSegmentsConfiguratorMtx);
+
+    if (DSC::SegmentsManager::getNextFreeSegmentNumber() == mActiveSegment)
+    {
+        return;
+    }
+
+    ++mActiveSegment;
+    refreshDisplayedSegmentProgram();
+}
+
+void MainWindow::segmentsConfiguratorSegmentTypeChanged()
+{
+    std::lock_guard<std::mutex> lockGuard(mSegmentsConfiguratorMtx);
+
+    auto currentIndex = ui->comboBoxSegmentsConfiguratorActiveType->currentIndex();
+    if (0 == currentIndex)
+    {
+        ui->textEditSegmentsConfiguratorActiveTemperatureStep->setEnabled(true);
+        ui->textEditSegmentsConfiguratorActiveTemperatureStop->setEnabled(true);
+    }
+    else
+    {
+        ui->textEditSegmentsConfiguratorActiveTemperatureStep->setEnabled(false);
+        ui->textEditSegmentsConfiguratorActiveTemperatureStop->setEnabled(false);
+    }
+}
+
+void MainWindow::callibrationSettingsUpdateFilterDataClicked()
+{
+    std::lock_guard<std::mutex> lockGuard(mCallibrationSettingsMtx);
+
+    auto threshold1 = ui->textEditCallibrationSettingsThreshold1->toPlainText().toStdString();
+    auto threshold2 = ui->textEditCallibrationSettingsThreshold2->toPlainText().toStdString();
+    auto threshold3 = ui->textEditCallibrationSettingsThreshold3->toPlainText().toStdString();
+
+    auto coefficient1 = ui->textEditCallibrationSettingsCoefficient1->toPlainText().toStdString();
+    auto coefficient2 = ui->textEditCallibrationSettingsCoefficient2->toPlainText().toStdString();
+    auto coefficient3 = ui->textEditCallibrationSettingsCoefficient3->toPlainText().toStdString();
+    auto coefficient4 = ui->textEditCallibrationSettingsCoefficient4->toPlainText().toStdString();
+
+    bool result = true;
+
+    Utilities::conditionalExecutor(result, [threshold1](){ return Utilities::isDouble(threshold1); });
+    Utilities::conditionalExecutor(result, [threshold2](){ return Utilities::isDouble(threshold2); });
+    Utilities::conditionalExecutor(result, [threshold3](){ return Utilities::isDouble(threshold3); });
+    Utilities::conditionalExecutor(result, [coefficient1](){ return Utilities::isDouble(coefficient1); });
+    Utilities::conditionalExecutor(result, [coefficient2](){ return Utilities::isDouble(coefficient2); });
+    Utilities::conditionalExecutor(result, [coefficient3](){ return Utilities::isDouble(coefficient3); });
+    Utilities::conditionalExecutor(result, [coefficient4](){ return Utilities::isDouble(coefficient4); });
+
+    if (!result)
+    {
+        QMessageBox msgBox;
+        QString message = "At least one filter parameter is not correct number value!";
+        msgBox.setText(message);
+        msgBox.setDefaultButton(QMessageBox::Button::Ok);
+        msgBox.exec();
+        return;
+    }
+
+    DSC::DataManager::updateData(EDataType::FilteringThreshold1, std::stod(threshold1));
+    DSC::DataManager::updateData(EDataType::FilteringThreshold2, std::stod(threshold2));
+    DSC::DataManager::updateData(EDataType::FilteringThreshold3, std::stod(threshold3));
+    DSC::DataManager::updateData(EDataType::FilteringThreshold1Coefficient, std::stod(coefficient1));
+    DSC::DataManager::updateData(EDataType::FilteringThreshold2Coefficient, std::stod(coefficient2));
+    DSC::DataManager::updateData(EDataType::FilteringThreshold3Coefficient, std::stod(coefficient3));
+    DSC::DataManager::updateData(EDataType::FilteringThreshold4Coefficient, std::stod(coefficient4));
+
+    ThreadPool::submit
+    (
+        TaskPriority::Normal,
+        []()
+        {
+            DSC::SampleCarrierDataManager::updateFilterData();
+        }
+    );
+}
+
+void MainWindow::callibrationSettingsThreshold1Changed()
+{
+    std::string str = "if ( difference > ";
+    str += ui->textEditCallibrationSettingsThreshold1->toPlainText().toStdString();
+    str += " )";
+
+    ui->labelCallibrationSettingsThreshold1Value->setText(QString::fromStdString(str));
+}
+
+void MainWindow::callibrationSettingsThreshold2Changed()
+{
+    std::string str = "else if ( difference > ";
+    str += ui->textEditCallibrationSettingsThreshold2->toPlainText().toStdString();
+    str += " )";
+
+    ui->labelCallibrationSettingsThreshold2Value->setText(QString::fromStdString(str));
+}
+
+void MainWindow::callibrationSettingsThreshold3Changed()
+{
+    std::string str = "else if ( difference > ";
+    str += ui->textEditCallibrationSettingsThreshold3->toPlainText().toStdString();
+    str += " )";
+
+    ui->labelCallibrationSettingsThreshold3Value->setText(QString::fromStdString(str));
+}
+
+void MainWindow::callibrationSettingsCoefficient1Changed()
+{
+    std::string str = "actualDscValue = ";
+    std::string valueString = ui->textEditCallibrationSettingsCoefficient1->toPlainText().toStdString();
+    if (Utilities::isDouble(valueString) && (1.0 == std::stod(valueString)))
+    {
+        str += "newDscValue";
+    }
+    else
+    {
+        str += "actualDscValue * ";
+        str += valueString;
+        str += " + newDscValue * ";
+
+        if (Utilities::isDouble(valueString))
+        {
+            str += convertDoubleToQString(1.0 - std::stod(valueString), 6).toStdString();
+        }
+        else
+        {
+            str += "N/A";
+        }
+    }
+
+    ui->labelCallibrationSettingsCoefficient1Value->setText(QString::fromStdString(str));
+}
+
+void MainWindow::callibrationSettingsCoefficient2Changed()
+{
+    std::string str = "actualDscValue = ";
+    std::string valueString = ui->textEditCallibrationSettingsCoefficient2->toPlainText().toStdString();
+    if (Utilities::isDouble(valueString) && (1.0 == std::stod(valueString)))
+    {
+        str += "newDscValue";
+    }
+    else
+    {
+        str += "actualDscValue * ";
+        str += valueString;
+        str += " + newDscValue * ";
+
+        if (Utilities::isDouble(valueString))
+        {
+            str += convertDoubleToQString(1.0 - std::stod(valueString), 6).toStdString();
+        }
+        else
+        {
+            str += "N/A";
+        }
+    }
+
+    ui->labelCallibrationSettingsCoefficient2Value->setText(QString::fromStdString(str));
+}
+
+void MainWindow::callibrationSettingsCoefficient3Changed()
+{
+    std::string str = "actualDscValue = ";
+    std::string valueString = ui->textEditCallibrationSettingsCoefficient3->toPlainText().toStdString();
+    if (Utilities::isDouble(valueString) && (1.0 == std::stod(valueString)))
+    {
+        str += "newDscValue";
+    }
+    else
+    {
+        str += "actualDscValue * ";
+        str += valueString;
+        str += " + newDscValue * ";
+
+        if (Utilities::isDouble(valueString))
+        {
+            str += convertDoubleToQString(1.0 - std::stod(valueString), 6).toStdString();
+        }
+        else
+        {
+            str += "N/A";
+        }
+    }
+
+    ui->labelCallibrationSettingsCoefficient3Value->setText(QString::fromStdString(str));
+}
+
+void MainWindow::callibrationSettingsCoefficient4Changed()
+{
+    std::string str = "actualDscValue = ";
+    std::string valueString = ui->textEditCallibrationSettingsCoefficient4->toPlainText().toStdString();
+    if (Utilities::isDouble(valueString) && (1.0 == std::stod(valueString)))
+    {
+        str += "newDscValue";
+    }
+    else
+    {
+        str += "actualDscValue * ";
+        str += valueString;
+        str += " + newDscValue * ";
+
+        if (Utilities::isDouble(valueString))
+        {
+            str += convertDoubleToQString(1.0 - std::stod(valueString), 6).toStdString();
+        }
+        else
+        {
+            str += "N/A";
+        }
+    }
+
+    ui->labelCallibrationSettingsCoefficient4Value->setText(QString::fromStdString(str));
+}
+
+void MainWindow::dscDataViewStartProgramClicked()
+{
+    std::lock_guard<std::mutex> lockGuard(mDscDataViewMtx);
+
+    auto samplingValue = 0.0;
+    switch (ui->comboBoxDscDataViewFileSps->currentIndex())
+    {
+        case 0:
+        {
+            samplingValue = 0.5;
+            break;
+        }
+
+        case 1:
+        {
+            samplingValue = 1.0;
+            break;
+        }
+
+        case 2:
+        {
+            samplingValue = 2.0;
+            break;
+        }
+
+        case 3:
+        {
+            samplingValue = 5.0;
+            break;
+        }
+
+        case 4:
+        {
+            samplingValue = 10.0;
+            break;
+        }
+    }
+
+    ThreadPool::submit
+    (
+        TaskPriority::High,
+        [samplingValue]()
+        {
+            DSC::DataManager::updateData(EDataType::DscDataFileDataSampling, samplingValue);
+        }
+    );
+
+    ui->pushButtonDscDataViewStartProgram->setEnabled(false);
+    ui->pushButtonDscDataViewStopProgram->setEnabled(true);
+
+    ThreadPool::submit
+    (
+        TaskPriority::Normal,
+        []()
+        {
+            DSC::SegmentsManager::startProgram();
+        }
+    );
+
+    DscDataViewPlotManager::startDrawing();
+}
+
+void MainWindow::dscDataViewStopProgramClicked()
+{
+    std::lock_guard<std::mutex> lockGuard(mDscDataViewMtx);
+
+    ThreadPool::submit
+    (
+        TaskPriority::Normal,
+        []()
+        {
+            DSC::SegmentsManager::stopProgram();
+        }
+    );
+
+    ui->pushButtonDscDataViewStartProgram->setEnabled(true);
+    ui->pushButtonDscDataViewStopProgram->setEnabled(false);
+
+    DscDataViewPlotManager::stopDrawing();
+}
+
+void MainWindow::dscDataViewPlotDataCallback()
+{
+    DscDataViewPlotManager::addNewDataToPlotCallback();
+}
+
+void MainWindow::dscDataViewSaveDataToFileClicked()
+{
+    std::lock_guard<std::mutex> lockGuard(mDscDataViewMtx);
+
+    if (ui->checkBoxDscDataViewSaveToFile->isChecked())
+    {
+        auto samplingValue = 1.0;
+        switch (ui->comboBoxDscDataViewFileSps->currentIndex())
+        {
+            case 0:
+            {
+                samplingValue = 0.5;
+                break;
+            }
+
+            case 1:
+            {
+                samplingValue = 1.0;
+                break;
+            }
+
+            case 2:
+            {
+                samplingValue = 2.0;
+                break;
+            }
+
+            case 3:
+            {
+                samplingValue = 5.0;
+                break;
+            }
+
+            case 4:
+            {
+                samplingValue = 10.0;
+                break;
+            }
+        }
+
+        ThreadPool::submit
+        (
+            TaskPriority::High,
+            [samplingValue]()
+            {
+                DSC::DataManager::updateData(EDataType::DscDataFileDataSampling, samplingValue);
+            }
+        );
+
+        auto fileName = ui->textEditDscDataViewFilename->toPlainText().toStdString();
+        ThreadPool::submit
+        (
+            TaskPriority::High,
+            [fileName]()
+            {
+                DSC::DataManager::updateUnitAttribute(EUnitId_Raspberry, "DscDataFileName", fileName);
+            }
+        );
+
+        ThreadPool::submit
+        (
+            TaskPriority::Normal,
+            []()
+            {
+                DSC::FileDataManager::startRegisteringDscData();
+            }
+        );
+    }
+    else
+    {
+        ThreadPool::submit
+        (
+            TaskPriority::Normal,
+            []()
+            {
+                DSC::FileDataManager::stopRegisteringDscData();
+            }
+        );
+    }
+}

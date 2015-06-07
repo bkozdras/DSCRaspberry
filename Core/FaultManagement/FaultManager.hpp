@@ -33,6 +33,8 @@ class FaultManager : boost::noncopyable
 
         static bool compareFaults(const SFaultIndication & a, const SFaultIndication & b);
 
+        static void newNucleoFaultIndCallback(TFaultInd && faultInd);
+
     private :
 
         static std::mutex mMutex;
@@ -40,7 +42,6 @@ class FaultManager : boost::noncopyable
         typedef std::function<void(std::shared_ptr<SFaultIndication>)> Callback;
         static std::vector<std::tuple<FaultManager::CallbackId, Callback, Callback>> mRegisteredNotificationCallbacks;
 
-        static void newNucleoFaultIndCallback(TFaultInd && faultInd);
         static CallbackId generateNewId();
         static const std::string & getLoggerPrefix();
 };

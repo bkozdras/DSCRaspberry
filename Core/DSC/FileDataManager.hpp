@@ -46,8 +46,10 @@ namespace DSC
             static bool openFile(std::ofstream & fileStream, const boost::filesystem::path & filePath);
             static bool closeFile(std::ofstream & fileStream);
             
+            static void saveToFileAuthor(std::ofstream & fileStream);
             static void saveToFileCurrentData(std::ofstream & fileStream);
             static void saveToFileCurrentControlMode(std::ofstream & fileStream);
+            static void saveToFileLegend(std::ofstream & fileStream);
             static void saveToFileRegisteringPeriod(std::ofstream & fileStream);
             static void saveToFileDescribeData(std::ofstream & fileStream);
 
@@ -55,7 +57,7 @@ namespace DSC
             static std::string getActualDate();
             static std::string getActualWeekday();
 
-            static std::string convertDoubleToString(const double & value, int precision);
+            static std::string convertDoubleToString(const double & value, int precision = 2);
 
             static const std::string & getLoggerPrefix();
 
@@ -69,6 +71,8 @@ namespace DSC
             static unsigned long long mHeaterDataSampleNumber;
             static unsigned long long mDscDataSampleNumber;
             static EControlMode mControlMode;
+            static bool mIsHeaterPowerControlDataRegisteringActive;
+            static bool mIsDscDataRegisteringActive;
 
             static DSC::DataManager::CallbackId mNewAttributeCallbackId;
             static bool mIsNewAttributeCallbackRegistered;

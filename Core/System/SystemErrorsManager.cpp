@@ -21,7 +21,7 @@ void SystemErrorsManager::printStacktrace()
     for (size_t functionSymbol = 0; size > functionSymbol; ++functionSymbol)
     {
         //Logger::error("%s: Backtrace(%u): %s.", getLoggerPrefix().c_str(), functionSymbol, backtraceSymbols[functionSymbol]);
-        std::fprintf(stderr, "%s: Backtrace(%u): %s.", getLoggerPrefix().c_str(), functionSymbol, backtraceSymbols[functionSymbol]);
+        std::fprintf(stderr, "%s: Backtrace(%u): %s.\n", getLoggerPrefix().c_str(), functionSymbol, backtraceSymbols[functionSymbol]);
     }
 }
 
@@ -50,13 +50,13 @@ void SystemErrorsManager::terminateHandler()
         }
         catch (...)
         {
-            std::fprintf(stderr, "Terminated due to unknown exception!n");
+            std::fprintf(stderr, "Terminated due to unknown exception!\n");
             //Logger::error("%s: Terminated due to unknown exception.", getLoggerPrefix().c_str());
         }
     }
     else
     {
-        std::fprintf(stderr, "Terminated due to unknown reason!n");
+        std::fprintf(stderr, "Terminated due to unknown reason!\n");
         //Logger::error("%s: Terminated due to unknown reason.", getLoggerPrefix().c_str());
     }
     printStacktrace();

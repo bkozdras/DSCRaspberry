@@ -12,7 +12,7 @@
 
 #endif
 
-typedef enum _ESegmentType
+typedef enum _ESegmentType : u8
 {
     ESegmentType_Static     = 0,
     ESegmentType_Dynamic    = 1

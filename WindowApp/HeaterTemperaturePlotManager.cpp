@@ -3,7 +3,7 @@
 #include <qobject.h>
 #include <qtimer.h>
 
-void HeaterTemperaturePlotManager::initialize(QCustomPlot* plot, std::shared_ptr<QTimer> plotTimer)
+void HeaterTemperaturePlotManager::initialize(QCustomPlot* plot, QTimer* plotTimer)
 {
     std::lock_guard<std::mutex> lockGuard(mMtx);
 
@@ -208,7 +208,7 @@ void HeaterTemperaturePlotManager::addNewDataToPlotCallback()
 
 std::mutex HeaterTemperaturePlotManager::mMtx;
 QCustomPlot* HeaterTemperaturePlotManager::mPlot;
-std::shared_ptr<QTimer> HeaterTemperaturePlotManager::mPlotTimer;
+QTimer* HeaterTemperaturePlotManager::mPlotTimer;
 std::vector<QCPPlottableLegendItem*> HeaterTemperaturePlotManager::mActiveLegends;
 EControlMode HeaterTemperaturePlotManager::mControlMode;
 bool HeaterTemperaturePlotManager::mIsGraphAddedToPlots;

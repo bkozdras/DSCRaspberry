@@ -154,6 +154,12 @@
     <ClCompile Include="Core\DSC\FileDataManager.cpp">
       <Filter>Core\DSC</Filter>
     </ClCompile>
+    <ClCompile Include="WindowApp\SegmentsProgramPlotManager.cpp">
+      <Filter>WindowApp</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowApp\DscDataViewPlotManager.cpp">
+      <Filter>WindowApp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="MainWindow.ui">
@@ -353,6 +359,12 @@
     </ClInclude>
     <ClInclude Include="Core\SharedDefines\EControllerDataType.h">
       <Filter>Core\SharedDefines</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowApp\SegmentsProgramPlotManager.hpp">
+      <Filter>WindowApp</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowApp\DscDataViewPlotManager.hpp">
+      <Filter>WindowApp</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

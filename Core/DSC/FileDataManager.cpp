@@ -19,6 +19,8 @@ namespace DSC
         std::lock_guard<std::mutex> lockGuard(mMtx);
 
         mIsNewAttributeCallbackRegistered = false;
+        mIsDscDataRegisteringActive = false;
+        mIsHeaterPowerControlDataRegisteringActive = false;
 
         auto result = createDataDirectoryIfDoesNotExist();
 
@@ -50,6 +52,7 @@ namespace DSC
     void FileDataManager::startRegisteringDscData()
     {
         std::lock_guard<std::mutex> lockGuard(mMtx);
+        ifFileExistsChangeName(mDscDataDirectoryPath, std::string("DscDataFileName"));
         _startRegisteringDscData();
     }
 
@@ -71,9 +74,11 @@ namespace DSC
             mControlMode = DSC::DataManager::getControlMode();
             mHeaterDataSampleNumber = 0U;
 
+            saveToFileAuthor(mHeaterDataFileStream);
             saveToFileCurrentData(mHeaterDataFileStream);
             saveToFileCurrentControlMode(mHeaterDataFileStream);
             saveToFileRegisteringPeriod(mHeaterDataFileStream);
+            saveToFileLegend(mHeaterDataFileStream);
             saveToFileDescribeData(mHeaterDataFileStream);
 
             mNewControlModeCallbackId = DSC::DataManager::registerNewControlModeCallback
@@ -110,6 +115,8 @@ namespace DSC
 
             Logger::info("%s: Started registering heater control system data with period: %u milliseconds.", getLoggerPrefix().c_str(), registeringPeriod);
             Logger::info("%s: Path to file: %s.", getLoggerPrefix().c_str(), mHeaterControlSystemDataFilePath.c_str());
+
+            mIsHeaterPowerControlDataRegisteringActive = true;
         }
         else
         {
@@ -119,22 +126,97 @@ namespace DSC
 
     void FileDataManager::_stopRegisteringHeaterControlSystemData()
     {
-        if (closeFile(mHeaterDataFileStream))
+        if (mIsHeaterPowerControlDataRegisteringActive)
         {
-            TimerManager::destroy(mHeaterControlSystemStoreDataCallbackId);
-            DSC::DataManager::deregisterNewControlModeCallback(mNewControlModeCallbackId);
+            if (closeFile(mHeaterDataFileStream))
+            {
+                TimerManager::destroy(mHeaterControlSystemStoreDataCallbackId);
+                DSC::DataManager::deregisterNewControlModeCallback(mNewControlModeCallbackId);
 
-            Logger::info("%s: Stopped registering heater control system data.", getLoggerPrefix().c_str());
-            Logger::info("%s: Saved file: %s.", getLoggerPrefix().c_str(), mHeaterControlSystemDataFilePath.c_str());
+                mIsHeaterPowerControlDataRegisteringActive = false;
+                if (!mIsDscDataRegisteringActive)
+                {
+                    DSC::DataManager::deregisterNewUnitAttributeCallback(mNewAttributeCallbackId);
+                    mIsNewAttributeCallbackRegistered = false;
+                }
+
+                Logger::info("%s: Stopped registering heater control system data.", getLoggerPrefix().c_str());
+                Logger::info("%s: Saved file: %s.", getLoggerPrefix().c_str(), mHeaterControlSystemDataFilePath.c_str());
+            }
         }
     }
 
     void FileDataManager::_startRegisteringDscData()
     {
+        std::string fileName;
+        DSC::DataManager::getUnitAttribute(EUnitId_Raspberry, "DscDataFileName", fileName);
+        mDscDataFilePath = mDscDataDirectoryPath;
+        mDscDataFilePath /= fileName;
+
+        if (openFile(mDscDataFileStream, mDscDataFilePath))
+        {
+            mDscDataSampleNumber = 0U;
+
+            saveToFileAuthor(mDscDataFileStream);
+            saveToFileCurrentData(mDscDataFileStream);
+            saveToFileRegisteringPeriod(mDscDataFileStream);
+            saveToFileLegend(mDscDataFileStream);
+            saveToFileDescribeData(mDscDataFileStream);
+
+            if (!mIsNewAttributeCallbackRegistered)
+            {
+                mNewAttributeCallbackId = DSC::DataManager::registerNewUnitAttributeCallback
+                (
+                    [](EUnitId unitId, const std::string & attribute, const std::string & value)
+                    {
+                        newAtributeCallback(unitId, attribute, value);
+                    }
+                );
+
+                mIsNewAttributeCallbackRegistered = true;
+            }
+
+            auto registeringPeriod = static_cast<uint64_t>(1000.0 * DSC::DataManager::getData(EDataType::DscDataFileDataSampling));
+            mDscStoreDataCallbackId = TimerManager::create
+            (
+                registeringPeriod,
+                registeringPeriod,
+                []()
+                {
+                    storeDscDataCallback();
+                }
+            );
+
+            mIsDscDataRegisteringActive = true;
+
+            Logger::info("%s: Started registering DSC data with period: %u milliseconds.", getLoggerPrefix().c_str(), registeringPeriod);
+            Logger::info("%s: Path to file: %s.", getLoggerPrefix().c_str(), mDscDataFilePath.c_str());
+        }
+        else
+        {
+            Logger::error("%s: Starting registering DSC data failed...", getLoggerPrefix().c_str());
+        }
     }
 
     void FileDataManager::_stopRegisteringDscData()
     {
+        if (mIsDscDataRegisteringActive)
+        {
+            if (closeFile(mDscDataFileStream))
+            {
+                TimerManager::destroy(mDscStoreDataCallbackId);
+
+                mIsDscDataRegisteringActive = false;
+                if (!mIsHeaterPowerControlDataRegisteringActive)
+                {
+                    DSC::DataManager::deregisterNewUnitAttributeCallback(mNewAttributeCallbackId);
+                    mIsNewAttributeCallbackRegistered = false;
+                }
+
+                Logger::info("%s: Stopped registering DSC data.", getLoggerPrefix().c_str());
+                Logger::info("%s: Saved file: %s.", getLoggerPrefix().c_str(), mDscDataFilePath.c_str());
+            }
+        }
     }
 
     void FileDataManager::newAtributeCallback(EUnitId unitId, const std::string & attribute, const std::string & value)
@@ -225,6 +307,56 @@ namespace DSC
     void FileDataManager::storeDscDataCallback()
     {
         std::lock_guard<std::mutex> lockGuard(mMtx);
+
+        auto time = getActualTime();
+        auto sampleNumber = ++mDscDataSampleNumber;
+
+        mDscDataFileStream << time;
+        mDscDataFileStream << "\t";
+        mDscDataFileStream << sampleNumber;
+        mDscDataFileStream << "\t";
+
+        auto heaterSpValue = DSC::DataManager::getData(EDataType::SPHeaterTemperature);
+        auto heaterPvValue = DSC::DataManager::getData(EDataType::HeaterTemperature);
+        auto heaterCvValue = DSC::DataManager::getData(EDataType::HeaterPower);
+        auto heaterErrValue = DSC::DataManager::getData(EDataType::ERRHeaterTemperature);
+        auto sampleCarrierTemperatue = DSC::DataManager::getData(EDataType::SampleCarrierTemperature);
+        auto sample1Value = DSC::DataManager::getData(EDataType::Thermocouple1);
+        auto sample2Value = DSC::DataManager::getData(EDataType::Thermocouple2);
+        auto sample3Value = DSC::DataManager::getData(EDataType::Thermocouple3);
+        auto sample4Value = DSC::DataManager::getData(EDataType::Thermocouple4);
+        auto sample1FilteredValue = DSC::DataManager::getData(EDataType::FilteredThermocouple1);
+        auto sample2FilteredValue = DSC::DataManager::getData(EDataType::FilteredThermocouple2);
+        auto sample3FilteredValue = DSC::DataManager::getData(EDataType::FilteredThermocouple3);
+        auto sample4FilteredValue = DSC::DataManager::getData(EDataType::FilteredThermocouple4);
+
+        mDscDataFileStream << convertDoubleToString(heaterSpValue);
+        mDscDataFileStream << "\t";
+        mDscDataFileStream << convertDoubleToString(heaterPvValue);
+        mDscDataFileStream << "\t";
+        mDscDataFileStream << convertDoubleToString(heaterCvValue);
+        mDscDataFileStream << "\t";
+        mDscDataFileStream << convertDoubleToString(heaterErrValue);
+        mDscDataFileStream << "\t";
+        mDscDataFileStream << convertDoubleToString(sampleCarrierTemperatue);
+        mDscDataFileStream << "\t";
+        mDscDataFileStream << convertDoubleToString(sample1Value, 3);
+        mDscDataFileStream << "\t";
+        mDscDataFileStream << convertDoubleToString(sample2Value, 3);
+        mDscDataFileStream << "\t";
+        mDscDataFileStream << convertDoubleToString(sample3Value, 3);
+        mDscDataFileStream << "\t";
+        mDscDataFileStream << convertDoubleToString(sample4Value, 3);
+        mDscDataFileStream << "\t";
+        mDscDataFileStream << convertDoubleToString(sample1FilteredValue, 3);
+        mDscDataFileStream << "\t";
+        mDscDataFileStream << convertDoubleToString(sample2FilteredValue, 3);
+        mDscDataFileStream << "\t";
+        mDscDataFileStream << convertDoubleToString(sample3FilteredValue, 3);
+        mDscDataFileStream << "\t";
+        mDscDataFileStream << convertDoubleToString(sample4FilteredValue, 3);
+
+        mDscDataFileStream << std::endl;
     }
 
     bool FileDataManager::createDataDirectoryIfDoesNotExist()
@@ -398,6 +530,15 @@ namespace DSC
         return true;
     }
 
+    void FileDataManager::saveToFileAuthor(std::ofstream & fileStream)
+    {
+        fileStream << std::endl;
+        fileStream << "File generated automatically by DSC Application." << std::endl;
+        fileStream << "DSC Application: @bkozdras (Bartlomiej Kozdras)." << std::endl;
+        fileStream << "@mail: b.kozdras@gmail.com" << std::endl;
+        fileStream << std::endl;
+    }
+
     void FileDataManager::saveToFileCurrentData(std::ofstream & fileStream)
     {
         fileStream << "Date: " << getActualDate() << ". Weekday: " << getActualWeekday() << ". Time: " << getActualTime() << "." << std::endl;
@@ -439,6 +580,47 @@ namespace DSC
         fileStream << "Control Mode: " << controlModeStr << "." << std::endl;
     }
 
+    void FileDataManager::saveToFileLegend(std::ofstream & fileStream)
+    {
+        fileStream << std::endl;
+
+        fileStream << "Time" << "\t" << "Sample Number" << "\t";
+
+        if (mHeaterDataFileStream == fileStream)
+        {
+            if (EControlMode::OpenLoop == mControlMode)
+            {
+                fileStream << "Power - heater power [%]" << std::endl;
+                fileStream << "Temperature - heater temperature [oC]" << std::endl;
+            }
+            else
+            {
+                fileStream << "SP - ideal heater temperature (Set Point) [oC]" << std::endl;
+                fileStream << "PV - real heater temperature (Process Value) [oC]" << std::endl;
+                fileStream << "CV - heater power (Control Value) [%]" << std::endl;
+                fileStream << "ERR - heater temperature error (ERR = SP - PV) [oC]" << std::endl;
+            }
+        }
+        else
+        {
+            fileStream << "SP - ideal heater temperature (Set Point) [oC]" << std::endl;
+            fileStream << "PV - real heater temperature (Process Value) [oC]" << std::endl;
+            fileStream << "CV - heater power (Control Value) [%]" << std::endl;
+            fileStream << "ERR - heater temperature error (ERR = SP - PV) [oC]" << std::endl;
+            fileStream << "SC - sample carrier temperature [oC]" << std::endl;
+            fileStream << "S1 - sample 1 effect voltage value [uV]" << std::endl;
+            fileStream << "S2 - sample 2 effect voltage value [uV]" << std::endl;
+            fileStream << "S3 - sample 3 effect voltage value [uV]" << std::endl;
+            fileStream << "S4 - sample 4 effect voltage value [uV]" << std::endl;
+            fileStream << "SF1 - sample 1 effect filtered voltage value [uV]" << std::endl;
+            fileStream << "SF2 - sample 2 effect filtered voltage value [uV]" << std::endl;
+            fileStream << "SF3 - sample 3 effect filtered voltage value [uV]" << std::endl;
+            fileStream << "SF4 - sample 4 effect filtered voltage value [uV]" << std::endl;
+        }
+
+        fileStream << std::endl;
+    }
+
     void FileDataManager::saveToFileRegisteringPeriod(std::ofstream & fileStream)
     {
         double registeringPeriod;
@@ -449,7 +631,7 @@ namespace DSC
         }
         else if (mDscDataFileStream == fileStream)
         {
-            return;
+            registeringPeriod = DSC::DataManager::getData(EDataType::DscDataFileDataSampling);
         }
         else
         {
@@ -477,6 +659,10 @@ namespace DSC
             {
                 fileStream << "SP" << "\t" << "CV" << "\t" << "PV" << "\t" << "ERR";
             }
+        }
+        else
+        {
+            fileStream << "SP" << "\t" << "PV" << "\t" << "CV" << "\t" << "ERR" << "\t" << "SC" << "\t" << "S1" << "\t" << "S2" << "\t" << "S3" << "\t" << "S4" << "\t" << "SF1" << "\t" << "SF2" << "\t" << "SF3" << "\t" << "SF4";
         }
 
         fileStream << std::endl << std::endl;
@@ -532,6 +718,11 @@ namespace DSC
 
     std::string FileDataManager::convertDoubleToString(const double & value, int precision)
     {
+        if (DSC::DataManager::UnknownValue == value)
+        {
+            return "N/A";
+        }
+
         std::stringstream stream;
         stream << std::fixed << std::setprecision(precision) << value;
         return stream.str();
@@ -558,4 +749,6 @@ namespace DSC
     TimerManager::TimerId FileDataManager::mHeaterControlSystemStoreDataCallbackId;
     TimerManager::TimerId FileDataManager::mDscStoreDataCallbackId;
     EControlMode FileDataManager::mControlMode;
+    bool FileDataManager::mIsHeaterPowerControlDataRegisteringActive;
+    bool FileDataManager::mIsDscDataRegisteringActive;
 }

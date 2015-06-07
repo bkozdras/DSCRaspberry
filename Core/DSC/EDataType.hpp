@@ -16,6 +16,10 @@ enum class EDataType : u8
     Thermocouple2,
     Thermocouple3,
     Thermocouple4,
+    FilteredThermocouple1,
+    FilteredThermocouple2,
+    FilteredThermocouple3,
+    FilteredThermocouple4,
     SMPCBTemperature,
     FanPower,
     HeaterPowerControlPlotDataSampling,
@@ -27,5 +31,14 @@ enum class EDataType : u8
     ProcessPidTuneKp,
     ProcessPidTuneKi,
     ProcessPidTuneKd,
-    ProcessPidTuneN
+    ProcessPidTuneN,
+    DscDataFileDataSampling,
+    FilteringThreshold1,
+    FilteringThreshold1Coefficient,
+    FilteringThreshold2,
+    FilteringThreshold2Coefficient,
+    FilteringThreshold3,
+    FilteringThreshold3Coefficient,
+    FilteringThreshold4,
+    FilteringThreshold4Coefficient
 };

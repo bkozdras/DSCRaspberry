@@ -16,6 +16,8 @@ bool FaultManager::initialize()
             newNucleoFaultIndCallback(std::move(faultInd));
         }
     );
+
+    return true;
 }
 
 void FaultManager::generate(std::shared_ptr<SFaultIndication> indication)

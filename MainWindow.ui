@@ -278,7 +278,7 @@
     </property>
     <widget class="QWidget" name="dockWidgetContents_4">
      <layout class="QGridLayout" name="gridLayout_5">
-      <item row="0" column="0">
+      <item row="1" column="0">
        <widget class="QTabWidget" name="applicationTabWidget">
         <property name="enabled">
          <bool>true</bool>
@@ -2389,7 +2389,7 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;2.64410249977534&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;3.04410249977534&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
            <widget class="QLabel" name="labelHeaterPowerControlKpInfo">
@@ -2951,9 +2951,9 @@ p, li { white-space: pre-wrap; }
          <widget class="QCustomPlot" name="segmentsConfiguratorProgramPlot" native="true">
           <property name="geometry">
            <rect>
-            <x>690</x>
+            <x>700</x>
             <y>10</y>
-            <width>1201</width>
+            <width>1191</width>
             <height>621</height>
            </rect>
           </property>
@@ -2961,8 +2961,8 @@ p, li { white-space: pre-wrap; }
          <widget class="QPushButton" name="pushButtonSegmentsConfiguratorAddToProgram">
           <property name="geometry">
            <rect>
-            <x>470</x>
-            <y>295</y>
+            <x>480</x>
+            <y>260</y>
             <width>201</width>
             <height>61</height>
            </rect>
@@ -2981,7 +2981,7 @@ p, li { white-space: pre-wrap; }
            <rect>
             <x>30</x>
             <y>10</y>
-            <width>421</width>
+            <width>431</width>
             <height>191</height>
            </rect>
           </property>
@@ -3264,7 +3264,7 @@ p, li { white-space: pre-wrap; }
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
-          <widget class="QLabel" name="labelSegmentsConfiguratorPreviousNumber_7">
+          <widget class="QLabel" name="labelSegmentsConfiguratorPreviousDegree1">
            <property name="geometry">
             <rect>
              <x>355</x>
@@ -3288,7 +3288,7 @@ p, li { white-space: pre-wrap; }
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
-          <widget class="QLabel" name="labelSegmentsConfiguratorPreviousNumber_8">
+          <widget class="QLabel" name="labelSegmentsConfiguratorPreviousDegree2">
            <property name="geometry">
             <rect>
              <x>355</x>
@@ -3312,7 +3312,7 @@ p, li { white-space: pre-wrap; }
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
-          <widget class="QLabel" name="labelSegmentsConfiguratorPreviousNumber_9">
+          <widget class="QLabel" name="labelSegmentsConfiguratorPreviousDegree3">
            <property name="geometry">
             <rect>
              <x>355</x>
@@ -3366,7 +3366,7 @@ p, li { white-space: pre-wrap; }
            <rect>
             <x>30</x>
             <y>210</y>
-            <width>421</width>
+            <width>431</width>
             <height>221</height>
            </rect>
           </property>
@@ -3379,7 +3379,7 @@ p, li { white-space: pre-wrap; }
           <property name="lineWidth">
            <number>2</number>
           </property>
-          <widget class="QLabel" name="labelSegmentsConfiguratorPreviousNumberInfo_2">
+          <widget class="QLabel" name="labelSegmentsConfiguratorActiveNumberInfo">
            <property name="geometry">
             <rect>
              <x>10</x>
@@ -3400,7 +3400,7 @@ p, li { white-space: pre-wrap; }
             <string>Segment Number</string>
            </property>
           </widget>
-          <widget class="QLabel" name="labelSegmentsConfiguratorPreviousNumber_2">
+          <widget class="QLabel" name="labelSegmentsConfiguratorActiveNumber">
            <property name="geometry">
             <rect>
              <x>250</x>
@@ -3424,7 +3424,7 @@ p, li { white-space: pre-wrap; }
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
-          <widget class="QLabel" name="labelSegmentsConfiguratorPreviousTypeInfo_2">
+          <widget class="QLabel" name="labelSegmentsConfiguratorActiveTypeInfo">
            <property name="geometry">
             <rect>
              <x>10</x>
@@ -3445,7 +3445,7 @@ p, li { white-space: pre-wrap; }
             <string>Type</string>
            </property>
           </widget>
-          <widget class="QLabel" name="labelSegmentsConfiguratorPreviousTemperatureStartInfo_2">
+          <widget class="QLabel" name="labelSegmentsConfiguratorActiveTemperatureStartInfo">
            <property name="geometry">
             <rect>
              <x>10</x>
@@ -3466,11 +3466,11 @@ p, li { white-space: pre-wrap; }
             <string>Temperature Start</string>
            </property>
           </widget>
-          <widget class="QLabel" name="labelSegmentsConfiguratorPreviousTemperatureStopInfo_2">
+          <widget class="QLabel" name="labelSegmentsConfiguratorActiveTemperatureStopInfo">
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>100</y>
+             <y>105</y>
              <width>174</width>
              <height>22</height>
             </rect>
@@ -3487,11 +3487,11 @@ p, li { white-space: pre-wrap; }
             <string>Temperature Stop</string>
            </property>
           </widget>
-          <widget class="QLabel" name="labelSegmentsConfiguratorPreviousTemperatureStepInfo_2">
+          <widget class="QLabel" name="labelSegmentsConfiguratorActiveTemperatureStepInfo">
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>130</y>
+             <y>140</y>
              <width>173</width>
              <height>22</height>
             </rect>
@@ -3508,11 +3508,11 @@ p, li { white-space: pre-wrap; }
             <string>Temperature Step</string>
            </property>
           </widget>
-          <widget class="QLabel" name="labelSegmentsConfiguratorPreviousProgramDurationInfo_2">
+          <widget class="QLabel" name="labelSegmentsConfiguratorActiveProgramDurationInfo">
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>160</y>
+             <y>175</y>
              <width>173</width>
              <height>22</height>
             </rect>
@@ -3529,7 +3529,7 @@ p, li { white-space: pre-wrap; }
             <string>Program Duration</string>
            </property>
           </widget>
-          <widget class="QLabel" name="labelSegmentsConfiguratorPreviousNumber_10">
+          <widget class="QLabel" name="labelSegmentsConfiguratorActiveDegree1">
            <property name="geometry">
             <rect>
              <x>355</x>
@@ -3553,11 +3553,11 @@ p, li { white-space: pre-wrap; }
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
-          <widget class="QLabel" name="labelSegmentsConfiguratorPreviousNumber_11">
+          <widget class="QLabel" name="labelSegmentsConfiguratorActiveDegree2">
            <property name="geometry">
             <rect>
              <x>355</x>
-             <y>100</y>
+             <y>105</y>
              <width>21</width>
              <height>23</height>
             </rect>
@@ -3577,11 +3577,11 @@ p, li { white-space: pre-wrap; }
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
-          <widget class="QLabel" name="labelSegmentsConfiguratorPreviousNumber_12">
+          <widget class="QLabel" name="labelSegmentsConfiguratorActiveDegree3">
            <property name="geometry">
             <rect>
              <x>355</x>
-             <y>130</y>
+             <y>140</y>
              <width>21</width>
              <height>23</height>
             </rect>
@@ -3601,42 +3601,20 @@ p, li { white-space: pre-wrap; }
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
-          <widget class="QLabel" name="labelSegmentsConfiguratorPreviousProgramDurationScale_2">
+          <widget class="QTextEdit" name="textEditSegmentsConfiguratorActiveTemperatureStart">
            <property name="geometry">
             <rect>
-             <x>355</x>
-             <y>160</y>
-             <width>39</width>
-             <height>23</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>14</pointsize>
-             <weight>50</weight>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;min.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-          <widget class="QTextEdit" name="textEditHeaterPowerControlSp_6">
-           <property name="geometry">
-            <rect>
-             <x>270</x>
+             <x>235</x>
              <y>70</y>
-             <width>81</width>
+             <width>101</width>
              <height>30</height>
             </rect>
            </property>
            <property name="font">
             <font>
              <pointsize>12</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
             </font>
            </property>
            <property name="layoutDirection">
@@ -3646,8 +3624,183 @@ p, li { white-space: pre-wrap; }
             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:12pt; font-weight:600; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;N/A&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;25&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QTextEdit" name="textEditSegmentsConfiguratorActiveTemperatureStop">
+           <property name="geometry">
+            <rect>
+             <x>235</x>
+             <y>105</y>
+             <width>101</width>
+             <height>30</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
+           <property name="html">
+            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;50&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QComboBox" name="comboBoxSegmentsConfiguratorActiveType">
+           <property name="geometry">
+            <rect>
+             <x>235</x>
+             <y>40</y>
+             <width>101</width>
+             <height>25</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <item>
+            <property name="text">
+             <string>Dynamic</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Static</string>
+            </property>
+           </item>
+          </widget>
+          <widget class="QTextEdit" name="textEditSegmentsConfiguratorActiveTemperatureStep">
+           <property name="geometry">
+            <rect>
+             <x>235</x>
+             <y>140</y>
+             <width>101</width>
+             <height>30</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
+           <property name="html">
+            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;0.1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QTextEdit" name="textEditSegmentsConfiguratorActiveProgramDuration">
+           <property name="geometry">
+            <rect>
+             <x>235</x>
+             <y>175</y>
+             <width>101</width>
+             <height>30</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
+           <property name="html">
+            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QComboBox" name="comboBoxSegmentsConfiguratorActiveScale">
+           <property name="geometry">
+            <rect>
+             <x>345</x>
+             <y>175</y>
+             <width>61</width>
+             <height>25</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
+           <item>
+            <property name="text">
+             <string>sec.</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>min.</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>hr.</string>
+            </property>
+           </item>
+          </widget>
+          <widget class="QLabel" name="labelSegmentsConfiguratorCrossImage">
+           <property name="geometry">
+            <rect>
+             <x>380</x>
+             <y>20</y>
+             <width>32</width>
+             <height>32</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="pixmap">
+            <pixmap resource="qdarkstyle/style.qrc">:/qss_icons/Images/Cross.png</pixmap>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelSegmentsConfiguratorTickImage">
+           <property name="geometry">
+            <rect>
+             <x>380</x>
+             <y>20</y>
+             <width>32</width>
+             <height>32</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="pixmap">
+            <pixmap resource="qdarkstyle/style.qrc">:/qss_icons/Images/Tick.png</pixmap>
            </property>
           </widget>
          </widget>
@@ -3656,7 +3809,7 @@ p, li { white-space: pre-wrap; }
            <rect>
             <x>30</x>
             <y>440</y>
-            <width>421</width>
+            <width>431</width>
             <height>191</height>
            </rect>
           </property>
@@ -3939,7 +4092,7 @@ p, li { white-space: pre-wrap; }
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
-          <widget class="QLabel" name="labelSegmentsConfiguratorNextNumber_4">
+          <widget class="QLabel" name="labelSegmentsConfiguratorNextDegree1">
            <property name="geometry">
             <rect>
              <x>355</x>
@@ -3963,7 +4116,7 @@ p, li { white-space: pre-wrap; }
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
-          <widget class="QLabel" name="labelSegmentsConfiguratorNextNumber_3">
+          <widget class="QLabel" name="labelSegmentsConfiguratorNextDegree2">
            <property name="geometry">
             <rect>
              <x>355</x>
@@ -3987,7 +4140,7 @@ p, li { white-space: pre-wrap; }
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
-          <widget class="QLabel" name="labelSegmentsConfiguratorNextNumber_2">
+          <widget class="QLabel" name="labelSegmentsConfiguratorNextDegree3">
            <property name="geometry">
             <rect>
              <x>355</x>
@@ -4039,8 +4192,8 @@ p, li { white-space: pre-wrap; }
          <widget class="QPushButton" name="pushButtonSegmentsConfiguratorUp">
           <property name="geometry">
            <rect>
-            <x>530</x>
-            <y>215</y>
+            <x>540</x>
+            <y>170</y>
             <width>76</width>
             <height>72</height>
            </rect>
@@ -4067,8 +4220,8 @@ p, li { white-space: pre-wrap; }
          <widget class="QPushButton" name="pushButtonSegmentsConfiguratorDown">
           <property name="geometry">
            <rect>
-            <x>530</x>
-            <y>365</y>
+            <x>540</x>
+            <y>410</y>
             <width>76</width>
             <height>72</height>
            </rect>
@@ -4092,10 +4245,10 @@ p, li { white-space: pre-wrap; }
            </size>
           </property>
          </widget>
-         <widget class="QPushButton" name="pushButtonSegmentsConfiguratorAddToProgram_2">
+         <widget class="QPushButton" name="pushButtonSegmentsConfiguratorApplyProgram">
           <property name="geometry">
            <rect>
-            <x>470</x>
+            <x>480</x>
             <y>570</y>
             <width>201</width>
             <height>61</height>
@@ -4110,11 +4263,2240 @@ p, li { white-space: pre-wrap; }
            <string>Apply Program</string>
           </property>
          </widget>
+         <widget class="QPushButton" name="pushButtonSegmentsConfiguratorDeleteFromProgram">
+          <property name="geometry">
+           <rect>
+            <x>480</x>
+            <y>330</y>
+            <width>201</width>
+            <height>61</height>
+           </rect>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Delete from Program</string>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="tabCallibrationSettings">
+         <attribute name="title">
+          <string>Callibration Settings</string>
+         </attribute>
+         <widget class="QFrame" name="frame_16">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>10</y>
+            <width>681</width>
+            <height>621</height>
+           </rect>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <property name="lineWidth">
+           <number>2</number>
+          </property>
+          <widget class="QLabel" name="labelSegmentsConfiguratorPreviousNumberInfo_2">
+           <property name="geometry">
+            <rect>
+             <x>220</x>
+             <y>10</y>
+             <width>261</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>DSC Data Filtering Settings</string>
+           </property>
+          </widget>
+          <widget class="QTextEdit" name="textEditCallibrationSettingsThreshold1">
+           <property name="geometry">
+            <rect>
+             <x>150</x>
+             <y>60</y>
+             <width>101</width>
+             <height>30</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
+           <property name="html">
+            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; color:#ffffff;&quot;&gt;25&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelCallibrationSettingsThreshold1Info">
+           <property name="geometry">
+            <rect>
+             <x>20</x>
+             <y>60</y>
+             <width>121</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Threshold 1</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelCallibrationSettingsUv1">
+           <property name="geometry">
+            <rect>
+             <x>270</x>
+             <y>60</y>
+             <width>31</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>uV</string>
+           </property>
+          </widget>
+          <widget class="QTextEdit" name="textEditCallibrationSettingsCoefficient1">
+           <property name="geometry">
+            <rect>
+             <x>150</x>
+             <y>100</y>
+             <width>101</width>
+             <height>30</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
+           <property name="html">
+            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; color:#ffffff;&quot;&gt;25&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelCallibrationSettingsCoefficient1Info">
+           <property name="geometry">
+            <rect>
+             <x>20</x>
+             <y>100</y>
+             <width>121</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Coefficient</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelCallibrationSettingsUv2">
+           <property name="geometry">
+            <rect>
+             <x>600</x>
+             <y>60</y>
+             <width>31</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>uV</string>
+           </property>
+          </widget>
+          <widget class="QTextEdit" name="textEditCallibrationSettingsCoefficient2">
+           <property name="geometry">
+            <rect>
+             <x>480</x>
+             <y>100</y>
+             <width>101</width>
+             <height>30</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
+           <property name="html">
+            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; color:#ffffff;&quot;&gt;25&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QTextEdit" name="textEditCallibrationSettingsThreshold2">
+           <property name="geometry">
+            <rect>
+             <x>480</x>
+             <y>60</y>
+             <width>101</width>
+             <height>30</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
+           <property name="html">
+            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; color:#ffffff;&quot;&gt;25&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelCallibrationSettingsCoefficient2Info">
+           <property name="geometry">
+            <rect>
+             <x>350</x>
+             <y>100</y>
+             <width>121</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Coefficient</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelCallibrationSettingsThreshold2Info">
+           <property name="geometry">
+            <rect>
+             <x>350</x>
+             <y>60</y>
+             <width>121</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Threshold 2</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelCallibrationSettingsUv3">
+           <property name="geometry">
+            <rect>
+             <x>270</x>
+             <y>160</y>
+             <width>31</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>uV</string>
+           </property>
+          </widget>
+          <widget class="QTextEdit" name="textEditCallibrationSettingsCoefficient3">
+           <property name="geometry">
+            <rect>
+             <x>150</x>
+             <y>200</y>
+             <width>101</width>
+             <height>30</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
+           <property name="html">
+            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; color:#ffffff;&quot;&gt;25&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QTextEdit" name="textEditCallibrationSettingsThreshold3">
+           <property name="geometry">
+            <rect>
+             <x>150</x>
+             <y>160</y>
+             <width>101</width>
+             <height>30</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
+           <property name="html">
+            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; color:#ffffff;&quot;&gt;25&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelCallibrationSettingsCoefficient3Info">
+           <property name="geometry">
+            <rect>
+             <x>20</x>
+             <y>200</y>
+             <width>121</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Coefficient</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelCallibrationSettingsThreshold3Info">
+           <property name="geometry">
+            <rect>
+             <x>20</x>
+             <y>160</y>
+             <width>121</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Threshold 3</string>
+           </property>
+          </widget>
+          <widget class="QTextEdit" name="textEditCallibrationSettingsCoefficient4">
+           <property name="geometry">
+            <rect>
+             <x>480</x>
+             <y>200</y>
+             <width>101</width>
+             <height>30</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
+           <property name="html">
+            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; color:#ffffff;&quot;&gt;25&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QTextEdit" name="textEditCallibrationSettingsThreshold4">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="geometry">
+            <rect>
+             <x>480</x>
+             <y>160</y>
+             <width>101</width>
+             <height>30</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
+           <property name="html">
+            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelCallibrationSettingsCoefficient4Info">
+           <property name="geometry">
+            <rect>
+             <x>350</x>
+             <y>200</y>
+             <width>121</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Coefficient</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelCallibrationSettingsThreshold4Info">
+           <property name="geometry">
+            <rect>
+             <x>350</x>
+             <y>160</y>
+             <width>121</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Threshold 4</string>
+           </property>
+          </widget>
+          <widget class="Line" name="line_26">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>320</y>
+             <width>661</width>
+             <height>1</height>
+            </rect>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelCallibrationSettingsThreshold1Info_2">
+           <property name="geometry">
+            <rect>
+             <x>20</x>
+             <y>340</y>
+             <width>421</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>difference = abs(newDscValue = actualDscValue)</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelCallibrationSettingsThreshold1Value">
+           <property name="geometry">
+            <rect>
+             <x>20</x>
+             <y>370</y>
+             <width>361</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>if ( difference &gt; 1000.0 )</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelCallibrationSettingsCoefficient1Value">
+           <property name="geometry">
+            <rect>
+             <x>40</x>
+             <y>400</y>
+             <width>591</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>actualDscValue = newDscValue</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelCallibrationSettingsThreshold2Value">
+           <property name="geometry">
+            <rect>
+             <x>20</x>
+             <y>430</y>
+             <width>361</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>else if ( difference &gt; 100.0 )</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelCallibrationSettingsCoefficient2Value">
+           <property name="geometry">
+            <rect>
+             <x>40</x>
+             <y>460</y>
+             <width>591</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>actualDscValue = actualDscValue * 0.75 + newDscValue * 0.25</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelCallibrationSettingsCoefficient3Value">
+           <property name="geometry">
+            <rect>
+             <x>40</x>
+             <y>520</y>
+             <width>591</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>actualDscValue = actualDscValue * 0.75 + newDscValue * 0.25</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelCallibrationSettingsThreshold3Value">
+           <property name="geometry">
+            <rect>
+             <x>20</x>
+             <y>490</y>
+             <width>361</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>else if ( difference &gt; 100.0 )</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelCallibrationSettingsCoefficient4Value">
+           <property name="geometry">
+            <rect>
+             <x>40</x>
+             <y>580</y>
+             <width>591</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>actualDscValue = actualDscValue * 0.984375 + newDscValue * 0.015625</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelCallibrationSettingsThreshold2Value_3">
+           <property name="geometry">
+            <rect>
+             <x>20</x>
+             <y>550</y>
+             <width>361</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>else</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="pushButtonCallibrationSettingsUpdateFilterData">
+           <property name="geometry">
+            <rect>
+             <x>220</x>
+             <y>250</y>
+             <width>201</width>
+             <height>61</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Update Filter Data</string>
+           </property>
+          </widget>
+         </widget>
+         <widget class="QFrame" name="frame_17">
+          <property name="geometry">
+           <rect>
+            <x>700</x>
+            <y>10</y>
+            <width>1191</width>
+            <height>621</height>
+           </rect>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <property name="lineWidth">
+           <number>2</number>
+          </property>
+          <widget class="QLabel" name="labelSegmentsConfiguratorPreviousNumberInfo_3">
+           <property name="geometry">
+            <rect>
+             <x>510</x>
+             <y>10</y>
+             <width>401</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>DSC Data Enthalpy Callibration Settings</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelSegmentsConfiguratorPreviousNumberInfo_4">
+           <property name="geometry">
+            <rect>
+             <x>540</x>
+             <y>220</y>
+             <width>331</width>
+             <height>141</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>16</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Functionality not&lt;/p&gt;&lt;p&gt;implemented yet&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </widget>
         </widget>
         <widget class="QWidget" name="tabDscDataView">
          <attribute name="title">
           <string>DSC Data View</string>
          </attribute>
+         <widget class="QCustomPlot" name="dscDataViewPlot" native="true">
+          <property name="geometry">
+           <rect>
+            <x>700</x>
+            <y>10</y>
+            <width>1191</width>
+            <height>621</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QFrame" name="frame_14">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>300</y>
+            <width>331</width>
+            <height>161</height>
+           </rect>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <property name="lineWidth">
+           <number>2</number>
+          </property>
+          <widget class="QLabel" name="labelDscDataViewActiveNumberInfo">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>10</y>
+             <width>211</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Active Segment</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewActiveNumber">
+           <property name="geometry">
+            <rect>
+             <x>178</x>
+             <y>10</y>
+             <width>91</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>N/A</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewActiveTypeInfo">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>40</y>
+             <width>89</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Type</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewActiveType">
+           <property name="geometry">
+            <rect>
+             <x>180</x>
+             <y>40</y>
+             <width>89</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>N/A</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewActiveTemperatureStartInfo">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>70</y>
+             <width>175</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Temperature Start</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewActiveTemperatureStart">
+           <property name="geometry">
+            <rect>
+             <x>180</x>
+             <y>70</y>
+             <width>89</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>N/A</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewActiveTemperatureStopInfo">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>100</y>
+             <width>174</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Temperature Stop</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewActiveTemperatureStop">
+           <property name="geometry">
+            <rect>
+             <x>180</x>
+             <y>100</y>
+             <width>89</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>N/A</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewActiveProgramDurationInfo">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>130</y>
+             <width>173</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Program Duration</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewActiveProgramDuration">
+           <property name="geometry">
+            <rect>
+             <x>180</x>
+             <y>130</y>
+             <width>89</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>N/A</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewActiveDegree1">
+           <property name="geometry">
+            <rect>
+             <x>285</x>
+             <y>70</y>
+             <width>21</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; vertical-align:super;&quot;&gt;o&lt;/span&gt;C&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewActiveDegree2">
+           <property name="geometry">
+            <rect>
+             <x>285</x>
+             <y>100</y>
+             <width>21</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; vertical-align:super;&quot;&gt;o&lt;/span&gt;C&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewActiveProgramDurationScale">
+           <property name="geometry">
+            <rect>
+             <x>280</x>
+             <y>130</y>
+             <width>39</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;min.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </widget>
+         <widget class="QFrame" name="frame_15">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>470</y>
+            <width>331</width>
+            <height>161</height>
+           </rect>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <property name="lineWidth">
+           <number>2</number>
+          </property>
+          <widget class="QLabel" name="labelDscDataViewNextNumberInfo">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>10</y>
+             <width>191</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Next Segment</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewNextNumber">
+           <property name="geometry">
+            <rect>
+             <x>178</x>
+             <y>10</y>
+             <width>91</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>N/A</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewNextTypeInfo">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>40</y>
+             <width>89</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Type</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewNextType">
+           <property name="geometry">
+            <rect>
+             <x>180</x>
+             <y>40</y>
+             <width>89</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>N/A</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewNextTemperatureStartInfo">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>70</y>
+             <width>175</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Temperature Start</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewNextTemperatureStart">
+           <property name="geometry">
+            <rect>
+             <x>180</x>
+             <y>70</y>
+             <width>89</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>N/A</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewNextTemperatureStopInfo">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>100</y>
+             <width>174</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Temperature Stop</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewNextTemperatureStop">
+           <property name="geometry">
+            <rect>
+             <x>180</x>
+             <y>100</y>
+             <width>89</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>N/A</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewNextProgramDurationInfo">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>130</y>
+             <width>173</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Program Duration</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewNextProgramDuration">
+           <property name="geometry">
+            <rect>
+             <x>180</x>
+             <y>130</y>
+             <width>89</width>
+             <height>22</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>N/A</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewNextDegree1">
+           <property name="geometry">
+            <rect>
+             <x>285</x>
+             <y>70</y>
+             <width>21</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; vertical-align:super;&quot;&gt;o&lt;/span&gt;C&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewNextDegree2">
+           <property name="geometry">
+            <rect>
+             <x>285</x>
+             <y>100</y>
+             <width>21</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; vertical-align:super;&quot;&gt;o&lt;/span&gt;C&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewNextProgramDurationScale">
+           <property name="geometry">
+            <rect>
+             <x>280</x>
+             <y>130</y>
+             <width>39</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;min.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </widget>
+         <widget class="QFrame" name="frame_6">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>130</y>
+            <width>331</width>
+            <height>161</height>
+           </rect>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <property name="lineWidth">
+           <number>2</number>
+          </property>
+          <widget class="QLabel" name="labelDscDataViewFilename">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>8</y>
+             <width>221</width>
+             <height>20</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <italic>true</italic>
+            </font>
+           </property>
+           <property name="text">
+            <string>Filename</string>
+           </property>
+          </widget>
+          <widget class="QTextEdit" name="textEditDscDataViewFilename">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>32</y>
+             <width>291</width>
+             <height>30</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="html">
+            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;dataFile.txt&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QCheckBox" name="checkBoxDscDataViewSaveToFile">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>130</y>
+             <width>271</width>
+             <height>21</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Save Data To File</string>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewDataSampling">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>70</y>
+             <width>221</width>
+             <height>21</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <italic>true</italic>
+            </font>
+           </property>
+           <property name="text">
+            <string>Data Saving Period</string>
+           </property>
+          </widget>
+          <widget class="QComboBox" name="comboBoxDscDataViewFileSps">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>100</y>
+             <width>241</width>
+             <height>25</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <item>
+            <property name="text">
+             <string>0.5 second</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>1 second</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>2 seconds</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>5 seconds</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>10 seconds</string>
+            </property>
+           </item>
+          </widget>
+         </widget>
+         <widget class="QPushButton" name="pushButtonDscDataViewStartProgram">
+          <property name="geometry">
+           <rect>
+            <x>80</x>
+            <y>5</y>
+            <width>201</width>
+            <height>51</height>
+           </rect>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Start Program</string>
+          </property>
+         </widget>
+         <widget class="QFrame" name="frame_7">
+          <property name="geometry">
+           <rect>
+            <x>350</x>
+            <y>10</y>
+            <width>331</width>
+            <height>241</height>
+           </rect>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <property name="lineWidth">
+           <number>2</number>
+          </property>
+          <widget class="QLabel" name="labelDscDataViewRealHeaterTemperatureInfo">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>90</y>
+             <width>121</width>
+             <height>58</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+             <underline>false</underline>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Real Heater&lt;/p&gt;&lt;p&gt;Temperature&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewIdealHeaterTemperatureInfo">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>10</y>
+             <width>121</width>
+             <height>58</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+             <underline>false</underline>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ideal Heater&lt;/p&gt;&lt;p&gt;Temperature&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewIdealHeaterTemperature">
+           <property name="geometry">
+            <rect>
+             <x>150</x>
+             <y>25</y>
+             <width>161</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+             <underline>false</underline>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;N/A&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewRealHeaterTemperature">
+           <property name="geometry">
+            <rect>
+             <x>150</x>
+             <y>105</y>
+             <width>161</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+             <underline>false</underline>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;N/A&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewDifferenceErrorInfo">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>170</y>
+             <width>121</width>
+             <height>58</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+             <underline>false</underline>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Difference&lt;/p&gt;&lt;p&gt;Error&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewDifferenceError">
+           <property name="geometry">
+            <rect>
+             <x>138</x>
+             <y>185</y>
+             <width>171</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+             <underline>false</underline>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;N/A&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </widget>
+         <widget class="QFrame" name="frame_8">
+          <property name="geometry">
+           <rect>
+            <x>350</x>
+            <y>260</y>
+            <width>331</width>
+            <height>81</height>
+           </rect>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <property name="lineWidth">
+           <number>2</number>
+          </property>
+          <widget class="QLabel" name="labelDscDataViewSampleCarrierTemperatureInfo">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>10</y>
+             <width>141</width>
+             <height>58</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+             <underline>false</underline>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Sample Carrier&lt;/p&gt;&lt;p&gt;Temperature&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewSampleCarrierTemperature">
+           <property name="geometry">
+            <rect>
+             <x>148</x>
+             <y>30</y>
+             <width>161</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+             <underline>false</underline>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;N/A&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </widget>
+         <widget class="QFrame" name="frame_9">
+          <property name="geometry">
+           <rect>
+            <x>350</x>
+            <y>350</y>
+            <width>331</width>
+            <height>281</height>
+           </rect>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <property name="lineWidth">
+           <number>2</number>
+          </property>
+          <widget class="QLabel" name="labelDscDataViewSample1Info">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>10</y>
+             <width>111</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+             <underline>false</underline>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Sample 1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewSample1">
+           <property name="geometry">
+            <rect>
+             <x>148</x>
+             <y>10</y>
+             <width>161</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>75</weight>
+             <italic>false</italic>
+             <bold>true</bold>
+             <underline>false</underline>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;N/A&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewSample1HeatFlow">
+           <property name="geometry">
+            <rect>
+             <x>160</x>
+             <y>40</y>
+             <width>149</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+             <underline>false</underline>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;N/A&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewSample1HeatFlowInfo">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>40</y>
+             <width>111</width>
+             <height>24</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+             <underline>false</underline>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Heat Flow&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewSample2Info">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>80</y>
+             <width>111</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+             <underline>false</underline>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Sample 2&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewSample2HeatFlow">
+           <property name="geometry">
+            <rect>
+             <x>160</x>
+             <y>110</y>
+             <width>149</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+             <underline>false</underline>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;N/A&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewSample2">
+           <property name="geometry">
+            <rect>
+             <x>148</x>
+             <y>80</y>
+             <width>161</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>75</weight>
+             <italic>false</italic>
+             <bold>true</bold>
+             <underline>false</underline>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;N/A&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewSample2HeatFlowInfo">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>110</y>
+             <width>121</width>
+             <height>24</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+             <underline>false</underline>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Heat Flow&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewSample3Info">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>150</y>
+             <width>111</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+             <underline>false</underline>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Sample 3&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewSample3HeatFlow">
+           <property name="geometry">
+            <rect>
+             <x>160</x>
+             <y>180</y>
+             <width>149</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+             <underline>false</underline>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;N/A&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewSample3">
+           <property name="geometry">
+            <rect>
+             <x>148</x>
+             <y>150</y>
+             <width>161</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>75</weight>
+             <italic>false</italic>
+             <bold>true</bold>
+             <underline>false</underline>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;N/A&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewSample3HeatFlowInfo">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>180</y>
+             <width>111</width>
+             <height>24</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+             <underline>false</underline>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Heat Flow&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewSample4Info">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>220</y>
+             <width>111</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+             <underline>false</underline>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Sample 4&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewSample4HeatFlow">
+           <property name="geometry">
+            <rect>
+             <x>160</x>
+             <y>250</y>
+             <width>149</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+             <underline>false</underline>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;N/A&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewSample4">
+           <property name="geometry">
+            <rect>
+             <x>148</x>
+             <y>220</y>
+             <width>161</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>75</weight>
+             <italic>false</italic>
+             <bold>true</bold>
+             <underline>false</underline>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;N/A&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelDscDataViewSample4HeatFlowInfo">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>250</y>
+             <width>121</width>
+             <height>24</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+             <underline>false</underline>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Heat Flow&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+         </widget>
+         <widget class="QPushButton" name="pushButtonDscDataViewStopProgram">
+          <property name="geometry">
+           <rect>
+            <x>80</x>
+            <y>70</y>
+            <width>201</width>
+            <height>51</height>
+           </rect>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Stop Program</string>
+          </property>
+         </widget>
         </widget>
        </widget>
       </item>
@@ -4329,12 +6711,6 @@ p, li { white-space: pre-wrap; }
      </layout>
     </widget>
    </widget>
-   <zorder>loggerDockWidget</zorder>
-   <zorder>footerDataTable</zorder>
-   <zorder>faultsDockWidget</zorder>
-   <zorder>applicationDockWidget</zorder>
-   <zorder>dscDataDockWidget</zorder>
-   <zorder>applicationTabWidget</zorder>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -4370,50 +6746,34 @@ p, li { white-space: pre-wrap; }
  </resources>
  <connections>
   <connection>
-   <sender>horizontalSliderHeaterPowerControlValue</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>heaterPowerControlCVSliderChanged()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>145</x>
-     <y>589</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>70</x>
-     <y>-12</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>applicationTabWidget</sender>
-   <signal>currentChanged(int)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>applicationTabWidgetChanged()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>82</x>
-     <y>81</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>147</x>
-     <y>-8</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkBoxHeaterPowerPlotTemperature</sender>
+   <sender>checkBoxDscDataViewSaveToFile</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>heaterPowerControPlotDataClicked()</slot>
+   <slot>dscDataViewSaveDataToFileClicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>26</x>
-     <y>260</y>
+     <x>35</x>
+     <y>369</y>
     </hint>
     <hint type="destinationlabel">
-     <x>511</x>
-     <y>-8</y>
+     <x>-2</x>
+     <y>342</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButtonDscDataViewStopProgram</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>dscDataViewStopProgramClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>203</x>
+     <y>193</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-3</x>
+     <y>203</y>
     </hint>
    </hints>
   </connection>
@@ -4424,8 +6784,8 @@ p, li { white-space: pre-wrap; }
    <slot>heaterPowerControlApplyValueClicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>311</x>
-     <y>658</y>
+     <x>313</x>
+     <y>630</y>
     </hint>
     <hint type="destinationlabel">
      <x>362</x>
@@ -4434,66 +6794,18 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>checkBoxHeaterPowerSaveToFile</sender>
+   <sender>pushButtonDscDataViewStartProgram</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>heaterPowerControlSaveDataToFileClicked()</slot>
+   <slot>dscDataViewStartProgramClicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>30</x>
-     <y>430</y>
+     <x>185</x>
+     <y>134</y>
     </hint>
     <hint type="destinationlabel">
-     <x>121</x>
-     <y>-2</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>comboBoxHeaterPowerPlotTemperatureSps</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>heaterPowerControlPlotFrequencyChanged()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>112</x>
-     <y>218</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>700</x>
-     <y>-6</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButtonHeaterPowerClearData</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>heaterPowerControlClearDataClicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>363</x>
-     <y>250</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>319</x>
-     <y>-8</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButtonHeaterPowerSetTemperatureSp</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>heaterPowerControlSetTemperatureClicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>111</x>
-     <y>553</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>939</x>
-     <y>-9</y>
+     <x>-1</x>
+     <y>134</y>
     </hint>
    </hints>
   </connection>
@@ -4514,14 +6826,222 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
+   <sender>comboBoxHeaterPowerPlotTemperatureSps</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>heaterPowerControlPlotFrequencyChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>112</x>
+     <y>218</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>700</x>
+     <y>-6</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>applicationTabWidget</sender>
+   <signal>currentChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>applicationTabWidgetChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>82</x>
+     <y>81</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>147</x>
+     <y>-8</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButtonHeaterPowerClearData</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>heaterPowerControlClearDataClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>363</x>
+     <y>250</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>319</x>
+     <y>-8</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderHeaterPowerControlValue</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>heaterPowerControlCVSliderChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>149</x>
+     <y>589</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>70</x>
+     <y>-12</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBoxHeaterPowerSaveToFile</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>heaterPowerControlSaveDataToFileClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>30</x>
+     <y>430</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>121</x>
+     <y>-2</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButtonHeaterPowerSetTunesSimple</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>heaterPowerControlSetTunesClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>273</x>
+     <y>525</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>834</x>
+     <y>-14</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButtonSegmentsConfiguratorUp</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>segmentsConfiguratorUpClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>624</x>
+     <y>289</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1711</x>
+     <y>-4</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBoxSegmentsConfiguratorActiveType</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>segmentsConfiguratorSegmentTypeChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>331</x>
+     <y>361</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>361</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBoxHeaterPowerPlotTemperature</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>heaterPowerControPlotDataClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>26</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>511</x>
+     <y>-8</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButtonHeaterPowerSetTemperatureSp</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>heaterPowerControlSetTemperatureClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>113</x>
+     <y>525</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>939</x>
+     <y>-9</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButtonSegmentsConfiguratorDeleteFromProgram</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>segmentsConfiguratorDeleteFromProgramClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>682</x>
+     <y>436</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1454</x>
+     <y>-2</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButtonSegmentsConfiguratorApplyProgram</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>segmentsConfiguratorApplyProgramClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>626</x>
+     <y>719</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-2</x>
+     <y>952</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButtonSegmentsConfiguratorAddToProgram</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>segmentsConfiguratorAddToProgramClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>666</x>
+     <y>389</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1222</x>
+     <y>-2</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
    <sender>textEditHeaterPowerControlValue</sender>
    <signal>textChanged()</signal>
    <receiver>MainWindow</receiver>
    <slot>heaterPowerControlValueTextChanged()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>93</x>
-     <y>657</y>
+     <x>95</x>
+     <y>629</y>
     </hint>
     <hint type="destinationlabel">
      <x>150</x>
@@ -4546,18 +7066,146 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>pushButtonHeaterPowerSetTunesSimple</sender>
+   <sender>pushButtonSegmentsConfiguratorDown</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>heaterPowerControlSetTunesClicked()</slot>
+   <slot>segmentsConfiguratorDownClicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>271</x>
-     <y>553</y>
+     <x>579</x>
+     <y>527</y>
     </hint>
     <hint type="destinationlabel">
-     <x>834</x>
-     <y>-14</y>
+     <x>-1</x>
+     <y>1028</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButtonCallibrationSettingsUpdateFilterData</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>callibrationSettingsUpdateFilterDataClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>334</x>
+     <y>394</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-3</x>
+     <y>387</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>textEditCallibrationSettingsThreshold1</sender>
+   <signal>textChanged()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>callibrationSettingsThreshold1Changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>224</x>
+     <y>195</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>5</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>textEditCallibrationSettingsCoefficient1</sender>
+   <signal>textChanged()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>callibrationSettingsCoefficient1Changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>178</x>
+     <y>219</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-5</x>
+     <y>39</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>textEditCallibrationSettingsThreshold3</sender>
+   <signal>textChanged()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>callibrationSettingsThreshold3Changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>225</x>
+     <y>281</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>67</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>textEditCallibrationSettingsCoefficient3</sender>
+   <signal>textChanged()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>callibrationSettingsCoefficient3Changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>192</x>
+     <y>332</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-3</x>
+     <y>105</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>textEditCallibrationSettingsThreshold2</sender>
+   <signal>textChanged()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>callibrationSettingsThreshold2Changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>554</x>
+     <y>180</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-2</x>
+     <y>162</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>textEditCallibrationSettingsCoefficient2</sender>
+   <signal>textChanged()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>callibrationSettingsCoefficient2Changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>524</x>
+     <y>224</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>textEditCallibrationSettingsCoefficient4</sender>
+   <signal>textChanged()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>callibrationSettingsCoefficient4Changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>556</x>
+     <y>328</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-4</x>
+     <y>245</y>
     </hint>
    </hints>
   </connection>
@@ -4576,5 +7224,23 @@ p, li { white-space: pre-wrap; }
   <slot>heaterPowerControlValueTextChanged()</slot>
   <slot>heaterPowerControlSetTemperatureClicked()</slot>
   <slot>heaterPowerControlSetTunesClicked()</slot>
+  <slot>segmentsConfiguratorAddToProgramClicked()</slot>
+  <slot>segmentsConfiguratorDeleteFromProgramClicked()</slot>
+  <slot>segmentsConfiguratorUpClicked()</slot>
+  <slot>segmentsConfiguratorDownClicked()</slot>
+  <slot>segmentsConfiguratorApplyProgramClicked()</slot>
+  <slot>segmentsConfiguratorSegmentTypeChanged()</slot>
+  <slot>dscDataViewStartProgramClicked()</slot>
+  <slot>dscDataViewStopProgramClicked()</slot>
+  <slot>dscDataViewSaveDataToFileClicked()</slot>
+  <slot>segmentsConfiguratorUpdateFilterDataClicked()</slot>
+  <slot>callibrationSettingsUpdateFilterDataClicked()</slot>
+  <slot>callibrationSettingsThreshold1Changed()</slot>
+  <slot>callibrationSettingsThreshold2Changed()</slot>
+  <slot>callibrationSettingsThreshold3Changed()</slot>
+  <slot>callibrationSettingsCoefficient1Changed()</slot>
+  <slot>callibrationSettingsCoefficient2Changed()</slot>
+  <slot>callibrationSettingsCoefficient3Changed()</slot>
+  <slot>callibrationSettingsCoefficient4Changed()</slot>
  </slots>
 </ui>

@@ -139,7 +139,9 @@
     <ClCompile Include="InfoDialog.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="qcustomplot.cpp" />
+    <ClCompile Include="WindowApp\DscDataViewPlotManager.cpp" />
     <ClCompile Include="WindowApp\HeaterTemperaturePlotManager.cpp" />
+    <ClCompile Include="WindowApp\SegmentsProgramPlotManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="debug.pro" />
@@ -209,7 +211,9 @@
     <ClInclude Include="InfoDialog.h" />
     <ClInclude Include="MainWindow.h" />
     <ClInclude Include="qcustomplot.h" />
+    <ClInclude Include="WindowApp\DscDataViewPlotManager.hpp" />
     <ClInclude Include="WindowApp\HeaterTemperaturePlotManager.hpp" />
+    <ClInclude Include="WindowApp\SegmentsProgramPlotManager.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

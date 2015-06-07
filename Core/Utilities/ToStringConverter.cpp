@@ -17,6 +17,7 @@ namespace ToStringConverter
             std::make_pair(EFaultId_System, "System"),
             std::make_pair(EFaultId_Uart, "Uart"),
             std::make_pair(EFaultId_WrongData, "WrongData"),
+            std::make_pair(EFaultId_TemperatureTooHigh, "TemperatureTooHigh"),
             std::make_pair(EFaultId_Unknown, "Unknown")
         };
 
@@ -30,6 +31,7 @@ namespace ToStringConverter
             std::make_pair(EUnitId_ADS1248, "ADS1248"),
             std::make_pair(EUnitId_DRV595, "DRV595"),
             std::make_pair(EUnitId_Empty, "Empty"),
+            std::make_pair(EUnitId_Heater, "Heater"),
             std::make_pair(EUnitId_HeaterTemperatureController, "Heater Temperature Controller"),
             std::make_pair(EUnitId_LMP90100ControlSystem, "LMP90100 CS"),
             std::make_pair(EUnitId_LMP90100SignalsMeasurement, "LMP90100 SM"),

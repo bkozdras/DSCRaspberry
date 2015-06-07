@@ -36,7 +36,7 @@ bool DeviceConfigurator::configureSystem()
 {
     std::lock_guard<std::mutex> lockGuard(mMtx);
 
-    Logger::setLevel(LoggerOutput::GuiTable, LoggerLevel::Debug);
+    Logger::setLevel(LoggerOutput::GuiTable, LoggerLevel::Info);
     Logger::info("%s: Started configuring system!", getLoggerPrefix().c_str());
 
     bool success = true;
@@ -58,8 +58,6 @@ bool DeviceConfigurator::configureSystem()
         Logger::error("%s: System configuring failure!", getLoggerPrefix().c_str());
         Logger::error("%s: Not ready for applying user settings and programs!", getLoggerPrefix().c_str());
     }
-
-    Logger::setLevel(LoggerOutput::GuiTable, LoggerLevel::Info);
 
     return success;
 }

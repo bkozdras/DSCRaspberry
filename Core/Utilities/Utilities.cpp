@@ -15,6 +15,12 @@ namespace Utilities
 
     bool isDouble(const std::string & doubleString)
     {
+        /*
+        if (doubleString.empty())
+        {
+            return false;
+        }
+
         auto isPointOccured = false;
 
         std::for_each
@@ -38,5 +44,16 @@ namespace Utilities
         );
 
         return true;
+        */
+
+        try
+        {
+            std::stod(doubleString);
+            return true;
+        }
+        catch (std::invalid_argument exception)
+        {
+            return false;
+        }
     }
 }
