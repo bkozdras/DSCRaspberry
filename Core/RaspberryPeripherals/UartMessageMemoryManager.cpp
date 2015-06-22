@@ -85,7 +85,7 @@ TByte* UartMessageMemoryManager::allocate(EMessageId messageId)
         default:
         {
             Logger::error("%s: Unknown message memory allocating: ID %u.", getLoggerPrefix().c_str(), messageId);
-            FaultManager::generate(EFaultId_System, EUnitId_Raspberry);
+            //FaultManager::generate(EFaultId_System, EUnitId_Raspberry);
             return nullptr;
         }
     }

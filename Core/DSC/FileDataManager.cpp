@@ -330,6 +330,8 @@ namespace DSC
         auto sample3FilteredValue = DSC::DataManager::getData(EDataType::FilteredThermocouple3);
         auto sample4FilteredValue = DSC::DataManager::getData(EDataType::FilteredThermocouple4);
 
+        auto referenceThermocouple = DSC::DataManager::getData(EDataType::ReferenceThermocouple);
+
         mDscDataFileStream << convertDoubleToString(heaterSpValue);
         mDscDataFileStream << "\t";
         mDscDataFileStream << convertDoubleToString(heaterPvValue);
@@ -355,6 +357,9 @@ namespace DSC
         mDscDataFileStream << convertDoubleToString(sample3FilteredValue, 3);
         mDscDataFileStream << "\t";
         mDscDataFileStream << convertDoubleToString(sample4FilteredValue, 3);
+
+        mDscDataFileStream << "\t";
+        mDscDataFileStream << convertDoubleToString(referenceThermocouple, 3);
 
         mDscDataFileStream << std::endl;
     }
@@ -584,7 +589,8 @@ namespace DSC
     {
         fileStream << std::endl;
 
-        fileStream << "Time" << "\t" << "Sample Number" << "\t";
+        fileStream << "Time - when data collected [hh::mm::ss]" << std::endl;
+        fileStream << "Sample Number - data number" << std::endl;
 
         if (mHeaterDataFileStream == fileStream)
         {
