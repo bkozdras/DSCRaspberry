@@ -7,6 +7,7 @@
 #include <mutex>
 #include <string>
 #include <vector>
+#include <map>
 
 namespace DSC
 {
@@ -14,12 +15,21 @@ namespace DSC
     {
         public:
 
+            enum class FilteringStatus : u8
+            {
+                Enabled,
+                Disabled
+            };
+
             static bool initialize();
 
             static float getTemperature();
             static float getThermocoupleValue(EUnitId thermocouple);
 
             static void updateFilterData();
+            static void changeThresholdFilteringStatus(FilteringStatus status);
+            static void updateAverageFilterData();
+            static void changeAverageFilteringStatus(FilteringStatus status);
 
             static void startRegisteringData();
             static void stopRegisteringData();
@@ -27,6 +37,9 @@ namespace DSC
         private:
 
             static void initializeFilterData();
+            static void initializeAverageFilterData();
+            static void deinitializeFilterData();
+            static void deinitializeAverageFilterData();
 
             static void sampleCarrierDataIndCallback(TSampleCarrierDataInd && ind);
             static void startRegisteringDataResponseCallback(TStartRegisteringDataResponse && response);
@@ -40,5 +53,10 @@ namespace DSC
 
             static std::mutex mMtx;
             static std::vector<std::pair<double, double>> mFilterData;
+            static std::map<EDataType, std::pair<unsigned int, std::vector<double>>> mFilterAverageVector;
+            static unsigned int mNAverageCoefficient;
+            static unsigned int mXAverageCoefficient;
+            static bool mIsThresholdFilteringEnabled;
+            static bool mIsAverageFilteringEnabled;
     };
 }

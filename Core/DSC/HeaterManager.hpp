@@ -50,6 +50,7 @@ namespace DSC
 
             static u16 convertPercentPowerToU16(float power);
             static float convertU16ToPercentPower(u16 value);
+			static float convertTemperatureToRtdResistance(float temperature);
             static EControlMode convertEControlSystemTypeToEControlMode(EControlSystemType type);
             static EControlSystemType convertEControlModeToEControlSystemType(EControlMode mode);
 

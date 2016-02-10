@@ -16,6 +16,7 @@ namespace DSC
 
         DataManager::updateData(EDataType::HeaterPower, 0.0);
         DataManager::updateData(EDataType::HeaterTemperature, DataManager::UnknownValue);
+		DataManager::updateData(EDataType::HeaterTemperatureRtdResistance, DataManager::UnknownValue);
         DataManager::updateData(EDataType::SPHeaterTemperature, DataManager::UnknownValue);
         DataManager::updateControlMode(EControlMode::NotSet);
 
@@ -57,6 +58,16 @@ namespace DSC
 
             TSetHeaterPowerRequest request;
             //request.power = convertPercentPowerToU16(percent);
+			if (0.0F > percent)
+			{
+				Logger::warning("%s: Requested power: %.2f%% is lower than 0! Adjusting...", getLoggerPrefix().c_str(), percent);
+				percent = 0.0F;
+			}
+			else if (100.0F < percent)
+			{
+				Logger::warning("%s: Requested power: %.2f%% is greater than 100%%! Adjusting...", getLoggerPrefix().c_str(), percent);
+				percent = 100.0F;
+			}
             request.power = percent;
 
             Logger::info("%s: Setting heater power value to %.2f%%.", getLoggerPrefix().c_str(), request.power);
@@ -238,6 +249,7 @@ namespace DSC
         std::lock_guard<std::mutex> lockGuard(mMtx);
         Logger::debug("%s: Received HeaterTemperatureInd. New value: %.2f oC.", getLoggerPrefix().c_str(), ind.temperature);
         DataManager::updateData(EDataType::HeaterTemperature, ind.temperature);
+		DataManager::updateData(EDataType::HeaterTemperatureRtdResistance, convertTemperatureToRtdResistance(ind.temperature));
     }
 
     void HeaterManager::controllerDataIndCallback(TControllerDataInd && ind)
@@ -497,6 +509,15 @@ namespace DSC
         auto floatValue = static_cast<float>(value);
         return ( floatValue / 10.0F );
     }
+
+	float HeaterManager::convertTemperatureToRtdResistance(float temperature)
+	{
+		static const auto z1 = -3.9083E-3F;
+		static const auto z2 = 1.758480889E-5F;
+		static const auto z3 = -2.310E-9F;
+		static const auto z4 = -1.155E-6F;
+		return (std::pow(z4 * temperature - z1, 2) - z2) / z3;
+	}
 
     EControlMode HeaterManager::convertEControlSystemTypeToEControlMode(EControlSystemType type)
     {

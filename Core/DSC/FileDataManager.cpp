@@ -2,9 +2,14 @@
 
 #include <boost/tokenizer.hpp>
 
+#include "../Defines/CommonDefines.hpp"
 #include "../Utilities/Logger.hpp"
 #include "../Utilities/ToStringConverter.hpp"
 #include "../FaultManagement/FaultManager.hpp"
+#include "HeaterManager.hpp"
+#include "../ModelIdentification/EInputDataSource.hpp"
+#include "../ModelIdentification/ExperimentManager.hpp"
+#include "../SharedDefines/EUnitId.h"
 
 #include <chrono>
 #include <ctime>
@@ -79,7 +84,8 @@ namespace DSC
             saveToFileCurrentControlMode(mHeaterDataFileStream);
             saveToFileRegisteringPeriod(mHeaterDataFileStream);
             saveToFileLegend(mHeaterDataFileStream);
-            saveToFileDescribeData(mHeaterDataFileStream);
+			saveToFileExperimentInfoIfIsInRunningState(mHeaterDataFileStream);
+			saveToFileDescribeData(mHeaterDataFileStream);
 
             mNewControlModeCallbackId = DSC::DataManager::registerNewControlModeCallback
             (
@@ -268,12 +274,18 @@ namespace DSC
         {
             case EControlMode::OpenLoop:
             {
-                auto cvValue = DSC::DataManager::getData(EDataType::HeaterPower);
-                auto pvValue = DSC::DataManager::getData(EDataType::HeaterTemperature);
+				auto cv1Value = HeaterManager::getPowerInPercent();
+				auto cv2Value = HeaterManager::getPower();
+                auto pv1Value = DSC::DataManager::getData(EDataType::HeaterTemperature);
+				auto pv2Value = DSC::DataManager::getData(EDataType::HeaterTemperatureRtdResistance);
 
-                mHeaterDataFileStream << convertDoubleToString(cvValue, 2);
+                mHeaterDataFileStream << convertDoubleToString(cv1Value, 2);
                 mHeaterDataFileStream << "\t";
-                mHeaterDataFileStream << convertDoubleToString(pvValue, 2);
+				mHeaterDataFileStream << convertDoubleToString(cv2Value, 2);
+				mHeaterDataFileStream << "\t";
+                mHeaterDataFileStream << convertDoubleToString(pv1Value, 2);
+				mHeaterDataFileStream << "\t";
+				mHeaterDataFileStream << convertDoubleToString(pv2Value, 2);
 
                 break;
             }
@@ -331,6 +343,7 @@ namespace DSC
         auto sample4FilteredValue = DSC::DataManager::getData(EDataType::FilteredThermocouple4);
 
         auto referenceThermocouple = DSC::DataManager::getData(EDataType::ReferenceThermocouple);
+        auto smPcbTemp = DSC::DataManager::getData(EDataType::SMPCBTemperature);
 
         mDscDataFileStream << convertDoubleToString(heaterSpValue);
         mDscDataFileStream << "\t";
@@ -360,6 +373,9 @@ namespace DSC
 
         mDscDataFileStream << "\t";
         mDscDataFileStream << convertDoubleToString(referenceThermocouple, 3);
+
+        mDscDataFileStream << "\t";
+        mDscDataFileStream << convertDoubleToString(smPcbTemp);
 
         mDscDataFileStream << std::endl;
     }
@@ -596,8 +612,11 @@ namespace DSC
         {
             if (EControlMode::OpenLoop == mControlMode)
             {
-                fileStream << "Power - heater power [%]" << std::endl;
-                fileStream << "Temperature - heater temperature [oC]" << std::endl;
+                fileStream << "Power - CV1 - heater power [%] (0 - 100 %)" << std::endl;
+				fileStream << "Power - CV2 - heater power [DAC] (0 - 1000)" << std::endl;
+                fileStream << "Temperature - PV1 - heater temperature [oC]" << std::endl;
+				fileStream << "RTD - PV2 - Pt1000 (RTD) resistance related to heater temperature [ohm]" << std::endl;
+
             }
             else
             {
@@ -659,7 +678,7 @@ namespace DSC
         {
             if (EControlMode::OpenLoop == mControlMode)
             {
-                fileStream << "Power" << "\t" << "Temperature";
+                fileStream << "CV1" << "\t" << "CV2" << "\t" << "PV1" << "\t" << "PV2";
             }
             else
             {
@@ -674,11 +693,62 @@ namespace DSC
         fileStream << std::endl << std::endl;
     }
 
+	void FileDataManager::saveToFileExperimentInfoIfIsInRunningState(std::ofstream & fileStream)
+	{
+		const auto experimentState = ModelIdentification::ExperimentManager::getExperimentState();
+		if (EExperimentState::Running != experimentState)
+		{
+			return;
+		}
+		
+		fileStream << std::endl << "Model Identification Experiment" << std::endl;
+
+		const auto inputDataSource = ModelIdentification::ExperimentManager::getInputDataSource();
+		fileStream << "Input data source: ";
+		if (EInputDataSource::ExternalFile == inputDataSource)
+		{
+			fileStream << "External File - ";
+			std::string filename;
+			DSC::DataManager::getUnitAttribute(EUnitId_Heater, "TestDataInputFilename", filename);
+			fileStream << filename << std::endl;
+			std::string description;
+			DSC::DataManager::getUnitAttribute(EUnitId_Heater, "TestDataInputDescription", description);
+			fileStream << "File description: " << description << std::endl;
+		}
+		else if (EInputDataSource::UniformDistribution == inputDataSource)
+		{
+			fileStream << "Internal Data Creator - Generated from Uniform Distribution (range 0 - 100)" << std::endl;
+		}
+
+		const auto samplingPeriod = static_cast<u64>(DSC::DataManager::getData(EDataType::ModelIdentificationSamplingPeriod));
+		const auto numberOfSamples = static_cast<u64>(DSC::DataManager::getData(EDataType::ModelIdentificationNumberOfSamples));
+		const auto experimentTime = static_cast<u64>(DSC::DataManager::getData(EDataType::ModelIdentificationExperimentTime));
+		const auto experimentTimeSeconds = static_cast<u16>((experimentTime / 1000) % 60);
+		const auto experimentTimeMinutes = static_cast<u16>((experimentTime / (1000 * 60)) % 60);
+		const auto experimentTimeHours = static_cast<u16>((experimentTime / (1000 * 60 * 60)) % 24);
+		fileStream << "Number of Samples: " << numberOfSamples << std::endl;
+		fileStream << "Sampling Period: " << samplingPeriod << " ms" << std::endl;
+		fileStream << "Duration of the Experiment: ";
+		if (0UL == experimentTimeHours && 0UL == experimentTimeMinutes)
+		{
+			fileStream << experimentTimeSeconds << " sec.";
+		}
+		else if (0UL == experimentTimeHours)
+		{
+			fileStream << experimentTimeMinutes << " min. " << experimentTimeSeconds << " sec.";
+		}
+		else
+		{
+			fileStream << experimentTimeHours << " hrs " << experimentTimeMinutes << " min. " << experimentTimeSeconds << " sec.";
+		}
+		fileStream << std::endl << std::endl;
+	}
+
     std::string FileDataManager::getActualTime()
     {
         auto actualTime = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
         auto localTime = std::localtime(&actualTime);
-
+		
         std::locale locale;
         const auto & tempPut = std::use_facet<std::time_put<char>>(locale);
         std::string timePattern;

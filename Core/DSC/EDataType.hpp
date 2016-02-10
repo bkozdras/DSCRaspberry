@@ -6,6 +6,7 @@ enum class EDataType : u8
 {
     HeaterPower,
     HeaterTemperature,
+	HeaterTemperatureRtdResistance,
     SPHeaterTemperature,
     PVHeaterTemperature,
     CVHeaterTemperature,
@@ -40,5 +41,16 @@ enum class EDataType : u8
     FilteringThreshold3,
     FilteringThreshold3Coefficient,
     FilteringThreshold4,
-    FilteringThreshold4Coefficient
+    FilteringThreshold4Coefficient,
+    FilteringAverageCoefficientN,
+    FilteringAverageCoefficientX,
+	ModelIdentificationSamplingPeriod,
+	ModelIdentificationExternalFileSamplingPeriod,
+	ModelIdentificationNumberOfSamples,
+	ModelIdentificationExternalFileNumberOfSamples,
+	ModelIdentificationExperimentTime,
+	ModelIdentificationExperimentalInfoExpiredSamples,
+	ModelIdentificationExperimentalInfoLeftSamples,
+	ModelIdentificationExperimentalInfoExpiredTime,
+	ModelIdentificationExperimentalInfoLeftTime
 };

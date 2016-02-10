@@ -83,7 +83,7 @@
     <LibraryPath>E:\Work\LibrariesCPlusPlus\boost_1_58_0_ARM7\stage\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <NMakeIncludeSearchPath>c:\sysgcc\raspberry\arm-linux-gnueabihf\sysroot\usr\share\qt4\mkspecs\arm-linux-gnueabihf;$(ProjectDir)\.;c:\sysgcc\raspberry\arm-linux-gnueabihf\sysroot\usr\include\qt4\QtCore;c:\sysgcc\raspberry\arm-linux-gnueabihf\sysroot\usr\include\qt4\QtGui;c:\sysgcc\raspberry\arm-linux-gnueabihf\sysroot\usr\include\qt4;e:\Work\LibrariesCPlusPlus\boost_1_58_0_ARM7;c:\sysgcc\raspberry\arm-linux-gnueabihf\include\c++\4.9;c:\sysgcc\raspberry\arm-linux-gnueabihf\include\c++\4.9\backward;c:\sysgcc\raspberry\lib\gcc\arm-linux-gnueabihf\4.9\include;c:\sysgcc\raspberry\lib\gcc\arm-linux-gnueabihf\4.9\include-fixed;c:\sysgcc\raspberry\arm-linux-gnueabihf\include;c:\sysgcc\raspberry\arm-linux-gnueabihf\include\arm-linux-gnueabihf\c++\4.9;c:\sysgcc\raspberry\arm-linux-gnueabihf\sysroot\usr\include\arm-linux-gnueabihf;c:\sysgcc\raspberry\arm-linux-gnueabihf\sysroot\usr\include;$(ProjectDir)\Release;E:\Work\LibrariesCPlusPlus\boost_1_58_0_ARM7;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <NMakeIncludeSearchPath>c:\sysgcc\raspberry\arm-linux-gnueabihf\sysroot\usr\share\qt4\mkspecs\arm-linux-gnueabihf;.;c:\sysgcc\raspberry\arm-linux-gnueabihf\sysroot\usr\include\qt4\QtCore;c:\sysgcc\raspberry\arm-linux-gnueabihf\sysroot\usr\include\qt4\QtGui;c:\sysgcc\raspberry\arm-linux-gnueabihf\sysroot\usr\include\qt4;e:\Work\LibrariesCPlusPlus\boost_1_58_0_ARM7;c:\sysgcc\raspberry\arm-linux-gnueabihf\include\c++\4.9;c:\sysgcc\raspberry\arm-linux-gnueabihf\include\c++\4.9\backward;c:\sysgcc\raspberry\lib\gcc\arm-linux-gnueabihf\4.9\include;c:\sysgcc\raspberry\lib\gcc\arm-linux-gnueabihf\4.9\include-fixed;c:\sysgcc\raspberry\arm-linux-gnueabihf\include;c:\sysgcc\raspberry\arm-linux-gnueabihf\include\arm-linux-gnueabihf\c++\4.9;c:\sysgcc\raspberry\arm-linux-gnueabihf\sysroot\usr\include\arm-linux-gnueabihf;c:\sysgcc\raspberry\arm-linux-gnueabihf\sysroot\usr\include;Release;E:\Work\LibrariesCPlusPlus\boost_1_58_0_ARM7;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
     <NMakeForcedIncludes>$(ProjectDir)\gcc_Release.h;$(VISUALGDB_DIR)\gcc_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
     <NMakeBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /build "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeBuildCommandLine>
     <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
@@ -119,6 +119,11 @@
     <ClCompile Include="Core\DSC\SegmentsManager.cpp" />
     <ClCompile Include="Core\DSC\SMPCBTemperatureManager.cpp" />
     <ClCompile Include="Core\FaultManagement\FaultManager.cpp" />
+    <ClCompile Include="Core\ModelIdentification\ExperimentManager.cpp" />
+    <ClCompile Include="Core\ModelIdentification\ExternalFileDataParser.cpp" />
+    <ClCompile Include="Core\ModelIdentification\InputDataGeneratorCreator.cpp" />
+    <ClCompile Include="Core\ModelIdentification\InputDataGeneratorExternalFile.cpp" />
+    <ClCompile Include="Core\ModelIdentification\InputDataGeneratorUniformDistribution.cpp" />
     <ClCompile Include="Core\Nucleo\DeviceCommunicator.cpp" />
     <ClCompile Include="Core\Nucleo\MessageGateway.cpp" />
     <ClCompile Include="Core\RaspberryPeripherals\AsyncSerial.cpp" />
@@ -167,6 +172,14 @@
     <ClInclude Include="Core\DSC\SMPCBTemperatureManager.hpp" />
     <ClInclude Include="Core\FaultManagement\FaultManager.hpp" />
     <ClInclude Include="Core\HardwareSettings\GpioDefines.hpp" />
+    <ClInclude Include="Core\ModelIdentification\EExperimentState.hpp" />
+    <ClInclude Include="Core\ModelIdentification\EInputDataSource.hpp" />
+    <ClInclude Include="Core\ModelIdentification\ExperimentManager.hpp" />
+    <ClInclude Include="Core\ModelIdentification\ExternalFileDataParser.hpp" />
+    <ClInclude Include="Core\ModelIdentification\IInputDataGenerator.hpp" />
+    <ClInclude Include="Core\ModelIdentification\InputDataGeneratorCreator.hpp" />
+    <ClInclude Include="Core\ModelIdentification\InputDataGeneratorExternalFile.hpp" />
+    <ClInclude Include="Core\ModelIdentification\InputDataGeneratorUniformDistribution.hpp" />
     <ClInclude Include="Core\Nucleo\DeviceCommunicator.hpp" />
     <ClInclude Include="Core\Nucleo\MessageGateway.hpp" />
     <ClInclude Include="Core\RaspberryPeripherals\AsyncSerial.hpp" />
@@ -206,6 +219,7 @@
     <ClInclude Include="Core\System\Utilities\ThreadSafeQueue.hpp" />
     <ClInclude Include="Core\Utilities\Logger.hpp" />
     <ClInclude Include="Core\Utilities\LoggerTypes.hpp" />
+    <ClInclude Include="Core\Utilities\QueueAdapter.hpp" />
     <ClInclude Include="Core\Utilities\ToStringConverter.hpp" />
     <ClInclude Include="Core\Utilities\Utilities.hpp" />
     <ClInclude Include="InfoDialog.h" />

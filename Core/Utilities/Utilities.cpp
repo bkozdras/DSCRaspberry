@@ -56,4 +56,17 @@ namespace Utilities
             return false;
         }
     }
+
+    bool isInteger(const std::string & integerString)
+    {
+        try
+        {
+            std::stoi(integerString);
+            return true;
+        }
+        catch (std::invalid_argument exception)
+        {
+            return false;
+        }
+    }
 }

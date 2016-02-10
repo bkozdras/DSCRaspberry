@@ -10,9 +10,9 @@
       <Transport>None</Transport>
     </BuildHost>
     <DeploymentHost>
-      <HostName>192.168.0.100</HostName>
+      <HostName>192.168.0.120</HostName>
       <Transport>SSH</Transport>
-      <UserName>root</UserName>
+      <UserName>pi</UserName>
     </DeploymentHost>
     <MainSourceTransferCommand>
       <SkipWhenRunningCommandList>false</SkipWhenRunningCommandList>
@@ -32,12 +32,13 @@
       </FileMasks>
       <TransferNewFilesOnly>true</TransferNewFilesOnly>
       <IncludeSubdirectories>true</IncludeSubdirectories>
-      <SelectedDirectories />
     </MainSourceTransferCommand>
     <AllowChangingHostForMainCommands>false</AllowChangingHostForMainCommands>
     <SkipBuildIfNoSourceFilesChanged>false</SkipBuildIfNoSourceFilesChanged>
     <IgnoreFileTransferErrors>false</IgnoreFileTransferErrors>
     <RemoveRemoteDirectoryOnClean>false</RemoveRemoteDirectoryOnClean>
+    <SkipDeploymentTests>false</SkipDeploymentTests>
+    <MainSourceDirectoryForLocalBuilds>$(ProjectDir)</MainSourceDirectoryForLocalBuilds>
   </Project>
   <Build xsi:type="com.visualgdb.build.qmake">
     <MakeFilePathRelativeToSourceDir>DSCMasterApplication.pro</MakeFilePathRelativeToSourceDir>
@@ -159,6 +160,7 @@
   <CustomDebug>
     <PreDebugActions />
     <PostDebugActions />
+    <DebugStopActions />
     <BreakMode>Default</BreakMode>
   </CustomDebug>
   <CustomShortcuts>
@@ -166,4 +168,11 @@
     <ShowMessageAfterExecuting>true</ShowMessageAfterExecuting>
   </CustomShortcuts>
   <UserDefinedVariables />
+  <ImportedPropertySheets />
+  <CodeSense>
+    <Enabled>Unknown</Enabled>
+    <ExtraSettings>
+      <HideErrorsInSystemHeaders>true</HideErrorsInSystemHeaders>
+    </ExtraSettings>
+  </CodeSense>
 </VisualGDBProjectSettings2>

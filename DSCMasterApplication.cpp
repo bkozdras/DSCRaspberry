@@ -11,7 +11,6 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-
     DeviceConfigurator::configureEnvironment();
 
     QFile f(":qdarkstyle/style.qss");
@@ -25,7 +24,6 @@ int main(int argc, char *argv[])
         QTextStream ts(&f);
         a.setStyleSheet(ts.readAll());
     }
-
     MainWindow w;
     w.show();
 

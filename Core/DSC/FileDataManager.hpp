@@ -52,6 +52,7 @@ namespace DSC
             static void saveToFileLegend(std::ofstream & fileStream);
             static void saveToFileRegisteringPeriod(std::ofstream & fileStream);
             static void saveToFileDescribeData(std::ofstream & fileStream);
+			static void saveToFileExperimentInfoIfIsInRunningState(std::ofstream & fileStream);
 
             static std::string getActualTime();
             static std::string getActualDate();

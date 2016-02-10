@@ -19,6 +19,7 @@
 #include "../DSC/SegmentsManager.hpp"
 #include "../DSC/SMPCBTemperatureManager.hpp"
 #include "../System/SystemErrorsManager.hpp"
+#include "../ModelIdentification/ExperimentManager.hpp"
 
 #include "../RaspberryPeripherals/UartMessageMemoryManager.hpp"
 
@@ -45,6 +46,7 @@ bool DeviceConfigurator::configureSystem()
         Utilities::conditionalExecutor(success, [](){ return configureDevicePeripheralManagers(); });
         Utilities::conditionalExecutor(success, [](){ return configureDSCManagers(); });
         Utilities::conditionalExecutor(success, [](){ return startConfiguringDevicePeripherals(); });
+		Utilities::conditionalExecutor(success, [](){ return ModelIdentification::ExperimentManager::initialize(); });
         Utilities::conditionalExecutor(success, [](){ return GpioManager::reset(RaspberryGpio::Type::LedRaspberry); });
     }
 
@@ -225,7 +227,7 @@ void DeviceConfigurator::newIcModeIndication(EUnitId unitId, u8 newMode)
             Logger::debug("%s: New %s mode %s set!", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(unitId).c_str(), ToStringConverter::getLMP90100Mode(lmpMode).c_str());
 
             {
-                DSC::HeaterManager::startRegisteringTemperatureValue();
+                DSC::HeaterManager::startRegisteringTemperatureValue(100U);
             }
 
             break;
@@ -285,7 +287,7 @@ void DeviceConfigurator::updateUnitAttributeIndication(EUnitId unitId, const std
                 Logger::debug("%s: %s unit channels gain set to %s.", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(unitId).c_str(), value.c_str());
 
                 {
-                    DSC::IntegratedCircuitsManager::setADS1248ChannelsSamplingSpeed(EADS1248SamplingSpeed_5SPS);
+                    DSC::IntegratedCircuitsManager::setADS1248ChannelsSamplingSpeed(EADS1248SamplingSpeed_10SPS);
                 }
             }
             else if ("ChannelsSamplingSpeed" == attribute)
@@ -318,7 +320,9 @@ void DeviceConfigurator::updateUnitAttributeIndication(EUnitId unitId, const std
                     Logger::debug("%s: Started collecting data from %s..", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(unitId).c_str());
 
                     {
-                        DSC::IntegratedCircuitsManager::changeLMP90100Mode(EUnitId_LMP90100SignalsMeasurement, ELMP90100Mode_On_1_6775_SPS);
+						// TU ZMIANY
+                        // DSC::IntegratedCircuitsManager::changeLMP90100Mode(EUnitId_LMP90100SignalsMeasurement, ELMP90100Mode_On_1_6775_SPS);
+						DSC::HeaterManager::setPowerControlMode(EControlMode::OpenLoop, [](EControlMode mode, bool result) { newControlModeSetCallback(mode, result); });
                     }
                 }
             }
@@ -361,7 +365,7 @@ void DeviceConfigurator::updateUnitAttributeIndication(EUnitId unitId, const std
                 Logger::info("%s: Set heater temperature controller algorithm execution period: %s ms.", getLoggerPrefix().c_str(), value.c_str());
 
                 {
-                    DSC::SMPCBTemperatureManager::startControlling();
+                    //DSC::SMPCBTemperatureManager::startControlling();
                 }
             }
         }

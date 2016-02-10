@@ -2,6 +2,7 @@
 #include "ui_MainWindow.h"
 #include "InfoDialog.h"
 #include <QMessageBox>
+#include <QFileDialog>
 #include <algorithm>
 #include <cmath>
 #include <functional>
@@ -24,11 +25,16 @@
 #include "../Core/DSC/HeaterManager.hpp"
 #include "../Core/DSC/FileDataManager.hpp"
 #include "../Core/DSC/SampleCarrierManager.hpp"
+#include "../Core/ModelIdentification/ExperimentManager.hpp"
+#include "../Core/ModelIdentification/EExperimentState.hpp"
+#include "../Core/ModelIdentification/EInputDataSource.hpp"
+#include "../Core/ModelIdentification/ExternalFileDataParser.hpp"
 #include "../WindowApp/HeaterTemperaturePlotManager.hpp"
 #include "../WindowApp/SegmentsProgramPlotManager.hpp"
 #include "../WindowApp/DscDataViewPlotManager.hpp"
 #include <map>
 #include <iostream>
+#include <boost/tokenizer.hpp>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -47,6 +53,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setupDscDeviceDataLabels();
     setupUnitsDataViewer();
     setupHeaterPowerControl();
+	setupTestInput();
     setupSegmentsConfigurator();
     setupCallibrationSettings();
     setupDscDataView();
@@ -69,9 +76,10 @@ void MainWindow::applicationTabWidgetChanged()
     const auto deviceStartupTab = 0;
     const auto unitsDataViewerTab = 1;
     const auto heaterPowerControlTab = 2;
-    const auto segmentsConfiguratorTab = 3;
-    const auto callibrationSettingsTab = 4;
-    const auto dscDataViewerTab = 5;
+	const auto testInputTab = 3;
+    const auto segmentsConfiguratorTab = 4;
+    const auto callibrationSettingsTab = 5;
+    const auto dscDataViewerTab = 6;
 
     static auto actualTab = deviceStartupTab;
 
@@ -88,6 +96,12 @@ void MainWindow::applicationTabWidgetChanged()
             heaterPowerControlStopWorking();
             break;
         }
+
+		case testInputTab:
+		{
+			testInputStopWorking();
+			break;
+		}
 
         case segmentsConfiguratorTab:
         {
@@ -122,6 +136,12 @@ void MainWindow::applicationTabWidgetChanged()
             heaterPowerControlStartWorking();
             break;
         }
+
+		case testInputTab:
+		{
+			testInputStartWorking();
+			break;
+		}
 
         case segmentsConfiguratorTab:
         {
@@ -1179,25 +1199,33 @@ void MainWindow::setActiveHeaterPowerComboBoxFileSps()
         DSC::DataManager::updateData(EDataType::HeaterPowerControlFileDataSampling, speed);
     }
 
-    if (0.5 == speed)
-    {
-        ui->comboBoxHeaterPowerFileSps->setCurrentIndex(0);
-    }
-    else if (1.0 == speed)
-    {
-        ui->comboBoxHeaterPowerFileSps->setCurrentIndex(1);
-    }
-    else if (2.0 == speed)
+	if (0.1 == speed)
+	{
+		ui->comboBoxHeaterPowerFileSps->setCurrentIndex(0);
+	}
+	else if (0.2 == speed)
+	{
+		ui->comboBoxHeaterPowerFileSps->setCurrentIndex(1);
+	}
+    else if (0.5 == speed)
     {
         ui->comboBoxHeaterPowerFileSps->setCurrentIndex(2);
     }
-    else if (5.0 == speed)
+    else if (1.0 == speed)
     {
         ui->comboBoxHeaterPowerFileSps->setCurrentIndex(3);
     }
-    else if (10.0 == speed)
+    else if (2.0 == speed)
     {
         ui->comboBoxHeaterPowerFileSps->setCurrentIndex(4);
+    }
+    else if (5.0 == speed)
+    {
+        ui->comboBoxHeaterPowerFileSps->setCurrentIndex(5);
+    }
+    else if (10.0 == speed)
+    {
+        ui->comboBoxHeaterPowerFileSps->setCurrentIndex(6);
     }
 
     ui->comboBoxHeaterPowerFileSps->blockSignals(false);
@@ -1223,6 +1251,399 @@ QString MainWindow::convertHeaterTemperatureToQString(double value)
     std::stringstream stream;
     stream << std::fixed << std::setprecision(2) << value;
     return QString::fromStdString(stream.str());
+}
+
+void MainWindow::setupTestInput()
+{
+	std::lock_guard<std::mutex> lockGuard(mTestInputMtx);
+	mIsExperimentInfoListenersStarted = false;
+	ui->pushButtonTestExperimentInfoStartStopExperiment->setEnabled(false);
+}
+
+void MainWindow::testInputStartWorking()
+{
+	std::lock_guard<std::mutex> lockGuard(mTestInputMtx);
+	const auto inputDataSource = ModelIdentification::ExperimentManager::getInputDataSource();
+	if (EInputDataSource::Unknown == inputDataSource || EInputDataSource::UniformDistribution == inputDataSource)
+	{
+		setCreatorAsActive();
+	}
+	else
+	{
+		setExternalFileAsActive();
+	}
+	renderTestInputSettings();
+	renderTestInputExperimentInfo();
+
+	mTestInputStateChangedCallbackId = DSC::DataManager::registerNewUnitAttributeCallback
+	(
+		[this](EUnitId unitId, const std::string & attribute, const std::string & value)
+		{
+			if (EUnitId_Heater == unitId && "TestInputExperimentInfoState" == attribute)
+			{
+				stateChangedCallback(value);
+			}
+		}
+	);
+}
+
+void MainWindow::testInputStopWorking()
+{
+	std::lock_guard<std::mutex> lockGuard(mTestInputMtx);
+	stopExperimentInfoListeners();
+	DSC::DataManager::deregisterNewUnitAttributeCallback(mTestInputStateChangedCallbackId);
+}
+
+void MainWindow::setCreatorAsActive()
+{
+	mActiveTestInput = 0U;
+	
+	ui->comboBoxTestInputDataSource->blockSignals(true);
+	ui->comboBoxTestInputDataSource->setCurrentIndex(0);
+	ui->comboBoxTestInputDataSource->blockSignals(false);
+
+	ui->textEditTestInputCreatorPeriod->setEnabled(true);
+	ui->textEditTestInputCreatorNumberOfSamples->setEnabled(true);
+
+	QMetaObject::invokeMethod(ui->textEditTestInputCreatorNumberOfSamples,
+		"setText",
+		Qt::QueuedConnection,
+		Q_ARG(QString, convertIntTestInputDataToQString(DSC::DataManager::getData(EDataType::ModelIdentificationNumberOfSamples)))
+	);
+	QMetaObject::invokeMethod(ui->textEditTestInputCreatorPeriod,
+		"setText",
+		Qt::QueuedConnection,
+		Q_ARG(QString, convertIntTestInputDataToQString(DSC::DataManager::getData(EDataType::ModelIdentificationSamplingPeriod)))
+	);
+
+	ui->pushButtonTestInputExternalFileChooseFile->setEnabled(false);
+
+	auto setWhiteTextColor =
+		[this](QWidget* widget)
+		{
+		widget->setStyleSheet("QLabel { color:rgb(255,255,255) }");
+		};
+	auto setGreyTextColor =
+		[this](QWidget* widget)
+		{
+			widget->setStyleSheet("QLabel { color:rgb(128,128,128) }");
+		};
+
+	setWhiteTextColor(ui->labelTestInputExternalFileInfo);
+	setWhiteTextColor(ui->textEditTestInputCreatorPeriod);
+	setWhiteTextColor(ui->labelTestInputCreatorPeriodInfo);
+	setWhiteTextColor(ui->labelTestInputCreatorPeriodMsInfo);
+	setWhiteTextColor(ui->labelTestInputCreatorSamplesInfo);
+	setWhiteTextColor(ui->textEditTestInputCreatorNumberOfSamples);
+	setWhiteTextColor(ui->labelTestInputCreatorDistributionInfo);
+	setWhiteTextColor(ui->comboBoxTestInputCreatorDistribution);
+
+	setGreyTextColor(ui->labelTestInputExternalFileInfo);
+	setGreyTextColor(ui->labelTestInputExternalFilePeriodInfo);
+	setGreyTextColor(ui->labelTestInputExternalFilePeriodMsInfo);
+	setGreyTextColor(ui->labelTestInputExternalFileSamplesInfo);
+	setGreyTextColor(ui->labelTestInputExternalFileChooseFileInfo);
+	setGreyTextColor(ui->pushButtonTestInputExternalFileChooseFile);
+	setGreyTextColor(ui->labelTestInputExternalFileFilenameInfo);
+	setGreyTextColor(ui->labelTestInputExternalFileFilename);
+	setGreyTextColor(ui->labelTestInputExternalFileDescriptionInfo);
+	setGreyTextColor(ui->textBrowserInputDataExternalFileDescription);
+}
+
+void MainWindow::setExternalFileAsActive()
+{
+	mActiveTestInput = 1U;
+
+	ui->comboBoxTestInputDataSource->blockSignals(true);
+	ui->comboBoxTestInputDataSource->setCurrentIndex(1);
+	ui->comboBoxTestInputDataSource->blockSignals(false);
+
+	ui->textEditTestInputCreatorPeriod->setEnabled(false);
+	ui->textEditTestInputCreatorNumberOfSamples->setEnabled(false);
+
+	QMetaObject::invokeMethod(ui->textEditTestInputExternalFileNumberOfSamples,
+		"setText",
+		Qt::QueuedConnection,
+		Q_ARG(QString, convertIntTestInputDataToQString(DSC::DataManager::getData(EDataType::ModelIdentificationNumberOfSamples)))
+	);
+	QMetaObject::invokeMethod(ui->textEditTestInputExternalFilePeriod,
+		"setText",
+		Qt::QueuedConnection,
+		Q_ARG(QString, convertIntTestInputDataToQString(DSC::DataManager::getData(EDataType::ModelIdentificationSamplingPeriod)))
+	);
+
+	std::string filename = "N/A";
+	if (DSC::DataManager::getUnitAttribute(EUnitId_Heater, "TestDataInputFilename", filename))
+	{
+		filename = getRawFileNameFromPath(filename);
+	}
+	QMetaObject::invokeMethod(ui->labelTestInputExternalFileFilename,
+		"setText",
+		Qt::QueuedConnection,
+		Q_ARG(QString, QString::fromStdString(filename))
+	);
+
+	std::string description = "N/A";
+	DSC::DataManager::getUnitAttribute(EUnitId_Heater, "TestDataInputDescription", description);
+	QMetaObject::invokeMethod(ui->textBrowserInputDataExternalFileDescription,
+		"setText",
+		Qt::QueuedConnection,
+		Q_ARG(QString, QString::fromStdString(description))
+	);
+
+	ui->pushButtonTestInputExternalFileChooseFile->setEnabled(true);
+
+	auto setWhiteTextColor =
+		[this](QWidget* widget)
+		{
+			widget->setStyleSheet("QLabel { color:rgb(255,255,255) }");
+		};
+	auto setGreyTextColor =
+		[this](QWidget* widget)
+	{
+		widget->setStyleSheet("QLabel { color:rgb(128,128,128) }");
+	};
+
+	setGreyTextColor(ui->labelTestInputExternalFileInfo);
+	setGreyTextColor(ui->textEditTestInputCreatorPeriod);
+	setGreyTextColor(ui->labelTestInputCreatorPeriodInfo);
+	setGreyTextColor(ui->labelTestInputCreatorPeriodMsInfo);
+	setGreyTextColor(ui->labelTestInputCreatorSamplesInfo);
+	setGreyTextColor(ui->textEditTestInputCreatorNumberOfSamples);
+	setGreyTextColor(ui->labelTestInputCreatorDistributionInfo);
+	setGreyTextColor(ui->comboBoxTestInputCreatorDistribution);
+
+	setWhiteTextColor(ui->labelTestInputExternalFileInfo);
+	setWhiteTextColor(ui->labelTestInputExternalFilePeriodInfo);
+	setWhiteTextColor(ui->labelTestInputExternalFilePeriodMsInfo);
+	setWhiteTextColor(ui->labelTestInputExternalFileSamplesInfo);
+	setWhiteTextColor(ui->labelTestInputExternalFileChooseFileInfo);
+	setWhiteTextColor(ui->pushButtonTestInputExternalFileChooseFile);
+	setWhiteTextColor(ui->labelTestInputExternalFileFilenameInfo);
+	setWhiteTextColor(ui->labelTestInputExternalFileFilename);
+	setWhiteTextColor(ui->labelTestInputExternalFileDescriptionInfo);
+	setWhiteTextColor(ui->textBrowserInputDataExternalFileDescription);
+}
+
+void MainWindow::renderTestInputSettings()
+{
+	const auto inputDataSource = ModelIdentification::ExperimentManager::getInputDataSource();
+	if (EInputDataSource::Unknown == inputDataSource)
+	{
+		QMetaObject::invokeMethod(ui->labelTestInputSettingsPeriod, "setText", Qt::QueuedConnection, Q_ARG(QString, QString::fromStdString("N/A")));
+		QMetaObject::invokeMethod(ui->labelTestInputSettingsSamples, "setText", Qt::QueuedConnection, Q_ARG(QString, QString::fromStdString("N/A")));
+		QMetaObject::invokeMethod(ui->labelTestInputSettingExperimentTimeHours, "setText", Qt::QueuedConnection, Q_ARG(QString, QString::fromStdString("N/A")));
+		QMetaObject::invokeMethod(ui->labelTestInputSettingExperimentTimeMinutes, "setText", Qt::QueuedConnection, Q_ARG(QString, QString::fromStdString("N/A")));
+		QMetaObject::invokeMethod(ui->labelTestInputSettingExperimentTimeSeconds, "setText", Qt::QueuedConnection, Q_ARG(QString, QString::fromStdString("N/A")));
+	}
+	else
+	{
+		const auto period = DSC::DataManager::getData(EDataType::ModelIdentificationSamplingPeriod);
+		const auto samples = DSC::DataManager::getData(EDataType::ModelIdentificationNumberOfSamples);
+		const auto experimentTime = DSC::DataManager::getData(EDataType::ModelIdentificationExperimentTime);
+		const auto experimentTimeUnit = convertMsToTimeData(experimentTime);
+
+		QMetaObject::invokeMethod(ui->labelTestInputSettingsPeriod, "setText", Qt::QueuedConnection, Q_ARG(QString, convertIntTestInputDataToQString(period)));
+		QMetaObject::invokeMethod(ui->labelTestInputSettingsSamples, "setText", Qt::QueuedConnection, Q_ARG(QString, convertIntTestInputDataToQString(samples)));
+		QMetaObject::invokeMethod(ui->labelTestInputSettingExperimentTimeHours, "setText", Qt::QueuedConnection, Q_ARG(QString, convertIntTestInputDataToQString(experimentTimeUnit.hours)));
+		QMetaObject::invokeMethod(ui->labelTestInputSettingExperimentTimeMinutes, "setText", Qt::QueuedConnection, Q_ARG(QString, convertIntTestInputDataToQString(experimentTimeUnit.minutes)));
+		QMetaObject::invokeMethod(ui->labelTestInputSettingExperimentTimeSeconds, "setText", Qt::QueuedConnection, Q_ARG(QString, convertIntTestInputDataToQString(experimentTimeUnit.seconds)));
+	}
+}
+
+void MainWindow::renderTestInputExperimentInfo()
+{
+	const auto experimentState = ModelIdentification::ExperimentManager::getExperimentState();
+	if (EExperimentState::Idle == experimentState)
+	{
+		ui->labelTestInputExperimentInfoState->setText("Idle");
+		QMetaObject::invokeMethod(ui->labelTestInputExperimentInfoState, "setText", Qt::QueuedConnection, Q_ARG(QString, "Idle"));
+		QMetaObject::invokeMethod(ui->labelTestInputExperimentInfoExpiredSamples, "setText", Qt::QueuedConnection, Q_ARG(QString, "N/A"));
+		QMetaObject::invokeMethod(ui->labelTestInputExperimentInfoLeftSamples, "setText", Qt::QueuedConnection, Q_ARG(QString, "N/A"));
+		QMetaObject::invokeMethod(ui->labelTestInputSettingExpiredTimeHours, "setText", Qt::QueuedConnection, Q_ARG(QString, "N/A"));
+		QMetaObject::invokeMethod(ui->labelTestInputSettingExpiredTimeMinutes, "setText", Qt::QueuedConnection, Q_ARG(QString, "N/A"));
+		QMetaObject::invokeMethod(ui->labelTestInputSettingExpiredTimeSeconds, "setText", Qt::QueuedConnection, Q_ARG(QString, "N/A"));
+		QMetaObject::invokeMethod(ui->labelTestInputSettingLeftTimeHours, "setText", Qt::QueuedConnection, Q_ARG(QString, "N/A"));
+		QMetaObject::invokeMethod(ui->labelTestInputSettingLeftTimeMinutes, "setText", Qt::QueuedConnection, Q_ARG(QString, "N/A"));
+		QMetaObject::invokeMethod(ui->labelTestInputSettingLeftTimeSeconds, "setText", Qt::QueuedConnection, Q_ARG(QString, "N/A"));
+		ui->pushButtonTestExperimentInfoStartStopExperiment->setText("Start Experiment");
+		return;
+	}
+
+	const auto expiredSamples = DSC::DataManager::getData(EDataType::ModelIdentificationExperimentalInfoExpiredSamples);
+	const auto leftSamples = DSC::DataManager::getData(EDataType::ModelIdentificationExperimentalInfoLeftSamples);
+	const auto expiredTime = DSC::DataManager::getData(EDataType::ModelIdentificationExperimentalInfoExpiredTime);
+	const auto leftTime = DSC::DataManager::getData(EDataType::ModelIdentificationExperimentalInfoLeftTime);
+
+	const auto expiredTimeUnit = convertMsToTimeData(expiredTime);
+	const auto leftTimeUnit = convertMsToTimeData(leftTime);
+
+	QMetaObject::invokeMethod(ui->labelTestInputExperimentInfoState, "setText", Qt::QueuedConnection, Q_ARG(QString, "Running"));
+	QMetaObject::invokeMethod(ui->labelTestInputExperimentInfoExpiredSamples, "setText", Qt::QueuedConnection, Q_ARG(QString, convertIntTestInputDataToQString(expiredSamples)));
+	QMetaObject::invokeMethod(ui->labelTestInputExperimentInfoLeftSamples, "setText", Qt::QueuedConnection, Q_ARG(QString, convertIntTestInputDataToQString(leftSamples)));
+	QMetaObject::invokeMethod(ui->labelTestInputSettingExpiredTimeHours, "setText", Qt::QueuedConnection, Q_ARG(QString, convertIntTestInputDataToQString(expiredTimeUnit.hours)));
+	QMetaObject::invokeMethod(ui->labelTestInputSettingExpiredTimeMinutes, "setText", Qt::QueuedConnection, Q_ARG(QString, convertIntTestInputDataToQString(expiredTimeUnit.minutes)));
+	QMetaObject::invokeMethod(ui->labelTestInputSettingExpiredTimeSeconds, "setText", Qt::QueuedConnection, Q_ARG(QString, convertIntTestInputDataToQString(expiredTimeUnit.seconds)));
+	QMetaObject::invokeMethod(ui->labelTestInputSettingLeftTimeHours, "setText", Qt::QueuedConnection, Q_ARG(QString, convertIntTestInputDataToQString(leftTimeUnit.hours)));
+	QMetaObject::invokeMethod(ui->labelTestInputSettingLeftTimeMinutes, "setText", Qt::QueuedConnection, Q_ARG(QString, convertIntTestInputDataToQString(leftTimeUnit.minutes)));
+	QMetaObject::invokeMethod(ui->labelTestInputSettingLeftTimeSeconds, "setText", Qt::QueuedConnection, Q_ARG(QString, convertIntTestInputDataToQString(leftTimeUnit.seconds)));
+	ui->pushButtonTestExperimentInfoStartStopExperiment->setText("Stop Experiment");
+}
+
+void MainWindow::startExperimentInfoListeners()
+{
+	if (mIsExperimentInfoListenersStarted)
+	{
+		return;
+	}
+
+	mTestIputExperimentUpdateValuesTimerId = TimerManager::create(1000U, 1000U, [this]() {
+		const auto expiredSamples = DSC::DataManager::getData(EDataType::ModelIdentificationExperimentalInfoExpiredSamples);
+		const auto expiredTime = DSC::DataManager::getData(EDataType::ModelIdentificationExperimentalInfoExpiredTime);
+		const auto leftSamples = DSC::DataManager::getData(EDataType::ModelIdentificationExperimentalInfoLeftSamples);
+		const auto leftTime = DSC::DataManager::getData(EDataType::ModelIdentificationExperimentalInfoLeftTime);
+
+		std::lock_guard<std::mutex> lockGuard(mTestInputMtx);
+		expiredSamplesChangedCallback(expiredSamples);
+		expiredTimeChangedCallback(expiredTime);
+		leftSamplesChangedCallback(leftSamples);
+		leftTimeChangedCallback(leftTime);
+	});
+
+	mIsExperimentInfoListenersStarted = true;
+}
+
+void MainWindow::stopExperimentInfoListeners()
+{
+	if (!mIsExperimentInfoListenersStarted)
+	{
+		return;
+	}
+
+	TimerManager::destroy(mTestIputExperimentUpdateValuesTimerId);
+
+	mIsExperimentInfoListenersStarted = false;
+}
+
+std::string MainWindow::getRawFileNameFromPath(const std::string & path)
+{
+	boost::char_separator<char> separator("/");
+	boost::tokenizer<boost::char_separator<char>> tokens(path, separator);
+	std::vector<std::string> splitFileName(std::begin(tokens), std::end(tokens));
+	const auto fullFileName = splitFileName.back();
+
+	boost::char_separator<char> separator2(".");
+	boost::tokenizer<boost::char_separator<char>> tokens2(fullFileName, separator2);
+	std::vector<std::string> splitFileName2(std::begin(tokens2), std::end(tokens2));
+	return splitFileName2.front();
+}
+
+void MainWindow::expiredTimeChangedCallback(double value)
+{
+	const auto expiredTimeUnit = convertMsToTimeData(value);
+
+	QMetaObject::invokeMethod(ui->labelTestInputSettingExpiredTimeHours, "setText", Qt::QueuedConnection, Q_ARG(QString, convertIntTestInputDataToQString(expiredTimeUnit.hours)));
+	QMetaObject::invokeMethod(ui->labelTestInputSettingExpiredTimeMinutes, "setText", Qt::QueuedConnection, Q_ARG(QString, convertIntTestInputDataToQString(expiredTimeUnit.minutes)));
+	QMetaObject::invokeMethod(ui->labelTestInputSettingExpiredTimeSeconds, "setText", Qt::QueuedConnection, Q_ARG(QString, convertIntTestInputDataToQString(expiredTimeUnit.seconds)));
+}
+
+void MainWindow::leftTimeChangedCallback(double value)
+{
+	const auto leftTimeUnit = convertMsToTimeData(value);
+
+	QMetaObject::invokeMethod(ui->labelTestInputSettingLeftTimeHours, "setText", Qt::QueuedConnection, Q_ARG(QString, convertIntTestInputDataToQString(leftTimeUnit.hours)));
+	QMetaObject::invokeMethod(ui->labelTestInputSettingLeftTimeMinutes, "setText", Qt::QueuedConnection, Q_ARG(QString, convertIntTestInputDataToQString(leftTimeUnit.minutes)));
+	QMetaObject::invokeMethod(ui->labelTestInputSettingLeftTimeSeconds, "setText", Qt::QueuedConnection, Q_ARG(QString, convertIntTestInputDataToQString(leftTimeUnit.seconds)));
+}
+
+void MainWindow::stateChangedCallback(const std::string & attribute)
+{
+	std::lock_guard<std::mutex> lockGuard(mTestInputMtx);
+
+	static double rememberedSampling = 0.0;
+	static QString rememberedComboBoxTest = "";
+
+	if ("Idle" == attribute)
+	{
+		stopExperimentInfoListeners();
+		ui->pushButtonTestInputApplySettings->setEnabled(true);
+		ui->pushButtonTestExperimentInfoStartStopExperiment->setEnabled(false);
+		ui->pushButtonTestExperimentInfoStartStopExperiment->setText("Start Experiment");
+		if (ui->checkBoxHeaterPowerSaveToFile->isChecked())
+		{
+			ui->checkBoxHeaterPowerSaveToFile->setEnabled(true);
+			ui->checkBoxHeaterPowerSaveToFile->click();
+			ui->comboBoxHeaterPowerFileSps->blockSignals(true);
+			QMetaObject::invokeMethod(ui->comboBoxHeaterPowerFileSps, "setEditText", Qt::QueuedConnection, Q_ARG(QString, rememberedComboBoxTest));
+			ui->comboBoxHeaterPowerFileSps->blockSignals(false);
+			DSC::DataManager::updateData(EDataType::DscDataFileDataSampling, rememberedSampling);
+		}
+	}
+	else
+	{
+		startExperimentInfoListeners();
+		ui->pushButtonTestInputApplySettings->setEnabled(false);
+		ui->pushButtonTestExperimentInfoStartStopExperiment->setText("Stop Experiment");
+		if (!ui->checkBoxHeaterPowerSaveToFile->isChecked())
+		{
+			const auto samplingPeriod = DSC::DataManager::getData(EDataType::ModelIdentificationSamplingPeriod);
+			rememberedSampling = DSC::DataManager::getData(EDataType::HeaterPowerControlFileDataSampling);
+			DSC::DataManager::updateData(EDataType::HeaterPowerControlFileDataSampling, samplingPeriod / 1000.0);
+			ui->checkBoxHeaterPowerSaveToFile->click();
+			ui->checkBoxHeaterPowerSaveToFile->setEnabled(false);
+			QString comboBoxText = convertDoubleTestInputDataToQString(samplingPeriod / 1000.0) + QString(" seconds");
+			rememberedComboBoxTest = ui->comboBoxHeaterPowerFileSps->currentText();
+			ui->comboBoxHeaterPowerFileSps->blockSignals(true);
+			QMetaObject::invokeMethod(ui->comboBoxHeaterPowerFileSps, "setEditText", Qt::QueuedConnection, Q_ARG(QString, comboBoxText));
+			ui->comboBoxHeaterPowerFileSps->blockSignals(false);
+		}
+	}
+
+	renderTestInputExperimentInfo();
+}
+
+void MainWindow::expiredSamplesChangedCallback(double value)
+{
+	QMetaObject::invokeMethod(ui->labelTestInputExperimentInfoExpiredSamples, "setText", Qt::QueuedConnection, Q_ARG(QString, convertIntTestInputDataToQString(value)));
+
+}
+
+void MainWindow::leftSamplesChangedCallback(double value)
+{
+	QMetaObject::invokeMethod(ui->labelTestInputExperimentInfoLeftSamples, "setText", Qt::QueuedConnection, Q_ARG(QString, convertIntTestInputDataToQString(value)));
+}
+
+QString MainWindow::convertDoubleTestInputDataToQString(double value)
+{
+	if (DSC::DataManager::UnknownValue == value)
+	{
+		return QString("N/A");
+	}
+	std::stringstream stream;
+	stream << std::fixed << std::setprecision(2) << value;
+	return QString::fromStdString(stream.str());
+}
+
+QString MainWindow::convertIntTestInputDataToQString(double value)
+{
+	if (DSC::DataManager::UnknownValue == value)
+	{
+		return QString("N/A");
+	}
+	auto intValue = static_cast<u64>(value);
+	auto stringValue = std::to_string(intValue);
+	return QString::fromStdString(stringValue);
+}
+
+MainWindow::TimeData MainWindow::convertMsToTimeData(double ms)
+{
+	TimeData timeData;
+	const auto msUInt = static_cast<u64>(ms);
+	timeData.seconds = static_cast<u16>((msUInt / 1000) % 60);
+	timeData.minutes = static_cast<u16>((msUInt / (1000 * 60)) % 60);
+	timeData.hours = static_cast<u16>((msUInt / (1000 * 60 * 60)) % 24);
+
+	return timeData;
 }
 
 void MainWindow::setupSegmentsConfigurator()
@@ -1587,6 +2008,9 @@ void MainWindow::callibrationSettingsStartWorking()
     auto coefficient3 = DSC::DataManager::getData(EDataType::FilteringThreshold3Coefficient);
     auto coefficient4 = DSC::DataManager::getData(EDataType::FilteringThreshold4Coefficient);
 
+    auto nCoefficientValue = static_cast<unsigned int>(DSC::DataManager::getData(EDataType::FilteringAverageCoefficientN));
+    auto xCoefficientValue = static_cast<unsigned int>(DSC::DataManager::getData(EDataType::FilteringAverageCoefficientX));
+
     ui->textEditCallibrationSettingsThreshold1->setText(convertDoubleToQString(threshold1, 2));
     ui->textEditCallibrationSettingsThreshold2->setText(convertDoubleToQString(threshold2, 2));
     ui->textEditCallibrationSettingsThreshold3->setText(convertDoubleToQString(threshold3, 2));
@@ -1596,6 +2020,9 @@ void MainWindow::callibrationSettingsStartWorking()
     ui->textEditCallibrationSettingsCoefficient2->setText(convertDoubleToQString(coefficient2, 6));
     ui->textEditCallibrationSettingsCoefficient3->setText(convertDoubleToQString(coefficient3, 6));
     ui->textEditCallibrationSettingsCoefficient4->setText(convertDoubleToQString(coefficient4, 6));
+
+    ui->textEditCallibrationSettingsN->setText(QString::fromStdString(std::to_string(nCoefficientValue)));
+    ui->textEditCallibrationSettingsX->setText(QString::fromStdString(std::to_string(xCoefficientValue)));
 }
 
 void MainWindow::setupDscDataView()
@@ -1715,6 +2142,8 @@ void MainWindow::dscDataViewStartWorking()
 {
     std::lock_guard<std::mutex> lockGuard(mDscDataViewMtx);
 
+    static auto isFirstEntering = true;
+
     mDscDataViewNewDataCallbackId = DSC::DataManager::registerNewDataCallback
     (
         [this](EDataType dataType, double value)
@@ -1736,6 +2165,13 @@ void MainWindow::dscDataViewStartWorking()
 
     auto actualRealizedSegment = DSC::DataManager::getData(EDataType::ActualRealizedSegment);
     updateSegmentsLabels(static_cast<u8>(actualRealizedSegment));
+
+    if (isFirstEntering)
+    {
+        DscDataViewPlotManager::startDrawing();
+        isFirstEntering = false;
+    }
+
 }
 
 void MainWindow::dscDataViewStopWorking()
@@ -2156,6 +2592,166 @@ void MainWindow::heaterPowerControlPlotNewControlModeCallback()
     HeaterTemperaturePlotManager::newControlModeNotification();
 }
 
+void MainWindow::testInputDataSourceChanged()
+{
+	std::lock_guard<std::mutex> lockGuard(mTestInputMtx);
+
+	switch (ui->comboBoxTestInputDataSource->currentIndex())
+	{
+		case 0: /*Creator*/
+		{
+			setCreatorAsActive();
+			break;
+		}
+
+		case 1: /*External File*/
+		{
+			setExternalFileAsActive();
+			break;
+		}
+
+		default:
+			break;
+	}
+}
+
+void MainWindow::testInputApplySettingsClicked()
+{
+	std::lock_guard<std::mutex> lockGuard(mTestInputMtx);
+
+	const auto experimentState = ModelIdentification::ExperimentManager::getExperimentState();
+	if (EExperimentState::Running == experimentState)
+	{
+		return;
+	}
+
+	switch (ui->comboBoxTestInputDataSource->currentIndex())
+	{
+		case 0: /*Creator*/
+		{
+			ModelIdentification::ExperimentManager::setInputDataSource(EInputDataSource::UniformDistribution);
+
+			bool result = true;
+			const auto samplingPeriod = ui->textEditTestInputCreatorPeriod->toPlainText().toStdString();
+			const auto numberOfSamples = ui->textEditTestInputCreatorNumberOfSamples->toPlainText().toStdString();
+			Utilities::conditionalExecutor(result, [samplingPeriod]() { return Utilities::isDouble(samplingPeriod); });
+			Utilities::conditionalExecutor(result, [numberOfSamples]() { return Utilities::isDouble(numberOfSamples); });
+			if (result)
+			{
+				const auto samplingPeriodNumber = std::stod(samplingPeriod);
+				const auto numberOfSamplesNumber = std::stod(numberOfSamples);
+				DSC::DataManager::updateData(EDataType::ModelIdentificationSamplingPeriod, samplingPeriodNumber);
+				DSC::DataManager::updateData(EDataType::ModelIdentificationNumberOfSamples, numberOfSamplesNumber);
+				DSC::DataManager::updateData(EDataType::ModelIdentificationExperimentTime, numberOfSamplesNumber * samplingPeriodNumber);
+			}
+
+			break;
+		}
+
+		case 1: /*External File*/
+		{
+			ModelIdentification::ExperimentManager::setInputDataSource(EInputDataSource::ExternalFile);
+
+			if (!ModelIdentification::ExternalFileDataParser::parseSettings())
+			{
+				return;
+			}
+
+			bool result = true;
+			const auto samplingPeriod = ui->textEditTestInputExternalFilePeriod->toPlainText().toStdString();
+			const auto numberOfSamples = ui->textEditTestInputExternalFileNumberOfSamples->toPlainText().toStdString();
+			Utilities::conditionalExecutor(result, [samplingPeriod]() { return Utilities::isDouble(samplingPeriod); });
+			Utilities::conditionalExecutor(result, [numberOfSamples]() { return Utilities::isDouble(numberOfSamples); });
+			if (result)
+			{
+				const auto samplingPeriodNumber = std::stod(samplingPeriod);
+				const auto numberOfSamplesNumber = std::stod(numberOfSamples);
+				DSC::DataManager::updateData(EDataType::ModelIdentificationSamplingPeriod, samplingPeriodNumber);
+				DSC::DataManager::updateData(EDataType::ModelIdentificationNumberOfSamples, numberOfSamplesNumber);
+				DSC::DataManager::updateData(EDataType::ModelIdentificationExperimentTime, numberOfSamplesNumber * samplingPeriodNumber);
+			}
+
+			break;
+		}
+
+		default:
+			break;
+	}
+
+	renderTestInputSettings();
+	renderTestInputExperimentInfo();
+	ui->pushButtonTestExperimentInfoStartStopExperiment->setEnabled(true);
+}
+
+void MainWindow::testInputCreatorDistributionChanged()
+{
+	std::lock_guard<std::mutex> lockGuard(mTestInputMtx);
+}
+
+void MainWindow::testInputExternalFileChooseFileClicked()
+{
+	std::lock_guard<std::mutex> lockGuard(mTestInputMtx);
+	QString filter = "Test Data Input (*.inputData)";
+	const auto filePath = QFileDialog::getOpenFileName(this, "Select a file with Test Data Input...", "/home/pi/CrossCompiling/InputData", filter).toStdString();
+
+	if ("" == filePath)
+	{
+		return;
+	}
+
+	DSC::DataManager::updateUnitAttribute(EUnitId_Heater, "TestDataInputFilename", filePath);
+
+	ui->labelTestInputExternalFileFilename->setText(QString::fromStdString(getRawFileNameFromPath(filePath)));
+
+	ThreadPool::submit(TaskPriority::Normal,
+		[this]()
+		{
+			if (!ModelIdentification::ExternalFileDataParser::parseSettings())
+			{
+				return;
+			}
+
+			std::lock_guard<std::mutex> lockGuard(mTestInputMtx);
+
+			const auto samplingPeriodNumber = DSC::DataManager::getData(EDataType::ModelIdentificationExternalFileSamplingPeriod);
+			const auto numberOfSamplesNumber = DSC::DataManager::getData(EDataType::ModelIdentificationExternalFileNumberOfSamples);
+			QMetaObject::invokeMethod(ui->textEditTestInputExternalFilePeriod, "setText", Qt::QueuedConnection, Q_ARG(QString, convertIntTestInputDataToQString(samplingPeriodNumber)));
+			QMetaObject::invokeMethod(ui->textEditTestInputExternalFileNumberOfSamples, "setText", Qt::QueuedConnection, Q_ARG(QString, convertIntTestInputDataToQString(numberOfSamplesNumber)));
+			std::string description = "";
+			if (DSC::DataManager::getUnitAttribute(EUnitId_Heater, "TestDataInputDescription", description))
+			{
+				QMetaObject::invokeMethod(ui->textBrowserInputDataExternalFileDescription, "setText", Qt::QueuedConnection, Q_ARG(QString, QString::fromStdString(description)));
+			}
+		}
+	);
+}
+
+void MainWindow::testInputExperimentInfoStartStopExperimentClicked()
+{
+	std::lock_guard<std::mutex> lockGuard(mTestInputMtx);
+	
+	const auto experimentState = ModelIdentification::ExperimentManager::getExperimentState();
+
+	if (EExperimentState::Idle == experimentState)
+	{
+		ThreadPool::submit(TaskPriority::Normal,
+			[]()
+			{
+				ModelIdentification::ExperimentManager::startExperiment();
+			}
+		);
+	}
+	else
+	{
+		ThreadPool::submit(TaskPriority::Normal,
+			[]()
+			{
+				ModelIdentification::ExperimentManager::forceStoppingExperiment();
+			}
+		);
+	}
+}
+
 void MainWindow::segmentsConfiguratorAddToProgramClicked()
 {
     std::lock_guard<std::mutex> lockGuard(mSegmentsConfiguratorMtx);
@@ -2336,6 +2932,53 @@ void MainWindow::callibrationSettingsUpdateFilterDataClicked()
     );
 }
 
+void MainWindow::callibrationSettingsUpdateAverageFilterDataClicked()
+{
+    std::lock_guard<std::mutex> lockGuard(mCallibrationSettingsMtx);
+
+    auto nValueStr = ui->textEditCallibrationSettingsN->toPlainText().toStdString();
+    auto xValueStr = ui->textEditCallibrationSettingsX->toPlainText().toStdString();
+
+    bool result = true;
+
+    Utilities::conditionalExecutor(result, [nValueStr](){ return Utilities::isInteger(nValueStr); });
+    Utilities::conditionalExecutor(result, [xValueStr](){ return Utilities::isInteger(xValueStr); });
+
+    if (!result)
+    {
+        QMessageBox msgBox;
+        QString message = "At least one filter parameter is not correct integer number value!";
+        msgBox.setText(message);
+        msgBox.setDefaultButton(QMessageBox::Button::Ok);
+        msgBox.exec();
+        return;
+    }
+
+    auto nValue = std::stoi(nValueStr);
+    auto xValue = std::stoi(xValueStr);
+
+    if ((nValue - xValue) < 1.0)
+    {
+        QMessageBox msgBox;
+        QString message = "Difference between N and X value has to be at least 1!";
+        msgBox.setText(message);
+        msgBox.setDefaultButton(QMessageBox::Button::Ok);
+        msgBox.exec();
+        return;
+    }
+
+    ThreadPool::submit
+    (
+        TaskPriority::Normal,
+        [nValue, xValue]()
+        {
+            DSC::DataManager::updateData(EDataType::FilteringAverageCoefficientN, nValue);
+            DSC::DataManager::updateData(EDataType::FilteringAverageCoefficientX, xValue);
+            DSC::SampleCarrierDataManager::updateAverageFilterData();
+        }
+    );
+}
+
 void MainWindow::callibrationSettingsThreshold1Changed()
 {
     std::string str = "if ( difference > ";
@@ -2471,6 +3114,56 @@ void MainWindow::callibrationSettingsCoefficient4Changed()
     ui->labelCallibrationSettingsCoefficient4Value->setText(QString::fromStdString(str));
 }
 
+void MainWindow::callibrationSettingsThresholdFilteringEnablingClicked()
+{
+    std::lock_guard<std::mutex> lockGuard(mCallibrationSettingsMtx);
+
+    DSC::SampleCarrierDataManager::FilteringStatus status;
+
+    if (ui->checkBoxCallibrationSettingsThresholdEnabled->isChecked())
+    {
+        status = DSC::SampleCarrierDataManager::FilteringStatus::Enabled;
+    }
+    else
+    {
+        status = DSC::SampleCarrierDataManager::FilteringStatus::Disabled;
+    }
+
+    ThreadPool::submit
+    (
+        TaskPriority::Normal,
+        [status]()
+        {
+            DSC::SampleCarrierDataManager::changeThresholdFilteringStatus(status);
+        }
+    );
+}
+
+void MainWindow::callibrationSettingsAverageFilteringEnablingClicked()
+{
+    std::lock_guard<std::mutex> lockGuard(mCallibrationSettingsMtx);
+
+    DSC::SampleCarrierDataManager::FilteringStatus status;
+
+    if (ui->checkBoxCallibrationSettingsAverageEnabled->isChecked())
+    {
+        status = DSC::SampleCarrierDataManager::FilteringStatus::Enabled;
+    }
+    else
+    {
+        status = DSC::SampleCarrierDataManager::FilteringStatus::Disabled;
+    }
+
+    ThreadPool::submit
+    (
+        TaskPriority::Normal,
+        [status]()
+        {
+            DSC::SampleCarrierDataManager::changeAverageFilteringStatus(status);
+        }
+    );
+}
+
 void MainWindow::dscDataViewStartProgramClicked()
 {
     std::lock_guard<std::mutex> lockGuard(mDscDataViewMtx);
@@ -2530,7 +3223,7 @@ void MainWindow::dscDataViewStartProgramClicked()
         }
     );
 
-    DscDataViewPlotManager::startDrawing();
+    //DscDataViewPlotManager::startDrawing();
 }
 
 void MainWindow::dscDataViewStopProgramClicked()
@@ -2549,7 +3242,7 @@ void MainWindow::dscDataViewStopProgramClicked()
     ui->pushButtonDscDataViewStartProgram->setEnabled(true);
     ui->pushButtonDscDataViewStopProgram->setEnabled(false);
 
-    DscDataViewPlotManager::stopDrawing();
+    //DscDataViewPlotManager::stopDrawing();
 }
 
 void MainWindow::dscDataViewPlotDataCallback()

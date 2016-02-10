@@ -37,6 +37,7 @@ void DscDataViewPlotManager::initialize(QCustomPlot* plot, QTimer* plotTimer)
         mPlot->xAxis->setLabelColor(QColor(51, 0, 0));
         mPlot->xAxis->setLabelFont(font);
 
+        /*
         mPlot->yAxis->setLabel("Sample Carrier Temperature [oC]");
         mPlot->yAxis->setLabelColor(QColor(51, 0, 0));
         mPlot->yAxis->setLabelFont(font);
@@ -49,6 +50,16 @@ void DscDataViewPlotManager::initialize(QCustomPlot* plot, QTimer* plotTimer)
         mPlot->yAxis2->setSubTickLength(1, 1);
         mPlot->yAxis2->setTickLabels(true);
         mPlot->yAxis2->setTicks(true);
+        */
+
+        mPlot->yAxis->setVisible(true);
+        mPlot->yAxis->setLabel("DSC [uV]");
+        mPlot->yAxis->setLabelColor(QColor(51, 0, 0));
+        mPlot->yAxis->setLabelFont(font);
+        mPlot->yAxis->setTickLength(3, 3);
+        mPlot->yAxis->setSubTickLength(1, 1);
+        mPlot->yAxis->setTickLabels(true);
+        mPlot->yAxis->setTicks(true);
 
         mPlot->axisRect()->setupFullAxesBox();
     }
@@ -99,31 +110,31 @@ void DscDataViewPlotManager::_startDrawing()
             QFont font("Arial", 9);
             font.setItalic(true);
             mPlot->legend->setFont(font);
-            mPlot->axisRect()->insetLayout()->setInsetAlignment(0, Qt::AlignBottom | Qt::AlignRight);
+            mPlot->axisRect()->insetLayout()->setInsetAlignment(0, Qt::AlignTop | Qt::AlignLeft);
         }
-
+        /*
         {
             mPlot->addGraph(mPlot->xAxis, mPlot->yAxis);
             mPlot->graph(0)->setName("SC Temp.");
             mPlot->graph(0)->setPen(QPen(Qt::red));
-        }
+        }*/
 
         {
-            mPlot->addGraph(mPlot->xAxis, mPlot->yAxis2);
-            mPlot->graph(1)->setName("Sample 1");
-            mPlot->graph(1)->setPen(QPen(Qt::blue));
+            mPlot->addGraph(mPlot->xAxis, mPlot->yAxis);
+            mPlot->graph(0)->setName("Sample 1");
+            mPlot->graph(0)->setPen(QPen(Qt::blue));
 
-            mPlot->addGraph(mPlot->xAxis, mPlot->yAxis2);
-            mPlot->graph(2)->setName("Sample 2");
-            mPlot->graph(2)->setPen(QPen(Qt::green));
+            mPlot->addGraph(mPlot->xAxis, mPlot->yAxis);
+            mPlot->graph(1)->setName("Sample 2");
+            mPlot->graph(1)->setPen(QPen(Qt::green));
 
-            mPlot->addGraph(mPlot->xAxis, mPlot->yAxis2);
-            mPlot->graph(3)->setName("Sample 3");
-            mPlot->graph(3)->setPen(QPen(Qt::gray));
+            mPlot->addGraph(mPlot->xAxis, mPlot->yAxis);
+            mPlot->graph(2)->setName("Sample 3");
+            mPlot->graph(2)->setPen(QPen(Qt::gray));
 
-            mPlot->addGraph(mPlot->xAxis, mPlot->yAxis2);
-            mPlot->graph(4)->setName("Sample 4");
-            mPlot->graph(4)->setPen(QPen(Qt::magenta));
+            mPlot->addGraph(mPlot->xAxis, mPlot->yAxis);
+            mPlot->graph(3)->setName("Sample 4");
+            mPlot->graph(3)->setPen(QPen(Qt::magenta));
         }
 
         mPlot->replot();
@@ -163,33 +174,33 @@ void DscDataViewPlotManager::addNewDataToPlotCallback()
 
     auto time = QDateTime::currentDateTime().toMSecsSinceEpoch() / 1000.0;
     auto temperature = DSC::DataManager::getData(EDataType::SampleCarrierTemperature);
-    auto sample1 = DSC::DataManager::getData(EDataType::Thermocouple1);
-    auto sample2 = DSC::DataManager::getData(EDataType::Thermocouple2);
-    auto sample3 = DSC::DataManager::getData(EDataType::Thermocouple3);
-    auto sample4 = DSC::DataManager::getData(EDataType::Thermocouple4);
-
+    auto sample1 = DSC::DataManager::getData(EDataType::FilteredThermocouple1);
+    auto sample2 = DSC::DataManager::getData(EDataType::FilteredThermocouple2);
+    auto sample3 = DSC::DataManager::getData(EDataType::FilteredThermocouple3);
+    auto sample4 = DSC::DataManager::getData(EDataType::FilteredThermocouple4);
+    /*
     {
         mPlot->graph(0)->addData(time, temperature);
         mPlot->graph(0)->removeDataBefore(time - 600);
         mPlot->graph(0)->rescaleAxes();
-    }
+    }*/
 
     {
-        mPlot->graph(1)->addData(time, sample1);
+        mPlot->graph(0)->addData(time, sample1);
+        mPlot->graph(0)->removeDataBefore(time - 600);
+        mPlot->graph(0)->rescaleAxes();
+
+        mPlot->graph(1)->addData(time, sample2);
         mPlot->graph(1)->removeDataBefore(time - 600);
-        mPlot->graph(1)->rescaleAxes();
+        //mPlot->graph(1)->rescaleAxes();
 
-        mPlot->graph(2)->addData(time, sample2);
+        mPlot->graph(2)->addData(time, sample3);
         mPlot->graph(2)->removeDataBefore(time - 600);
-        mPlot->graph(2)->rescaleAxes();
+        //mPlot->graph(2)->rescaleAxes();
 
-        mPlot->graph(3)->addData(time, sample3);
+        mPlot->graph(3)->addData(time, sample4);
         mPlot->graph(3)->removeDataBefore(time - 600);
-        mPlot->graph(3)->rescaleAxes();
-
-        mPlot->graph(4)->addData(time, sample4);
-        mPlot->graph(4)->removeDataBefore(time - 600);
-        mPlot->graph(4)->rescaleAxes();
+        //mPlot->graph(3)->rescaleAxes();
     }
     /*
     auto updateScale = 

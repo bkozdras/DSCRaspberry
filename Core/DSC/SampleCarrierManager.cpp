@@ -24,6 +24,7 @@ namespace DSC
         DataManager::updateData(EDataType::FilteredThermocouple4, DataManager::UnknownValue);
 
         initializeFilterData();
+        initializeAverageFilterData();
 
         {
             Nucleo::DeviceCommunicator::registerIndCallback
@@ -78,6 +79,56 @@ namespace DSC
         Logger::info("%s: Updated filter thresholds and coefficients.", getLoggerPrefix().c_str());
     }
 
+    void SampleCarrierDataManager::changeThresholdFilteringStatus(FilteringStatus status)
+    {
+        std::lock_guard<std::mutex> lockGuard(mMtx);
+
+        if (FilteringStatus::Enabled == status)
+        {
+            initializeFilterData();
+        }
+        else
+        {
+            deinitializeFilterData();
+        }
+    }
+
+    void SampleCarrierDataManager::updateAverageFilterData()
+    {
+        std::lock_guard<std::mutex> lockGuard(mMtx);
+
+        mNAverageCoefficient = DataManager::getData(EDataType::FilteringAverageCoefficientN);
+        mXAverageCoefficient = DataManager::getData(EDataType::FilteringAverageCoefficientX);
+
+        mFilterAverageVector[EDataType::Thermocouple1].first = 0U;
+        mFilterAverageVector[EDataType::Thermocouple1].second.clear();
+
+        mFilterAverageVector[EDataType::Thermocouple2].first = 0U;
+        mFilterAverageVector[EDataType::Thermocouple2].second.clear();
+
+        mFilterAverageVector[EDataType::Thermocouple3].first = 0U;
+        mFilterAverageVector[EDataType::Thermocouple3].second.clear();
+
+        mFilterAverageVector[EDataType::Thermocouple4].first = 0U;
+        mFilterAverageVector[EDataType::Thermocouple4].second.clear();
+
+        Logger::info("%s: Updated average filter coefficients (N = %u, X = %u).", getLoggerPrefix().c_str(), mNAverageCoefficient, mXAverageCoefficient);
+    }
+
+    void SampleCarrierDataManager::changeAverageFilteringStatus(FilteringStatus status)
+    {
+        std::lock_guard<std::mutex> lockGuard(mMtx);
+
+        if (FilteringStatus::Enabled == status)
+        {
+            initializeAverageFilterData();
+        }
+        else
+        {
+            deinitializeAverageFilterData();
+        }
+    }
+
     void SampleCarrierDataManager::startRegisteringData()
     {
         std::lock_guard<std::mutex> lockGuard(mMtx);
@@ -100,21 +151,56 @@ namespace DSC
 
     void SampleCarrierDataManager::initializeFilterData()
     {
-        DataManager::updateData(EDataType::FilteringThreshold1, 1000.0);
-        DataManager::updateData(EDataType::FilteringThreshold1Coefficient, 1.0);
-        mFilterData.push_back(std::make_pair(1000.0, 1.0));
+        DataManager::updateData(EDataType::FilteringThreshold1, 50.0);
+        DataManager::updateData(EDataType::FilteringThreshold1Coefficient, 0.5);
+        mFilterData.push_back(std::make_pair(50.0, 0.5));
 
-        DataManager::updateData(EDataType::FilteringThreshold2, 100.0);
-        DataManager::updateData(EDataType::FilteringThreshold2Coefficient, 0.75);
-        mFilterData.push_back(std::make_pair(100.0, 0.75));
+        DataManager::updateData(EDataType::FilteringThreshold2, 25.0);
+        DataManager::updateData(EDataType::FilteringThreshold2Coefficient, 0.7);
+        mFilterData.push_back(std::make_pair(25.0, 0.7));
 
         DataManager::updateData(EDataType::FilteringThreshold3, 10.0);
-        DataManager::updateData(EDataType::FilteringThreshold3Coefficient, 0.875);
-        mFilterData.push_back(std::make_pair(10.0, 0.875));
-
+        DataManager::updateData(EDataType::FilteringThreshold3Coefficient, 0.8);
+        mFilterData.push_back(std::make_pair(10.0, 0.8));
+        
         DataManager::updateData(EDataType::FilteringThreshold4, 1.0);
-        DataManager::updateData(EDataType::FilteringThreshold4Coefficient, 0.984375);
-        mFilterData.push_back(std::make_pair(1.0, 0.984375));
+        DataManager::updateData(EDataType::FilteringThreshold4Coefficient, 0.0);
+        mFilterData.push_back(std::make_pair(1.0, 0.0));
+
+        mIsThresholdFilteringEnabled = true;
+
+        Logger::info("%s: Threshold filtering DSC data enabled.", getLoggerPrefix().c_str());
+    }
+
+    void SampleCarrierDataManager::initializeAverageFilterData()
+    {
+        DataManager::updateData(EDataType::FilteringAverageCoefficientN, 20.0);
+        DataManager::updateData(EDataType::FilteringAverageCoefficientX, 5.0);
+        mNAverageCoefficient = 20.0;
+        mXAverageCoefficient = 5.0;
+        mFilterAverageVector[EDataType::Thermocouple1] = std::make_pair(0U, std::vector<double>());
+        mFilterAverageVector[EDataType::Thermocouple2] = std::make_pair(0U, std::vector<double>());
+        mFilterAverageVector[EDataType::Thermocouple3] = std::make_pair(0U, std::vector<double>());
+        mFilterAverageVector[EDataType::Thermocouple4] = std::make_pair(0U, std::vector<double>());
+        mIsAverageFilteringEnabled = true;
+
+        Logger::info("%s: Average filtering DSC data enabled.", getLoggerPrefix().c_str());
+    }
+
+    void SampleCarrierDataManager::deinitializeFilterData()
+    {
+        mFilterData.clear();
+        mIsThresholdFilteringEnabled = false;
+
+        Logger::info("%s: Threshold filtering DSC data disabled.", getLoggerPrefix().c_str());
+    }
+
+    void SampleCarrierDataManager::deinitializeAverageFilterData()
+    {
+        mFilterAverageVector.clear();
+        mIsAverageFilteringEnabled = false;
+
+        Logger::info("%s: Average filtering DSC data disabled.", getLoggerPrefix().c_str());
     }
 
     void SampleCarrierDataManager::sampleCarrierDataIndCallback(TSampleCarrierDataInd && ind)
@@ -143,7 +229,7 @@ namespace DSC
             {
                 Logger::debug("%s: Sample carrier %s value: %.4f mV.", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(EUnitId_Thermocouple1).c_str(), ind.data.value);
                 filterDataAndUpdate(EDataType::Thermocouple1, ind.data.value);
-                DataManager::updateData(convertThermocoupleUnitIdToDataType(EUnitId_Thermocouple1), ind.data.value);
+                //DataManager::updateData(convertThermocoupleUnitIdToDataType(EUnitId_Thermocouple1), ind.data.value);
                 break;
             }
 
@@ -151,7 +237,7 @@ namespace DSC
             {
                 Logger::debug("%s: Sample carrier %s value: %.4f mV.", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(EUnitId_Thermocouple2).c_str(), ind.data.value);
                 filterDataAndUpdate(EDataType::Thermocouple2, ind.data.value);
-                DataManager::updateData(convertThermocoupleUnitIdToDataType(EUnitId_Thermocouple2), ind.data.value);
+                //DataManager::updateData(convertThermocoupleUnitIdToDataType(EUnitId_Thermocouple2), ind.data.value);
                 break;
             }
 
@@ -159,7 +245,7 @@ namespace DSC
             {
                 Logger::debug("%s: Sample carrier %s value: %.4f mV.", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(EUnitId_Thermocouple3).c_str(), ind.data.value);
                 filterDataAndUpdate(EDataType::Thermocouple3, ind.data.value);
-                DataManager::updateData(convertThermocoupleUnitIdToDataType(EUnitId_Thermocouple3), ind.data.value);
+                //DataManager::updateData(convertThermocoupleUnitIdToDataType(EUnitId_Thermocouple3), ind.data.value);
                 break;
             }
 
@@ -167,7 +253,7 @@ namespace DSC
             {
                 Logger::debug("%s: Sample carrier %s value: %.4f mV.", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(EUnitId_Thermocouple4).c_str(), ind.data.value);
                 filterDataAndUpdate(EDataType::Thermocouple4, ind.data.value);
-                DataManager::updateData(convertThermocoupleUnitIdToDataType(EUnitId_Thermocouple4), ind.data.value);
+                //DataManager::updateData(convertThermocoupleUnitIdToDataType(EUnitId_Thermocouple4), ind.data.value);
                 break;
             }
 
@@ -275,29 +361,102 @@ namespace DSC
 
     void SampleCarrierDataManager::filterDataAndUpdate(EDataType dataType, const double & newValue)
     {
-        auto actualValue = DSC::DataManager::getData(dataType);
+        static auto isFirstEntering = true;
+        static u8 counter = 0;
 
-        const auto difference = std::abs(newValue - actualValue);
-        auto filtered = false;
+        auto actualFilteredValue = DSC::DataManager::getData(getFilteredDataType(dataType));
+        if (isFirstEntering && (counter++ < 4))
+        {
+            actualFilteredValue = newValue;
+        }
+        else
+        {
+            isFirstEntering = false;
+        }
+        
+        auto averageFilteringOutput = newValue;
+        DataManager::updateData(dataType, newValue);
+        auto isThresholdFilteringAllowed = false;
 
-        auto filterData = 
-            [&filtered, &actualValue, &newValue, &difference](const double & threshold, const double & coefficient)
+        if (mIsAverageFilteringEnabled)
+        {
+            auto & filterData = mFilterAverageVector[dataType];
+            auto & xInBufferCount = filterData.first;
+            auto & buffer = filterData.second;
+
+            buffer.push_back(newValue);
+            ++xInBufferCount;
+
+            if ((buffer.size() + 1) >= mNAverageCoefficient)
+            {
+                buffer.erase(std::begin(buffer));
+
+                if (xInBufferCount >= mXAverageCoefficient)
+                {
+                    const auto nSubX = mNAverageCoefficient - mXAverageCoefficient;
+                    double firstAverageValue = 0.0;
+                    double secondAverageValue = 0.0;
+
+                    {
+                        auto iter = std::begin(buffer);
+                        std::advance(iter, nSubX);
+                        firstAverageValue = std::accumulate(std::begin(buffer), iter, 0.0) / nSubX;
+                    }
+
+                    {
+                        auto iter = std::begin(buffer);
+                        std::advance(iter, nSubX + 1);
+                        secondAverageValue = std::accumulate(iter, std::end(buffer), 0.0) / mXAverageCoefficient;
+                    }
+
+                    averageFilteringOutput = (nSubX * firstAverageValue + mXAverageCoefficient * secondAverageValue) / mNAverageCoefficient;
+
+                    xInBufferCount = 0;
+                    isThresholdFilteringAllowed = true;
+                }
+            }
+        }
+
+        if (mIsThresholdFilteringEnabled && isThresholdFilteringAllowed)
+        {
+            const auto difference = std::abs(averageFilteringOutput - actualFilteredValue);
+            auto filtered = false;
+
+            auto filterData =
+                [&filtered, &actualFilteredValue, &averageFilteringOutput, &difference](const double & threshold, const double & coefficient)
             {
                 if (!filtered && difference > threshold)
                 {
-                    actualValue = (actualValue * coefficient) + (newValue * (1.0 - coefficient));
+                    actualFilteredValue = (actualFilteredValue * coefficient) + (averageFilteringOutput * (1.0 - coefficient));
                     filtered = true;
                 }
             };
 
-        filterData(mFilterData[0].first, mFilterData[0].second);
-        filterData(mFilterData[1].first, mFilterData[1].second);
-        filterData(mFilterData[2].first, mFilterData[2].second);
-        filterData(0.0, mFilterData[3].second);
+            filterData(mFilterData[0].first, mFilterData[0].second);
+            filterData(mFilterData[1].first, mFilterData[1].second);
+            filterData(mFilterData[2].first, mFilterData[2].second);
+            filterData(-0.1, mFilterData[3].second);
+        }
 
-        DataManager::updateData(getFilteredDataType(dataType), actualValue);
+        if (mIsThresholdFilteringEnabled)
+        {
+            DataManager::updateData(getFilteredDataType(dataType), actualFilteredValue);
+        }
+        else if (isThresholdFilteringAllowed)
+        {
+            DataManager::updateData(getFilteredDataType(dataType), averageFilteringOutput);
+        }
+        else
+        {
+            DataManager::updateData(getFilteredDataType(dataType), actualFilteredValue);
+        }
     }
 
     std::mutex SampleCarrierDataManager::mMtx;
     std::vector<std::pair<double, double>> SampleCarrierDataManager::mFilterData;
+    std::map<EDataType, std::pair<unsigned int, std::vector<double>>> SampleCarrierDataManager::mFilterAverageVector;
+    unsigned int SampleCarrierDataManager::mNAverageCoefficient;
+    unsigned int SampleCarrierDataManager::mXAverageCoefficient;
+    bool SampleCarrierDataManager::mIsThresholdFilteringEnabled;
+    bool SampleCarrierDataManager::mIsAverageFilteringEnabled;
 }

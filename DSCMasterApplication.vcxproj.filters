@@ -59,6 +59,9 @@
     <Filter Include="WindowApp">
       <UniqueIdentifier>{5be953e4-098d-4ac7-8fd2-983bc213154e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\ModelIdentification">
+      <UniqueIdentifier>{98751b2b-c591-4390-8dbb-5fb6f3fde5db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DSCMasterApplication.cpp">
@@ -159,6 +162,21 @@
     </ClCompile>
     <ClCompile Include="WindowApp\DscDataViewPlotManager.cpp">
       <Filter>WindowApp</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ModelIdentification\ExperimentManager.cpp">
+      <Filter>Core\ModelIdentification</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ModelIdentification\InputDataGeneratorExternalFile.cpp">
+      <Filter>Core\ModelIdentification</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ModelIdentification\InputDataGeneratorUniformDistribution.cpp">
+      <Filter>Core\ModelIdentification</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ModelIdentification\InputDataGeneratorCreator.cpp">
+      <Filter>Core\ModelIdentification</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ModelIdentification\ExternalFileDataParser.cpp">
+      <Filter>Core\ModelIdentification</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -365,6 +383,33 @@
     </ClInclude>
     <ClInclude Include="WindowApp\DscDataViewPlotManager.hpp">
       <Filter>WindowApp</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ModelIdentification\ExperimentManager.hpp">
+      <Filter>Core\ModelIdentification</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ModelIdentification\EInputDataSource.hpp">
+      <Filter>Core\ModelIdentification</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ModelIdentification\IInputDataGenerator.hpp">
+      <Filter>Core\ModelIdentification</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ModelIdentification\InputDataGeneratorExternalFile.hpp">
+      <Filter>Core\ModelIdentification</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ModelIdentification\InputDataGeneratorUniformDistribution.hpp">
+      <Filter>Core\ModelIdentification</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ModelIdentification\InputDataGeneratorCreator.hpp">
+      <Filter>Core\ModelIdentification</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ModelIdentification\EExperimentState.hpp">
+      <Filter>Core\ModelIdentification</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ModelIdentification\ExternalFileDataParser.hpp">
+      <Filter>Core\ModelIdentification</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Utilities\QueueAdapter.hpp">
+      <Filter>Core\Utilities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

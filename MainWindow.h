@@ -53,6 +53,12 @@ protected slots:
     void heaterPowerControlPlotNewSamplingCallback();
     void heaterPowerControlPlotNewControlModeCallback();
 
+	void testInputDataSourceChanged();
+	void testInputApplySettingsClicked();
+	void testInputCreatorDistributionChanged();
+	void testInputExternalFileChooseFileClicked();
+	void testInputExperimentInfoStartStopExperimentClicked();
+
     void segmentsConfiguratorAddToProgramClicked();
     void segmentsConfiguratorDeleteFromProgramClicked();
     void segmentsConfiguratorApplyProgramClicked();
@@ -61,6 +67,7 @@ protected slots:
     void segmentsConfiguratorSegmentTypeChanged();
 
     void callibrationSettingsUpdateFilterDataClicked();
+    void callibrationSettingsUpdateAverageFilterDataClicked();
     void callibrationSettingsThreshold1Changed();
     void callibrationSettingsThreshold2Changed();
     void callibrationSettingsThreshold3Changed();
@@ -68,6 +75,8 @@ protected slots:
     void callibrationSettingsCoefficient2Changed();
     void callibrationSettingsCoefficient3Changed();
     void callibrationSettingsCoefficient4Changed();
+    void callibrationSettingsThresholdFilteringEnablingClicked();
+    void callibrationSettingsAverageFilteringEnablingClicked();
 
     void dscDataViewStartProgramClicked();
     void dscDataViewStopProgramClicked();
@@ -80,6 +89,13 @@ signals :
     void signalHeaterPowerControlPlotNewControlModeCallback();
 
 private:
+
+	struct TimeData
+	{
+		u16 hours;
+		u16 minutes;
+		u16 seconds;
+	};
 
     Ui::MainWindow* ui;
     InfoDialog* mInfoDialog;
@@ -181,6 +197,41 @@ private:
     DSC::DataManager::CallbackId mHeaterPowerControlPlotNewModeCallbackId;
     DSC::DataManager::CallbackId mHeaterPowerControlFileNewFilenameCallbackId;
     QTimer* mHeaterPowerControlPlotTimer;
+
+	// Test Input Data Configurator
+
+	std::mutex mTestInputMtx;
+
+	void setupTestInput();
+
+	void testInputStartWorking();
+	void testInputStopWorking();
+
+	void setCreatorAsActive();
+	void setExternalFileAsActive();
+
+	void renderTestInputSettings();
+	void renderTestInputExperimentInfo();
+
+	void startExperimentInfoListeners();
+	void stopExperimentInfoListeners();
+
+	std::string getRawFileNameFromPath(const std::string & path);
+
+	void expiredTimeChangedCallback(double value);
+	void leftTimeChangedCallback(double value);
+	void stateChangedCallback(const std::string & attribute);
+	void expiredSamplesChangedCallback(double value);
+	void leftSamplesChangedCallback(double value);
+
+	QString convertDoubleTestInputDataToQString(double value);
+	QString convertIntTestInputDataToQString(double value);
+	TimeData convertMsToTimeData(double ms);
+
+	u8 mActiveTestInput;
+	DSC::DataManager::CallbackId mTestInputStateChangedCallbackId;
+	TimerManager::TimerId mTestIputExperimentUpdateValuesTimerId;
+	bool mIsExperimentInfoListenersStarted;
 
     // Segments Configurator
 
