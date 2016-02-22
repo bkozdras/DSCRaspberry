@@ -321,5 +321,5 @@ namespace ModelIdentification
 	std::string ExternalFileDataParser::mFilename;
 	std::ifstream ExternalFileDataParser::mFileStream;
 	u64 ExternalFileDataParser::mLeftDataCount;
-	const u64 ExternalFileDataParser::mFileReadDataStep = 1UL;
+	const u64 ExternalFileDataParser::mFileReadDataStep = 50UL;
 }

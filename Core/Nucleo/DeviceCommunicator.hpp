@@ -44,6 +44,7 @@ namespace Nucleo
             SEND_MACRO(StartReferenceTemperatureStabilization);
             SEND_MACRO(StopReferenceTemperatureStabilization);
             SEND_MACRO(SetRTDPolynomialCoefficients);
+			SEND_MACRO(SetMaximumAllowedTemperature);
 
             #define INDICATION_CALLBACK_MACRO(messageUniqueName) static void registerIndCallback(std::function<void(T##messageUniqueName##Ind &&)> indCallback)
 

@@ -1,6 +1,9 @@
 #include "SystemErrorsManager.hpp"
 
 #include "../Utilities/Logger.hpp"
+#include "../FaultManagement/FaultManager.hpp"
+#include "../ModelIdentification/ExperimentManager.hpp"
+#include "../DevicePeripherals/StateManager.hpp"
 
 #include <cstdlib>
 #include <cstdio>
@@ -63,12 +66,33 @@ void SystemErrorsManager::terminateHandler()
     std::abort();
 }
 
+void SystemErrorsManager::newFaultHandler(std::shared_ptr<SFaultIndication> faultPtr)
+{
+	if (EFaultId_Uart == faultPtr->faultId && EUnitId_Nucleo == faultPtr->faultyUnitId)
+	{
+		Logger::error("%s: Detected failures in UART communication with Slave.", getLoggerPrefix().c_str());
+		if (EExperimentState::Running == ModelIdentification::ExperimentManager::getExperimentState())
+		{
+			Logger::error("%s: Model Identification experiment is running. Turning off...", getLoggerPrefix().c_str());
+			ModelIdentification::ExperimentManager::forceStoppingExperiment();
+		}
+		if (DevicePeripherals::State::PowerOn == DevicePeripherals::StateManager::getState())
+		{
+			Logger::error("%s: Disabling Slave device...", getLoggerPrefix().c_str());
+			DevicePeripherals::StateManager::turnPowerOff();
+		}
+	}
+}
+
 bool SystemErrorsManager::initialize()
 {
     Logger::debug("%s: Initializing.");
 
     signal(SIGSEGV, &SystemErrorsManager::signalHandler);
     std::set_terminate(terminateHandler);
+	FaultManager::registerNotificationCallback([](std::shared_ptr<SFaultIndication> faultInd) {
+		newFaultHandler(faultInd);
+	});
 
     Logger::info("%s: Initialized!", getLoggerPrefix().c_str());
 

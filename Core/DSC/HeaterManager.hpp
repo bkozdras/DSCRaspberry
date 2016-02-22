@@ -26,6 +26,7 @@ namespace DSC
             static EControlMode getPowerControlMode();
             static bool setPowerControlProcessPidTunes(double && kp, double && ki, double && kd, double && n);
 
+			static bool setMaximumAllowedTemperature(float value);
             static bool setTemperatureInFeedbackMode(float value);
             static bool setControllingAlgorithmExecutionPeriod(u16 value);
 
@@ -45,6 +46,8 @@ namespace DSC
             static void setControllerTunesResponse(TSetControllerTunesResponse && response);
             static void setHeaterTemperatureInFeedbackModeResponse(TSetHeaterTemperatureInFeedbackModeResponse && response);
             static void setControllingAlgorithmExecutionPeriodResponse(TSetControllingAlgorithmExecutionPeriodResponse && response);
+			static void setMaximumAllowedTemperatureResponse(TSetMaximumAllowedTemperatureResponse && response);
+			static void maxTemperatureController();
 
             static const std::string & getLoggerPrefix();
 
@@ -58,5 +61,7 @@ namespace DSC
             static std::function<void(EControlMode, bool)> mNewControlModeSetCallback;
             static std::function<void(float, bool)> mNewPowerValueSetCallback;
             static std::unique_ptr<SPidTunes> mSettingPidTunes;
+			static float mMaxAllowedTemperature;
+			static u8 mNumberOfFailedRequests;
     };
 }

@@ -5,6 +5,11 @@
 #include "../Nucleo/DeviceCommunicator.hpp"
 #include "../DevicePeripherals/UnitsDetector.hpp"
 #include "../System/ThreadPool.hpp"
+#include "../System/TimerManager.hpp"
+#include "../ModelIdentification/ExperimentManager.hpp"
+#include "../FaultManagement/FaultManager.hpp"
+#include "../SharedDefines/EFaultId.h"
+#include "../ModelIdentification/EExperimentState.hpp"
 
 namespace DSC
 {
@@ -37,6 +42,11 @@ namespace DSC
                 }
             );
         }
+		{
+			TimerManager::create(1000U, 1000U, []() {
+				maxTemperatureController();
+			});
+		}
 
         Logger::info("%s: Initialized!", getLoggerPrefix().c_str());
         return true;
@@ -70,7 +80,7 @@ namespace DSC
 			}
             request.power = percent;
 
-            Logger::info("%s: Setting heater power value to %.2f%%.", getLoggerPrefix().c_str(), request.power);
+            Logger::debug("%s: Setting heater power value to %.2f%%.", getLoggerPrefix().c_str(), request.power);
 
             Nucleo::DeviceCommunicator::send(request, [](TSetHeaterPowerResponse && response, bool isNotTimeout){ heaterPowerResponseCallback(std::move(response)); });
         }
@@ -165,6 +175,23 @@ namespace DSC
 
         return true;
     }
+
+	bool HeaterManager::setMaximumAllowedTemperature(float value)
+	{
+		std::lock_guard<std::mutex> lockGuard(mMtx);
+
+		if (mMaxAllowedTemperature == value)
+		{
+			Logger::warning("%s: Setting maximum allowed temperature value to %.2f oC skipped. Actual value is the same.", getLoggerPrefix().c_str(), value);
+			return true;
+		}
+
+		TSetMaximumAllowedTemperatureRequest request;
+		request.temperature = value;
+		Nucleo::DeviceCommunicator::send(request, [](TSetMaximumAllowedTemperatureResponse && response, bool isNotTimeout) { setMaximumAllowedTemperatureResponse(std::move(response)); });
+
+		return true;
+	}
 
     bool HeaterManager::setTemperatureInFeedbackMode(float value)
     {
@@ -296,12 +323,18 @@ namespace DSC
 
         if (response.success)
         {
-            Logger::info("%s: Heater power %.2f%% set.", getLoggerPrefix().c_str(), powerPercent);
+            Logger::debug("%s: Heater power %.2f%% set.", getLoggerPrefix().c_str(), powerPercent);
             DataManager::updateData(EDataType::HeaterPower, powerPercent);
+			mNumberOfFailedRequests = 0U;
         }
         else
         {
             Logger::error("%s: Setting heater power %.2f%% failed!", getLoggerPrefix().c_str(), powerPercent);
+			++mNumberOfFailedRequests;
+			if (3U == mNumberOfFailedRequests)
+			{
+				FaultManager::generate(EFaultId_Uart, EUnitId_Nucleo);
+			}
         }
 
         if (mNewPowerValueSetCallback)
@@ -486,6 +519,58 @@ namespace DSC
         }
     }
 
+	void HeaterManager::setMaximumAllowedTemperatureResponse(TSetMaximumAllowedTemperatureResponse && response)
+	{
+		std::lock_guard<std::mutex> lockGuard(mMtx);
+
+		if (response.success)
+		{
+			Logger::info("%s: Set maximum allowed temperature to %.2f oC.", getLoggerPrefix().c_str(), response.temperature);
+			mMaxAllowedTemperature = response.temperature;
+		}
+		else
+		{
+			Logger::error("%s: Setting maximum allowed temperature to %.2f oC failed.", getLoggerPrefix().c_str(), response.temperature);
+		}
+	}
+
+	void HeaterManager::maxTemperatureController()
+	{
+		std::lock_guard<std::mutex> lockGuard(mMtx);
+		static bool mIsOverheatedReported = false;
+		const auto temperature = DataManager::getData(EDataType::HeaterTemperature);
+		if (DataManager::UnknownValue == temperature || temperature < mMaxAllowedTemperature)
+		{
+			if (mIsOverheatedReported)
+			{
+				Logger::warning("Heater is not overheated! Cancelling fault.", getLoggerPrefix().c_str());
+				FaultManager::cancel(EFaultId_TemperatureTooHigh, EUnitId_Heater);
+			}
+			mIsOverheatedReported = false;
+			return;
+		}
+		if (mIsOverheatedReported)
+		{
+			return;
+		}
+		Logger::error("%s: Actual temperature: >= %.2f oC. Maximum allowed temperature: %.2f oC. Overheated!", getLoggerPrefix().c_str(), temperature, mMaxAllowedTemperature);
+		FaultManager::generate(EFaultId_TemperatureTooHigh, EUnitId_Heater);
+		if (EExperimentState::Running == ModelIdentification::ExperimentManager::getExperimentState())
+		{
+			ModelIdentification::ExperimentManager::forceStoppingExperiment();
+		}
+		const auto controlMode = DSC::DataManager::getControlMode();
+		if (EControlMode::MFCFeedback == controlMode || EControlMode::SimpleFeedback == controlMode)
+		{
+			ThreadPool::submit(TaskPriority::High, []() {
+				setPowerControlMode(EControlMode::OpenLoop);
+			});
+		}
+		ThreadPool::submit(TaskPriority::High, []() {
+			setPower(0);
+		});
+	}
+
     const std::string & HeaterManager::getLoggerPrefix()
     {
         static std::string loggerPrefix("HeaterManager");
@@ -547,4 +632,6 @@ namespace DSC
     std::function<void(EControlMode, bool)> HeaterManager::mNewControlModeSetCallback;
     std::function<void(float, bool)> HeaterManager::mNewPowerValueSetCallback;
     std::unique_ptr<SPidTunes> HeaterManager::mSettingPidTunes;
+	float HeaterManager::mMaxAllowedTemperature = 380.0F;
+	u8 HeaterManager::mNumberOfFailedRequests = 0U;
 }

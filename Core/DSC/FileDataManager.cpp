@@ -11,6 +11,7 @@
 #include "../ModelIdentification/ExperimentManager.hpp"
 #include "../SharedDefines/EUnitId.h"
 
+#include <algorithm>
 #include <chrono>
 #include <ctime>
 #include <iomanip>
@@ -713,21 +714,24 @@ namespace DSC
 			fileStream << filename << std::endl;
 			std::string description;
 			DSC::DataManager::getUnitAttribute(EUnitId_Heater, "TestDataInputDescription", description);
-			fileStream << "File description: " << description << std::endl;
+			fileStream << description << std::endl;
+			
 		}
 		else if (EInputDataSource::UniformDistribution == inputDataSource)
 		{
-			fileStream << "Internal Data Creator - Generated from Uniform Distribution (range 0 - 100)" << std::endl;
+			fileStream << "Internal Data Creator - Generated from Uniform Distribution (range 0 - 60)" << std::endl;
 		}
 
 		const auto samplingPeriod = static_cast<u64>(DSC::DataManager::getData(EDataType::ModelIdentificationSamplingPeriod));
+		const auto fileDataCollectingPeriod = static_cast<u64>(1000.0 * DSC::DataManager::getData(EDataType::HeaterPowerControlFileDataSampling));
 		const auto numberOfSamples = static_cast<u64>(DSC::DataManager::getData(EDataType::ModelIdentificationNumberOfSamples));
 		const auto experimentTime = static_cast<u64>(DSC::DataManager::getData(EDataType::ModelIdentificationExperimentTime));
-		const auto experimentTimeSeconds = static_cast<u16>((experimentTime / 1000) % 60);
-		const auto experimentTimeMinutes = static_cast<u16>((experimentTime / (1000 * 60)) % 60);
-		const auto experimentTimeHours = static_cast<u16>((experimentTime / (1000 * 60 * 60)) % 24);
+		const auto experimentTimeHours = static_cast<u16>(experimentTime / (1000 * 60 * 60));
+		const auto experimentTimeMinutes = static_cast<u16>((experimentTime % (1000 * 60 * 60)) / (1000 * 60));
+		const auto experimentTimeSeconds = static_cast<u16>(((experimentTime % (1000 * 60 * 60)) % (1000 * 60)) / 1000);
 		fileStream << "Number of Samples: " << numberOfSamples << std::endl;
-		fileStream << "Sampling Period: " << samplingPeriod << " ms" << std::endl;
+		fileStream << "CV Sampling Period: " << samplingPeriod << " ms" << std::endl;
+		fileStream << "Data Collecting to File Period: " << fileDataCollectingPeriod << " ms" << std::endl;
 		fileStream << "Duration of the Experiment: ";
 		if (0UL == experimentTimeHours && 0UL == experimentTimeMinutes)
 		{

@@ -62,6 +62,8 @@ typedef enum _EMessageId : u8
     EMessageId_UnitReadyInd                                                 = 53,
     EMessageId_SetHeaterTemperatureInFeedbackModeRequest                    = 54,
     EMessageId_SetHeaterTemperatureInFeedbackModeResponse                   = 55,
+	EMessageId_SetMaximumAllowedTemperatureRequest							= 56,
+	EMessageId_SetMaximumAllowedTemperatureResponse							= 57,
     EMessageId_UnexpectedMasterMessageInd                                   = 99
 } EMessageId;
 

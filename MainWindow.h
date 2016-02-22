@@ -58,6 +58,7 @@ protected slots:
 	void testInputCreatorDistributionChanged();
 	void testInputExternalFileChooseFileClicked();
 	void testInputExperimentInfoStartStopExperimentClicked();
+	void testInputProcessValueSettingsApplySettingsClicked();
 
     void segmentsConfiguratorAddToProgramClicked();
     void segmentsConfiguratorDeleteFromProgramClicked();
@@ -122,7 +123,7 @@ private:
 
     void setupLoggerTable();
     void addNewLogToLoggerTable(std::shared_ptr<Logger::StoredLog> log);
-    void removeTheOldestDebugLogFromLoggerTable();
+    void removeTheOldestLogsFromLoggerTable();
     const QColor & getColorForLogSeverity(ELogSeverity severity);
     const QString & getQStringSource(Logger::LogSource source);
     const QString & getQStringSeverity(ELogSeverity severity);

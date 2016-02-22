@@ -143,6 +143,11 @@ namespace Nucleo
         SEND_IMPL(SetRTDPolynomialCoefficients);
     }
 
+	SEND_MACRO_IMPL(SetMaximumAllowedTemperature)
+	{
+		SEND_IMPL(SetMaximumAllowedTemperature);
+	}
+
     #define INDICATION_CALLBACK_MACRO_IMPL(messageUniqueName) void DeviceCommunicator::registerIndCallback(std::function<void(T##messageUniqueName##Ind &&)> indCallback)
 
     #define INDICATION_IMPL(messageUniqueName)  std::lock_guard<std::mutex> lockGuard(mMtx);                                                            \

@@ -27,7 +27,7 @@ class FaultManager : boost::noncopyable
         static CallbackId registerNotificationCallback
         (
             std::function<void(std::shared_ptr<SFaultIndication>)> faultRaisedCallback,
-            std::function<void(std::shared_ptr<SFaultIndication>)> faultCancelledCallback
+            std::function<void(std::shared_ptr<SFaultIndication>)> faultCancelledCallback = std::function<void(std::shared_ptr<SFaultIndication>)>()
         );
         static void deregisterNotificationCallback(CallbackId id);
 

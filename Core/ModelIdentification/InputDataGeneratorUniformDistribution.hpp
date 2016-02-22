@@ -22,8 +22,8 @@ namespace ModelIdentification
 		private :
 
 			const float mRangeMin = 0.0F;
-			const float mRangeMax = 100.0F;
+			const float mRangeMax = 60.0F;
 			std::unique_ptr<std::default_random_engine> mRandomEngine = std::unique_ptr<std::default_random_engine>();
-			std::unique_ptr<std::uniform_real_distribution<float>> mUniformDistributionGenerator = std::unique_ptr<std::uniform_real_distribution<float>>();
+			std::unique_ptr<std::uniform_int_distribution<int>> mUniformDistributionGenerator = std::unique_ptr<std::uniform_int_distribution<int>>();
 	};
 }

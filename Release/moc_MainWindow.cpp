@@ -22,7 +22,7 @@ static const uint qt_meta_data_MainWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-      44,   14, // methods
+      45,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -56,26 +56,27 @@ static const uint qt_meta_data_MainWindow[] = {
      798,   11,   11,   11, 0x09,
      839,   11,   11,   11, 0x09,
      891,   11,   11,   11, 0x09,
-     933,   11,   11,   11, 0x09,
-     980,   11,   11,   11, 0x09,
-    1022,   11,   11,   11, 0x09,
-    1054,   11,   11,   11, 0x09,
-    1088,   11,   11,   11, 0x09,
-    1129,   11,   11,   11, 0x09,
-    1175,   11,   11,   11, 0x09,
-    1228,   11,   11,   11, 0x09,
-    1268,   11,   11,   11, 0x09,
-    1308,   11,   11,   11, 0x09,
-    1348,   11,   11,   11, 0x09,
-    1390,   11,   11,   11, 0x09,
-    1432,   11,   11,   11, 0x09,
-    1474,   11,   11,   11, 0x09,
-    1516,   11,   11,   11, 0x09,
-    1572,   11,   11,   11, 0x09,
-    1626,   11,   11,   11, 0x09,
-    1659,   11,   11,   11, 0x09,
-    1691,   11,   11,   11, 0x09,
-    1721,   11,   11,   11, 0x09,
+     943,   11,   11,   11, 0x09,
+     985,   11,   11,   11, 0x09,
+    1032,   11,   11,   11, 0x09,
+    1074,   11,   11,   11, 0x09,
+    1106,   11,   11,   11, 0x09,
+    1140,   11,   11,   11, 0x09,
+    1181,   11,   11,   11, 0x09,
+    1227,   11,   11,   11, 0x09,
+    1280,   11,   11,   11, 0x09,
+    1320,   11,   11,   11, 0x09,
+    1360,   11,   11,   11, 0x09,
+    1400,   11,   11,   11, 0x09,
+    1442,   11,   11,   11, 0x09,
+    1484,   11,   11,   11, 0x09,
+    1526,   11,   11,   11, 0x09,
+    1568,   11,   11,   11, 0x09,
+    1624,   11,   11,   11, 0x09,
+    1678,   11,   11,   11, 0x09,
+    1711,   11,   11,   11, 0x09,
+    1743,   11,   11,   11, 0x09,
+    1773,   11,   11,   11, 0x09,
 
        0        // eod
 };
@@ -104,6 +105,7 @@ static const char qt_meta_stringdata_MainWindow[] = {
     "testInputCreatorDistributionChanged()\0"
     "testInputExternalFileChooseFileClicked()\0"
     "testInputExperimentInfoStartStopExperimentClicked()\0"
+    "testInputProcessValueSettingsApplySettingsClicked()\0"
     "segmentsConfiguratorAddToProgramClicked()\0"
     "segmentsConfiguratorDeleteFromProgramClicked()\0"
     "segmentsConfiguratorApplyProgramClicked()\0"
@@ -156,27 +158,28 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 20: _t->testInputCreatorDistributionChanged(); break;
         case 21: _t->testInputExternalFileChooseFileClicked(); break;
         case 22: _t->testInputExperimentInfoStartStopExperimentClicked(); break;
-        case 23: _t->segmentsConfiguratorAddToProgramClicked(); break;
-        case 24: _t->segmentsConfiguratorDeleteFromProgramClicked(); break;
-        case 25: _t->segmentsConfiguratorApplyProgramClicked(); break;
-        case 26: _t->segmentsConfiguratorUpClicked(); break;
-        case 27: _t->segmentsConfiguratorDownClicked(); break;
-        case 28: _t->segmentsConfiguratorSegmentTypeChanged(); break;
-        case 29: _t->callibrationSettingsUpdateFilterDataClicked(); break;
-        case 30: _t->callibrationSettingsUpdateAverageFilterDataClicked(); break;
-        case 31: _t->callibrationSettingsThreshold1Changed(); break;
-        case 32: _t->callibrationSettingsThreshold2Changed(); break;
-        case 33: _t->callibrationSettingsThreshold3Changed(); break;
-        case 34: _t->callibrationSettingsCoefficient1Changed(); break;
-        case 35: _t->callibrationSettingsCoefficient2Changed(); break;
-        case 36: _t->callibrationSettingsCoefficient3Changed(); break;
-        case 37: _t->callibrationSettingsCoefficient4Changed(); break;
-        case 38: _t->callibrationSettingsThresholdFilteringEnablingClicked(); break;
-        case 39: _t->callibrationSettingsAverageFilteringEnablingClicked(); break;
-        case 40: _t->dscDataViewStartProgramClicked(); break;
-        case 41: _t->dscDataViewStopProgramClicked(); break;
-        case 42: _t->dscDataViewPlotDataCallback(); break;
-        case 43: _t->dscDataViewSaveDataToFileClicked(); break;
+        case 23: _t->testInputProcessValueSettingsApplySettingsClicked(); break;
+        case 24: _t->segmentsConfiguratorAddToProgramClicked(); break;
+        case 25: _t->segmentsConfiguratorDeleteFromProgramClicked(); break;
+        case 26: _t->segmentsConfiguratorApplyProgramClicked(); break;
+        case 27: _t->segmentsConfiguratorUpClicked(); break;
+        case 28: _t->segmentsConfiguratorDownClicked(); break;
+        case 29: _t->segmentsConfiguratorSegmentTypeChanged(); break;
+        case 30: _t->callibrationSettingsUpdateFilterDataClicked(); break;
+        case 31: _t->callibrationSettingsUpdateAverageFilterDataClicked(); break;
+        case 32: _t->callibrationSettingsThreshold1Changed(); break;
+        case 33: _t->callibrationSettingsThreshold2Changed(); break;
+        case 34: _t->callibrationSettingsThreshold3Changed(); break;
+        case 35: _t->callibrationSettingsCoefficient1Changed(); break;
+        case 36: _t->callibrationSettingsCoefficient2Changed(); break;
+        case 37: _t->callibrationSettingsCoefficient3Changed(); break;
+        case 38: _t->callibrationSettingsCoefficient4Changed(); break;
+        case 39: _t->callibrationSettingsThresholdFilteringEnablingClicked(); break;
+        case 40: _t->callibrationSettingsAverageFilteringEnablingClicked(); break;
+        case 41: _t->dscDataViewStartProgramClicked(); break;
+        case 42: _t->dscDataViewStopProgramClicked(); break;
+        case 43: _t->dscDataViewPlotDataCallback(); break;
+        case 44: _t->dscDataViewSaveDataToFileClicked(); break;
         default: ;
         }
     }
@@ -215,9 +218,9 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 44)
+        if (_id < 45)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 44;
+        _id -= 45;
     }
     return _id;
 }

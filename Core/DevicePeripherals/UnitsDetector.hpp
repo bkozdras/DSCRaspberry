@@ -38,6 +38,8 @@ namespace DevicePeripherals
             static std::map<CallbackId, std::function<void(EUnitId, Status)>> mUnitsStatusObservers;
             static std::mutex mMtx;
 
+			static bool checkIfAllUnitsAreNotLost();
+			static void resetStatesOfAllUnits();
             static void unitReadyIndCallback(TUnitReadyInd && unitReadyInd);
             static CallbackId generateUniqueCallbackId();
             static const std::string & getStatusString(Status status);

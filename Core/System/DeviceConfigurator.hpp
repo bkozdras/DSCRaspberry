@@ -13,6 +13,7 @@ class DeviceConfigurator : boost::noncopyable
         static void configureEnvironment();
         static bool configureSystem();
         static void shutdownSystem();
+		static void notifyAboutResettingSystem();
 
     private :
 
@@ -28,4 +29,5 @@ class DeviceConfigurator : boost::noncopyable
         static void newControlModeSetCallback(EControlMode mode, bool result);
 
         static std::mutex mMtx;
+		static bool mAreAllDevicesConfigured;
 };

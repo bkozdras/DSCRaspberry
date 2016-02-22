@@ -112,7 +112,8 @@ void UartManager::initializeTerminal()
     tty_old = tty;
 
     /* Set Baud Rate */
-    cfsetospeed(&tty, (speed_t)B1000000);
+    //cfsetospeed(&tty, (speed_t)B1000000);
+	cfsetospeed(&tty, (speed_t)B500000);
 
     /* Setting other Port Stuff */
     tty.c_cflag &= ~PARENB;            // Make 8n1
@@ -144,7 +145,8 @@ bool UartManager::initializeHardwareConnection()
     mAsyncSerial.open
     (
         "/dev/ttyAMA0",
-        1000000
+        /*1000000*/
+		500000
     );
 
     if (mAsyncSerial.errorStatus())

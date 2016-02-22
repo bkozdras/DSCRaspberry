@@ -40,6 +40,8 @@ bool DeviceConfigurator::configureSystem()
     Logger::setLevel(LoggerOutput::GuiTable, LoggerLevel::Info);
     Logger::info("%s: Started configuring system!", getLoggerPrefix().c_str());
 
+	//DevicePeripherals::StateManager::startSlavePolling();
+
     bool success = true;
     {
         Utilities::conditionalExecutor(success, [](){ return configureRaspberryPeripherals(); });
@@ -70,9 +72,17 @@ void DeviceConfigurator::shutdownSystem()
 
     Logger::warning("%s: Shutdowning system...", getLoggerPrefix().c_str());
 
+	DevicePeripherals::StateManager::stopSlavePolling();
     GpioManager::uninitialize();
 
     Logger::warning("%s: System is in shutdown!", getLoggerPrefix().c_str());
+}
+
+void DeviceConfigurator::notifyAboutResettingSystem()
+{
+	std::lock_guard<std::mutex> lockGuard(mMtx);
+	mAreAllDevicesConfigured = false;
+	DSC::DataManager::updateControlMode(EControlMode::NotSet);
 }
 
 bool DeviceConfigurator::configureRaspberryPeripherals()
@@ -204,14 +214,12 @@ void DeviceConfigurator::unitReadyIndication(EUnitId unitId, DevicePeripherals::
 {
     std::lock_guard<std::mutex> lockGuard(mMtx);
 
-    static auto areConfigured = false;
-
-    if (!areConfigured && DevicePeripherals::UnitsDetector::areAllUnitsNotLost())
+    if (!mAreAllDevicesConfigured && DevicePeripherals::UnitsDetector::areAllUnitsNotLost())
     {
         Logger::info("%s: All units are properly detected!", getLoggerPrefix().c_str());
         Logger::info("%s: Starting collecting DSC / Device data...", getLoggerPrefix().c_str());
         DSC::IntegratedCircuitsManager::changeLMP90100Mode(EUnitId_LMP90100ControlSystem, ELMP90100Mode_On_13_42_SPS);
-        areConfigured = true;
+		mAreAllDevicesConfigured = true;
     }
 }
 
@@ -227,7 +235,7 @@ void DeviceConfigurator::newIcModeIndication(EUnitId unitId, u8 newMode)
             Logger::debug("%s: New %s mode %s set!", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(unitId).c_str(), ToStringConverter::getLMP90100Mode(lmpMode).c_str());
 
             {
-                DSC::HeaterManager::startRegisteringTemperatureValue(100U);
+                DSC::HeaterManager::startRegisteringTemperatureValue(1000U);
             }
 
             break;
@@ -398,3 +406,4 @@ void DeviceConfigurator::newControlModeSetCallback(EControlMode mode, bool resul
 }
 
 std::mutex DeviceConfigurator::mMtx;
+bool DeviceConfigurator::mAreAllDevicesConfigured = false;

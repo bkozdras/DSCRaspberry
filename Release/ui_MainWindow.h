@@ -220,6 +220,7 @@ public:
     QLabel *labelInputDataSettingExpTime_5;
     QLabel *labelInputDataSettingExpTime_6;
     QLabel *labelHeaterPowerControlModeTemperatureInfo_5;
+    QLabel *labelInputDataSettingExpTime_7;
     QFrame *frame_41;
     QLabel *labelTestInputExternalFileInfo;
     QLabel *labelTestInputExternalFilePeriodInfo;
@@ -256,6 +257,14 @@ public:
     QLabel *labelInputDataSettingExpTime_15;
     QLabel *labelTestInputExperimentInfoLeftSamples;
     QLabel *labelHeaterPowerControlModeTemperatureInfo_9;
+    QFrame *frame_21;
+    QLabel *labelHeaterPowerPlotTemperature_7;
+    QLabel *labelHeaterPowerControlModePowerInfo_5;
+    QLabel *labelTestInputSettingExperimentTimeSeconds_2;
+    QLabel *labelInputDataSettingExpTime_16;
+    QTextEdit *textEditTestInputProcessValueSettingsMaxAllowedTemp;
+    QLabel *labelTestInputProcessValueSettingsMaxAllowedTempInfo;
+    QPushButton *pushButtonTestInputProcessValueSettingsApplySettings;
     QWidget *tabSegmentsConfigurator;
     QCustomPlot *segmentsConfiguratorProgramPlot;
     QPushButton *pushButtonSegmentsConfiguratorAddToProgram;
@@ -1376,6 +1385,10 @@ public:
         labelHeaterPowerControlModeTemperatureInfo_5->setObjectName(QString::fromUtf8("labelHeaterPowerControlModeTemperatureInfo_5"));
         labelHeaterPowerControlModeTemperatureInfo_5->setGeometry(QRect(20, 140, 131, 21));
         labelHeaterPowerControlModeTemperatureInfo_5->setFont(font20);
+        labelInputDataSettingExpTime_7 = new QLabel(frame_20);
+        labelInputDataSettingExpTime_7->setObjectName(QString::fromUtf8("labelInputDataSettingExpTime_7"));
+        labelInputDataSettingExpTime_7->setGeometry(QRect(290, 50, 61, 21));
+        labelInputDataSettingExpTime_7->setFont(font13);
         frame_41 = new QFrame(tab);
         frame_41->setObjectName(QString::fromUtf8("frame_41"));
         frame_41->setGeometry(QRect(390, 220, 431, 411));
@@ -1527,6 +1540,41 @@ public:
         labelHeaterPowerControlModeTemperatureInfo_9->setObjectName(QString::fromUtf8("labelHeaterPowerControlModeTemperatureInfo_9"));
         labelHeaterPowerControlModeTemperatureInfo_9->setGeometry(QRect(20, 110, 131, 21));
         labelHeaterPowerControlModeTemperatureInfo_9->setFont(font20);
+        frame_21 = new QFrame(tab);
+        frame_21->setObjectName(QString::fromUtf8("frame_21"));
+        frame_21->setGeometry(QRect(830, 460, 431, 171));
+        frame_21->setFrameShape(QFrame::Box);
+        frame_21->setFrameShadow(QFrame::Raised);
+        frame_21->setLineWidth(2);
+        labelHeaterPowerPlotTemperature_7 = new QLabel(frame_21);
+        labelHeaterPowerPlotTemperature_7->setObjectName(QString::fromUtf8("labelHeaterPowerPlotTemperature_7"));
+        labelHeaterPowerPlotTemperature_7->setGeometry(QRect(120, 10, 231, 31));
+        labelHeaterPowerPlotTemperature_7->setFont(font19);
+        labelHeaterPowerControlModePowerInfo_5 = new QLabel(frame_21);
+        labelHeaterPowerControlModePowerInfo_5->setObjectName(QString::fromUtf8("labelHeaterPowerControlModePowerInfo_5"));
+        labelHeaterPowerControlModePowerInfo_5->setGeometry(QRect(20, 60, 211, 21));
+        labelHeaterPowerControlModePowerInfo_5->setFont(font20);
+        labelTestInputSettingExperimentTimeSeconds_2 = new QLabel(frame_21);
+        labelTestInputSettingExperimentTimeSeconds_2->setObjectName(QString::fromUtf8("labelTestInputSettingExperimentTimeSeconds_2"));
+        labelTestInputSettingExperimentTimeSeconds_2->setGeometry(QRect(210, 170, 61, 21));
+        labelTestInputSettingExperimentTimeSeconds_2->setFont(font13);
+        labelInputDataSettingExpTime_16 = new QLabel(frame_21);
+        labelInputDataSettingExpTime_16->setObjectName(QString::fromUtf8("labelInputDataSettingExpTime_16"));
+        labelInputDataSettingExpTime_16->setGeometry(QRect(290, 170, 61, 21));
+        labelInputDataSettingExpTime_16->setFont(font13);
+        textEditTestInputProcessValueSettingsMaxAllowedTemp = new QTextEdit(frame_21);
+        textEditTestInputProcessValueSettingsMaxAllowedTemp->setObjectName(QString::fromUtf8("textEditTestInputProcessValueSettingsMaxAllowedTemp"));
+        textEditTestInputProcessValueSettingsMaxAllowedTemp->setGeometry(QRect(220, 50, 91, 30));
+        textEditTestInputProcessValueSettingsMaxAllowedTemp->setFont(font12);
+        textEditTestInputProcessValueSettingsMaxAllowedTemp->setLayoutDirection(Qt::LeftToRight);
+        labelTestInputProcessValueSettingsMaxAllowedTempInfo = new QLabel(frame_21);
+        labelTestInputProcessValueSettingsMaxAllowedTempInfo->setObjectName(QString::fromUtf8("labelTestInputProcessValueSettingsMaxAllowedTempInfo"));
+        labelTestInputProcessValueSettingsMaxAllowedTempInfo->setGeometry(QRect(330, 60, 61, 21));
+        labelTestInputProcessValueSettingsMaxAllowedTempInfo->setFont(font13);
+        pushButtonTestInputProcessValueSettingsApplySettings = new QPushButton(frame_21);
+        pushButtonTestInputProcessValueSettingsApplySettings->setObjectName(QString::fromUtf8("pushButtonTestInputProcessValueSettingsApplySettings"));
+        pushButtonTestInputProcessValueSettingsApplySettings->setGeometry(QRect(110, 110, 221, 31));
+        pushButtonTestInputProcessValueSettingsApplySettings->setFont(font9);
         applicationTabWidget->addTab(tab, QString());
         tabSegmentsConfigurator = new QWidget();
         tabSegmentsConfigurator->setObjectName(QString::fromUtf8("tabSegmentsConfigurator"));
@@ -2479,6 +2527,7 @@ public:
         QObject::connect(comboBoxTestInputCreatorDistribution, SIGNAL(currentIndexChanged(int)), MainWindow, SLOT(testInputCreatorDistributionChanged()));
         QObject::connect(pushButtonTestInputExternalFileChooseFile, SIGNAL(clicked()), MainWindow, SLOT(testInputExternalFileChooseFileClicked()));
         QObject::connect(pushButtonTestExperimentInfoStartStopExperiment, SIGNAL(clicked()), MainWindow, SLOT(testInputExperimentInfoStartStopExperimentClicked()));
+        QObject::connect(pushButtonTestInputProcessValueSettingsApplySettings, SIGNAL(clicked()), MainWindow, SLOT(testInputProcessValueSettingsApplySettingsClicked()));
 
         applicationTabWidget->setCurrentIndex(0);
         tabWidgetHeaterPower->setCurrentIndex(0);
@@ -2702,6 +2751,7 @@ public:
         labelInputDataSettingExpTime_5->setText(QApplication::translate("MainWindow", "min.", 0, QApplication::UnicodeUTF8));
         labelInputDataSettingExpTime_6->setText(QApplication::translate("MainWindow", "sec.", 0, QApplication::UnicodeUTF8));
         labelHeaterPowerControlModeTemperatureInfo_5->setText(QApplication::translate("MainWindow", "Time", 0, QApplication::UnicodeUTF8));
+        labelInputDataSettingExpTime_7->setText(QApplication::translate("MainWindow", "ms", 0, QApplication::UnicodeUTF8));
         labelTestInputExternalFileInfo->setText(QApplication::translate("MainWindow", "External File", 0, QApplication::UnicodeUTF8));
         labelTestInputExternalFilePeriodInfo->setText(QApplication::translate("MainWindow", "Sampling Period", 0, QApplication::UnicodeUTF8));
         textEditTestInputExternalFilePeriod->setHtml(QApplication::translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
@@ -2743,6 +2793,17 @@ public:
         labelInputDataSettingExpTime_15->setText(QApplication::translate("MainWindow", "min.", 0, QApplication::UnicodeUTF8));
         labelTestInputExperimentInfoLeftSamples->setText(QApplication::translate("MainWindow", "N/A", 0, QApplication::UnicodeUTF8));
         labelHeaterPowerControlModeTemperatureInfo_9->setText(QApplication::translate("MainWindow", "Left Samples", 0, QApplication::UnicodeUTF8));
+        labelHeaterPowerPlotTemperature_7->setText(QApplication::translate("MainWindow", "Process Value Settings", 0, QApplication::UnicodeUTF8));
+        labelHeaterPowerControlModePowerInfo_5->setText(QApplication::translate("MainWindow", "Max. Allowed Temp.", 0, QApplication::UnicodeUTF8));
+        labelTestInputSettingExperimentTimeSeconds_2->setText(QApplication::translate("MainWindow", "N/A", 0, QApplication::UnicodeUTF8));
+        labelInputDataSettingExpTime_16->setText(QApplication::translate("MainWindow", "sec.", 0, QApplication::UnicodeUTF8));
+        textEditTestInputProcessValueSettingsMaxAllowedTemp->setHtml(QApplication::translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Arial'; font-size:14pt; font-weight:600; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">100</span></p></body></html>", 0, QApplication::UnicodeUTF8));
+        labelTestInputProcessValueSettingsMaxAllowedTempInfo->setText(QApplication::translate("MainWindow", "oC", 0, QApplication::UnicodeUTF8));
+        pushButtonTestInputProcessValueSettingsApplySettings->setText(QApplication::translate("MainWindow", "Apply Settings", 0, QApplication::UnicodeUTF8));
         applicationTabWidget->setTabText(applicationTabWidget->indexOf(tab), QApplication::translate("MainWindow", "Test Input Data Configurator", 0, QApplication::UnicodeUTF8));
         pushButtonSegmentsConfiguratorAddToProgram->setText(QApplication::translate("MainWindow", "Add to Program", 0, QApplication::UnicodeUTF8));
         labelSegmentsConfiguratorPreviousNumberInfo->setText(QApplication::translate("MainWindow", "Segment Number", 0, QApplication::UnicodeUTF8));

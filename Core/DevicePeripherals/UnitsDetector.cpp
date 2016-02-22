@@ -4,6 +4,7 @@
 #include "../Nucleo/DeviceCommunicator.hpp"
 #include "../System/ThreadPool.hpp"
 #include "../FaultManagement/FaultManager.hpp"
+#include "../System/DeviceConfigurator.hpp"
 
 namespace DevicePeripherals
 {
@@ -11,24 +12,7 @@ namespace DevicePeripherals
     {
         std::lock_guard<std::mutex> lockGuard(mMtx);
 
-        mUnitsStatus = decltype(mUnitsStatus)
-        {
-            std::make_pair(EUnitId_ADS1248, Status::Unknown),
-            std::make_pair(EUnitId_DRV595, Status::Unknown),
-            std::make_pair(EUnitId_LMP90100ControlSystem, Status::Unknown),
-            std::make_pair(EUnitId_LMP90100SignalsMeasurement, Status::Unknown),
-            std::make_pair(EUnitId_MCP4716, Status::Unknown),
-            std::make_pair(EUnitId_Nucleo, Status::Unknown),
-            std::make_pair(EUnitId_ThermocoupleReference, Status::Unknown),
-            std::make_pair(EUnitId_Thermocouple1, Status::Unknown),
-            std::make_pair(EUnitId_Thermocouple2, Status::Unknown),
-            std::make_pair(EUnitId_Thermocouple3, Status::Unknown),
-            std::make_pair(EUnitId_Thermocouple4, Status::Unknown),
-            std::make_pair(EUnitId_Rtd1Pt100, Status::Unknown),
-            std::make_pair(EUnitId_Rtd2Pt100, Status::Unknown),
-            std::make_pair(EUnitId_RtdPt1000, Status::Unknown),
-            std::make_pair(EUnitId_Peltier, Status::Unknown)
-        };
+		resetStatesOfAllUnits();
 
         Nucleo::DeviceCommunicator::registerIndCallback([](TUnitReadyInd && unitReadyInd){ unitReadyIndCallback(std::move(unitReadyInd)); });
 
@@ -96,22 +80,56 @@ namespace DevicePeripherals
     bool UnitsDetector::areAllUnitsNotLost()
     {
         std::lock_guard<std::mutex> lockGuard(mMtx);
-        auto notLost = true;
-        for (const auto & unitStatus : mUnitsStatus)
-        {
-            if (Status::Lost == unitStatus.second || Status::Unknown == unitStatus.second)
-            {
-                notLost = false;
-                break;
-            }
-        }
-
-        return notLost;
+		return checkIfAllUnitsAreNotLost();
     }
+
+	bool UnitsDetector::checkIfAllUnitsAreNotLost()
+	{
+		auto notLost = true;
+		for (const auto & unitStatus : mUnitsStatus)
+		{
+			if (Status::Lost == unitStatus.second || Status::Unknown == unitStatus.second)
+			{
+				notLost = false;
+				break;
+			}
+		}
+
+		return notLost;
+	}
+
+	void UnitsDetector::resetStatesOfAllUnits()
+	{
+		mUnitsStatus = decltype(mUnitsStatus)
+		{
+			std::make_pair(EUnitId_ADS1248, Status::Unknown),
+			std::make_pair(EUnitId_DRV595, Status::Unknown),
+			std::make_pair(EUnitId_LMP90100ControlSystem, Status::Unknown),
+			std::make_pair(EUnitId_LMP90100SignalsMeasurement, Status::Unknown),
+			std::make_pair(EUnitId_MCP4716, Status::Unknown),
+			std::make_pair(EUnitId_Nucleo, Status::Unknown),
+			std::make_pair(EUnitId_ThermocoupleReference, Status::Unknown),
+			std::make_pair(EUnitId_Thermocouple1, Status::Unknown),
+			std::make_pair(EUnitId_Thermocouple2, Status::Unknown),
+			std::make_pair(EUnitId_Thermocouple3, Status::Unknown),
+			std::make_pair(EUnitId_Thermocouple4, Status::Unknown),
+			std::make_pair(EUnitId_Rtd1Pt100, Status::Unknown),
+			std::make_pair(EUnitId_Rtd2Pt100, Status::Unknown),
+			std::make_pair(EUnitId_RtdPt1000, Status::Unknown),
+			std::make_pair(EUnitId_Peltier, Status::Unknown)
+		};
+	}
 
     void UnitsDetector::unitReadyIndCallback(TUnitReadyInd && unitReadyInd)
     {
         std::lock_guard<std::mutex> lockGuard(mMtx);
+
+		if (checkIfAllUnitsAreNotLost())
+		{
+			Logger::warning("%s: Detected Slave self SW reset... Setting all states as Unknown...");
+			resetStatesOfAllUnits();
+			DeviceConfigurator::notifyAboutResettingSystem();
+		}
 
         auto it = mUnitsStatus.find(unitReadyInd.unitId);
 
@@ -128,7 +146,7 @@ namespace DevicePeripherals
                     {
                         it->second = Status::Detected;
                     }
-                    Logger::info("%s: Detected new unit %s status: Detected!", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(unitReadyInd.unitId).c_str());
+                    Logger::debug("%s: Detected new unit %s status: Detected!", getLoggerPrefix().c_str(), ToStringConverter::getUnitId(unitReadyInd.unitId).c_str());
                     FaultManager::cancel(EFaultId_Communication, unitReadyInd.unitId);
                 }
                 else

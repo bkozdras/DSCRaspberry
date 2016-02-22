@@ -350,4 +350,15 @@ typedef struct _TSetHeaterTemperatureInFeedbackModeResponse
     bool success;
 } TSetHeaterTemperatureInFeedbackModeResponse;
 
+typedef struct _TSetMaximumAllowedTemperatureRequest
+{
+	float temperature;
+} TSetMaximumAllowedTemperatureRequest;
+
+typedef struct _TSetMaximumAllowedTemperatureResponse
+{
+	float temperature;
+	bool success;
+} TSetMaximumAllowedTemperatureResponse;
+
 #endif

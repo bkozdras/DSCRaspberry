@@ -170,9 +170,9 @@ void MainWindow::applicationTabWidgetChanged()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+	Logger::deregisterGuiTableLogCallback();
+	FaultManager::deregisterNotificationCallback(mNewFaultCallbackId);
     DeviceConfigurator::shutdownSystem();
-    FaultManager::deregisterNotificationCallback(mNewFaultCallbackId);
-    Logger::deregisterGuiTableLogCallback();
 }
 
 void MainWindow::openInfoDialog()
@@ -182,6 +182,13 @@ void MainWindow::openInfoDialog()
         [this]()
         {
             closeInfoDialog();
+			Logger::registerGuiTableLogCallback
+			(
+				[this](std::shared_ptr<Logger::StoredLog> log)
+				{
+					addNewLogToLoggerTable(log);
+				}
+			);
             DeviceConfigurator::configureSystem();
         }
     );
@@ -212,6 +219,7 @@ void MainWindow::setupApplicationDockLogger()
 void MainWindow::setupDockLogger()
 {
     ui->loggerDockWidget->setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint);
+	//ui->loggerDockWidget->setFeatures(QDockWidget::DockWidgetFloatable);
 }
 
 void MainWindow::setupLoggerTable()
@@ -228,77 +236,81 @@ void MainWindow::setupLoggerTable()
     ui->loggerTable->setColumnWidth(1, sourceColumnWidth);
     ui->loggerTable->setColumnWidth(2, severityColumnWidth);
     ui->loggerTable->setColumnWidth(3, logColumnWidth);
-
-    Logger::registerGuiTableLogCallback
-    (
-        [this](std::shared_ptr<Logger::StoredLog> log)
-        {
-            addNewLogToLoggerTable(log);
-        }
-    );
 }
 
 void MainWindow::addNewLogToLoggerTable(std::shared_ptr<Logger::StoredLog> log)
 {
     std::lock_guard<std::mutex> lockGuard(mLoggerTableMtx);
 
-    if (100 < mNumberOfDebugLogs)
-    {
-        //removeTheOldestDebugLogFromLoggerTable();
-    }
+    removeTheOldestLogsFromLoggerTable();
 
     {
-        ui->loggerTable->insertRow(0);
-        //QMetaObject::invokeMethod(ui->loggerTable, "insertRow", Qt::QueuedConnection, Q_ARG(int, 0));
-        for (auto iter = 0; 4 > iter; ++iter)
-        {
-            ui->loggerTable->setItem(0, iter, new QTableWidgetItem());
+		try
+		{
+			ui->loggerTable->insertRow(0);
+			//QMetaObject::invokeMethod(ui->loggerTable, "insertRow", Qt::QueuedConnection, Q_ARG(int, 0));
+			for (auto iter = 0; 4 > iter; ++iter)
+			{
+				ui->loggerTable->setItem(0, iter, new QTableWidgetItem());
 
-            {
-                QFont font("Arial", 12);
-                QBrush brush;
-                brush.setColor(getColorForLogSeverity(log->severity));
-                ui->loggerTable->item(0, iter)->setForeground(brush);
-                ui->loggerTable->item(0, iter)->setFont(font);
-            }
+				{
+					QFont font("Arial", 12);
+					QBrush brush;
+					brush.setColor(getColorForLogSeverity(log->severity));
+					ui->loggerTable->item(0, iter)->setForeground(brush);
+					ui->loggerTable->item(0, iter)->setFont(font);
+				}
 
-            if (3 != iter)
-            {
-                ui->loggerTable->item(0, iter)->setTextAlignment(Qt::AlignCenter);
-            }
-            else
-            {
-                ui->loggerTable->item(0, iter)->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-            }
-        }
+				if (3 != iter)
+				{
+					ui->loggerTable->item(0, iter)->setTextAlignment(Qt::AlignCenter);
+				}
+				else
+				{
+					ui->loggerTable->item(0, iter)->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+				}
+			}
+
+			ui->loggerTable->item(0, 0)->setText(QString::fromStdString(log->timeData.time));
+			ui->loggerTable->item(0, 1)->setText(getQStringSource(log->source));
+			ui->loggerTable->item(0, 2)->setText(getQStringSeverity(log->severity));
+			ui->loggerTable->item(0, 3)->setText(QString::fromStdString(log->log));
+
+			if (ELogSeverity_Debug == log->severity)
+			{
+				++mNumberOfDebugLogs;
+			}
+			++mNumberOfLogs;
+		}
+		catch (...)
+		{
+		}
     }
-
-    ui->loggerTable->item(0, 0)->setText(QString::fromStdString(log->timeData.time));
-    ui->loggerTable->item(0, 1)->setText(getQStringSource(log->source));
-    ui->loggerTable->item(0, 2)->setText(getQStringSeverity(log->severity));
-    ui->loggerTable->item(0, 3)->setText(QString::fromStdString(log->log));
-
-    if (ELogSeverity_Debug == log->severity)
-    {
-        ++mNumberOfDebugLogs;
-    }
-    ++mNumberOfLogs;
 }
 
-void MainWindow::removeTheOldestDebugLogFromLoggerTable()
+void MainWindow::removeTheOldestLogsFromLoggerTable()
 {
-    auto numberOfRows = ui->loggerTable->rowCount();
-    auto qString = QString("Debug");
-    for (int iter = numberOfRows - 1; iter >= 0; --iter)
-    {
-        if (qString == ui->loggerTable->item(iter, 2)->text())
-        {
-            //ui->loggerTable->removeRow(iter);
-            QMetaObject::invokeMethod(ui->loggerTable, "removeRow", Qt::QueuedConnection, Q_ARG(int, iter));
-            --mNumberOfDebugLogs;
-            break;
-        }
-    }
+	auto numberOfRows = ui->loggerTable->rowCount();
+	while (numberOfRows >= 80)
+	{
+		ui->loggerTable->removeRow(numberOfRows - 1);
+		numberOfRows = ui->loggerTable->rowCount();
+	}
+	return;
+
+
+    //auto numberOfRows = ui->loggerTable->rowCount();
+    //auto qString = QString("Debug");
+    //for (int iter = numberOfRows - 1; iter >= 0; --iter)
+    //{
+    //    //if (qString == ui->loggerTable->item(iter, 2)->text())
+    //    {
+    //        ui->loggerTable->removeRow(iter);
+    //        //QMetaObject::invokeMethod(ui->loggerTable, "removeRow", Qt::QueuedConnection, Q_ARG(int, iter));
+    //        --mNumberOfDebugLogs;
+    //        break;
+    //    }
+    //}
 }
 
 const QColor & MainWindow::getColorForLogSeverity(ELogSeverity severity)
@@ -344,18 +356,25 @@ void MainWindow::setupFooterTable()
     QBrush blackBrush;
     blackBrush.setColor(QColor(250, 250, 250));
 
-    ui->footerDataTable->insertRow(0);
-    //QMetaObject::invokeMethod(ui->footerDataTable, "insertRow", Qt::QueuedConnection, Q_ARG(int, 0));
+	try
+	{
+		ui->footerDataTable->insertRow(0);
+		//QMetaObject::invokeMethod(ui->footerDataTable, "insertRow", Qt::QueuedConnection, Q_ARG(int, 0));
 
-    {
-        ui->footerDataTable->setColumnWidth(0, 70);
-        ui->footerDataTable->setItem(0, 0, new QTableWidgetItem());
-        //QMetaObject::invokeMethod(ui->footerDataTable, "setColumnWidth", Qt::QueuedConnection, Q_ARG(int, 0), Q_ARG(int, 70));
-        //QMetaObject::invokeMethod(ui->footerDataTable, "setItem", Qt::QueuedConnection, Q_ARG(int, 0), Q_ARG(int, 70), Q_ARG(QTableWidgetItem*, new QTableWidgetItem()));
-        ui->footerDataTable->item(0, 0)->setFont(font);
-        ui->footerDataTable->item(0, 0)->setForeground(blackBrush);
-        //  ui->footerDataTable->item(0, 0)->setText("@bkozdras");
-    }
+		{
+			ui->footerDataTable->setColumnWidth(0, 70);
+			ui->footerDataTable->setItem(0, 0, new QTableWidgetItem());
+			//QMetaObject::invokeMethod(ui->footerDataTable, "setColumnWidth", Qt::QueuedConnection, Q_ARG(int, 0), Q_ARG(int, 70));
+			//QMetaObject::invokeMethod(ui->footerDataTable, "setItem", Qt::QueuedConnection, Q_ARG(int, 0), Q_ARG(int, 70), Q_ARG(QTableWidgetItem*, new QTableWidgetItem()));
+			ui->footerDataTable->item(0, 0)->setFont(font);
+			ui->footerDataTable->item(0, 0)->setForeground(blackBrush);
+			//  ui->footerDataTable->item(0, 0)->setText("@bkozdras");
+		}
+	}
+	catch (...)
+	{
+
+	}
 }
 
 void MainWindow::setupFaultsTable()
@@ -388,77 +407,91 @@ void MainWindow::addNewFaultToFaultsTable(std::shared_ptr<SFaultIndication> faul
 {
     std::lock_guard<std::mutex> lockGuard(mFaultsTableMtx);
 
-    {
-        ui->faultsTable->insertRow(0);
-        //QMetaObject::invokeMethod(ui->faultsTable, "insertRow", Qt::QueuedConnection, Q_ARG(int, 0));
-        for (auto iter = 0; 4 > iter; ++iter)
-        {
-            ui->faultsTable->setItem(0, iter, new QTableWidgetItem());
-            //QMetaObject::invokeMethod(ui->faultsTable, "setItem", Qt::QueuedConnection, Q_ARG(int, 0), Q_ARG(int, iter), Q_ARG(QTableWidgetItem*, new QTableWidgetItem()));
+	try
+	{
+		{
+			ui->faultsTable->insertRow(0);
+			//QMetaObject::invokeMethod(ui->faultsTable, "insertRow", Qt::QueuedConnection, Q_ARG(int, 0));
+			for (auto iter = 0; 4 > iter; ++iter)
+			{
+				ui->faultsTable->setItem(0, iter, new QTableWidgetItem());
+				//QMetaObject::invokeMethod(ui->faultsTable, "setItem", Qt::QueuedConnection, Q_ARG(int, 0), Q_ARG(int, iter), Q_ARG(QTableWidgetItem*, new QTableWidgetItem()));
 
-            {
-                QFont font("Arial", 12);
-                QBrush brush;
-                brush.setColor(QColor(255, 69, 0));
-                ui->faultsTable->item(0, iter)->setForeground(brush);
-                ui->faultsTable->item(0, iter)->setFont(font);
-            }
+				{
+					QFont font("Arial", 12);
+					QBrush brush;
+					brush.setColor(QColor(255, 69, 0));
+					ui->faultsTable->item(0, iter)->setForeground(brush);
+					ui->faultsTable->item(0, iter)->setFont(font);
+				}
 
-            ui->faultsTable->item(0, iter)->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-        }
-    }
-    
-    ui->faultsTable->item(0, 0)->setText(QString::fromStdString(std::to_string(faultInd->faultId)));
-    ui->faultsTable->item(0, 1)->setText(QString::fromStdString(ToStringConverter::getFaultId(faultInd->faultId)));
-    ui->faultsTable->item(0, 2)->setText(QString::fromStdString(ToStringConverter::getUnitId(faultInd->faultyUnitId)));
-    if (EUnitId_Empty != faultInd->faultySubUnitId)
-    {
-        ui->faultsTable->item(0, 3)->setText(QString::fromStdString(ToStringConverter::getUnitId(faultInd->faultySubUnitId)));
-    }
+				ui->faultsTable->item(0, iter)->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+			}
+		}
 
-    mStoredFaults.push_back(std::make_pair(faultInd, ui->faultsTable->item(0, 0)));
+		ui->faultsTable->item(0, 0)->setText(QString::fromStdString(std::to_string(faultInd->faultId)));
+		ui->faultsTable->item(0, 1)->setText(QString::fromStdString(ToStringConverter::getFaultId(faultInd->faultId)));
+		ui->faultsTable->item(0, 2)->setText(QString::fromStdString(ToStringConverter::getUnitId(faultInd->faultyUnitId)));
+		if (EUnitId_Empty != faultInd->faultySubUnitId)
+		{
+			ui->faultsTable->item(0, 3)->setText(QString::fromStdString(ToStringConverter::getUnitId(faultInd->faultySubUnitId)));
+		}
+
+		mStoredFaults.push_back(std::make_pair(faultInd, ui->faultsTable->item(0, 0)));
+	}
+	catch (...)
+	{
+
+	}
 }
 
 void MainWindow::removeFaultFromFaultsTable(std::shared_ptr<SFaultIndication> faultInd)
 {
     std::lock_guard<std::mutex> lockGuard(mFaultsTableMtx);
 
-    auto faultIter =    std::find_if
-                        (
-                            std::begin(mStoredFaults),
-                            std::end(mStoredFaults),
-                            [&faultInd](const std::pair<std::shared_ptr<SFaultIndication>, QTableWidgetItem*> & storedFault)
-                            {
-                                if (FaultManager::compareFaults(*faultInd, *(storedFault.first)))
-                                {
-                                    return true;
-                                }
+	try
+	{
+		auto faultIter = std::find_if
+		(
+			std::begin(mStoredFaults),
+			std::end(mStoredFaults),
+			[&faultInd](const std::pair<std::shared_ptr<SFaultIndication>, QTableWidgetItem*> & storedFault)
+			{
+				if (FaultManager::compareFaults(*faultInd, *(storedFault.first)))
+				{
+					return true;
+				}
 
-                                return false;
-                            }
-                        );
+				return false;
+			}
+		);
 
-    if (std::end(mStoredFaults) != faultIter)
-    {
-        auto rowNumber = std::numeric_limits<int>::max();
+		if (std::end(mStoredFaults) != faultIter)
+		{
+			auto rowNumber = std::numeric_limits<int>::max();
 
-        for (auto iter = 0; ui->faultsTable->rowCount() > iter; ++iter)
-        {
-            if (ui->faultsTable->item(iter, 0) == faultIter->second)
-            {
-                rowNumber = faultIter->second->row();
-                break;
-            }
-        }
+			for (auto iter = 0; ui->faultsTable->rowCount() > iter; ++iter)
+			{
+				if (ui->faultsTable->item(iter, 0) == faultIter->second)
+				{
+					rowNumber = faultIter->second->row();
+					break;
+				}
+			}
 
-        mStoredFaults.erase(faultIter);
+			mStoredFaults.erase(faultIter);
 
-        if (std::numeric_limits<int>::max() != rowNumber)
-        {
-            //ui->faultsTable->removeRow(rowNumber);
-            QMetaObject::invokeMethod(ui->faultsTable, "removeRow", Qt::QueuedConnection, Q_ARG(int, rowNumber));
-        }
-    }
+			if (std::numeric_limits<int>::max() != rowNumber)
+			{
+				ui->faultsTable->removeRow(rowNumber);
+				//QMetaObject::invokeMethod(ui->faultsTable, "removeRow", Qt::QueuedConnection, Q_ARG(int, rowNumber));
+			}
+		}
+	}
+	catch (...)
+	{
+
+	}
 }
 
 void MainWindow::setupAutodetectionTabLabels()
@@ -1258,6 +1291,8 @@ void MainWindow::setupTestInput()
 	std::lock_guard<std::mutex> lockGuard(mTestInputMtx);
 	mIsExperimentInfoListenersStarted = false;
 	ui->pushButtonTestExperimentInfoStartStopExperiment->setEnabled(false);
+	ui->labelTestInputProcessValueSettingsMaxAllowedTempInfo->setText("<sup>o</sup>C");
+	ui->textEditTestInputProcessValueSettingsMaxAllowedTemp->setText("380.0");
 }
 
 void MainWindow::testInputStartWorking()
@@ -1285,6 +1320,13 @@ void MainWindow::testInputStartWorking()
 			}
 		}
 	);
+
+	const auto experimentState = ModelIdentification::ExperimentManager::getExperimentState();
+
+	if (!mIsExperimentInfoListenersStarted && (EExperimentState::Running == experimentState))
+	{
+		startExperimentInfoListeners();
+	}
 }
 
 void MainWindow::testInputStopWorking()
@@ -1586,12 +1628,12 @@ void MainWindow::stateChangedCallback(const std::string & attribute)
 		ui->pushButtonTestExperimentInfoStartStopExperiment->setText("Stop Experiment");
 		if (!ui->checkBoxHeaterPowerSaveToFile->isChecked())
 		{
-			const auto samplingPeriod = DSC::DataManager::getData(EDataType::ModelIdentificationSamplingPeriod);
+			const auto samplingPeriod = 1000.0; // ms
 			rememberedSampling = DSC::DataManager::getData(EDataType::HeaterPowerControlFileDataSampling);
 			DSC::DataManager::updateData(EDataType::HeaterPowerControlFileDataSampling, samplingPeriod / 1000.0);
 			ui->checkBoxHeaterPowerSaveToFile->click();
 			ui->checkBoxHeaterPowerSaveToFile->setEnabled(false);
-			QString comboBoxText = convertDoubleTestInputDataToQString(samplingPeriod / 1000.0) + QString(" seconds");
+			QString comboBoxText = convertDoubleTestInputDataToQString(samplingPeriod / 1000.0) + QString(" second");
 			rememberedComboBoxTest = ui->comboBoxHeaterPowerFileSps->currentText();
 			ui->comboBoxHeaterPowerFileSps->blockSignals(true);
 			QMetaObject::invokeMethod(ui->comboBoxHeaterPowerFileSps, "setEditText", Qt::QueuedConnection, Q_ARG(QString, comboBoxText));
@@ -1638,10 +1680,12 @@ QString MainWindow::convertIntTestInputDataToQString(double value)
 MainWindow::TimeData MainWindow::convertMsToTimeData(double ms)
 {
 	TimeData timeData;
-	const auto msUInt = static_cast<u64>(ms);
-	timeData.seconds = static_cast<u16>((msUInt / 1000) % 60);
-	timeData.minutes = static_cast<u16>((msUInt / (1000 * 60)) % 60);
-	timeData.hours = static_cast<u16>((msUInt / (1000 * 60 * 60)) % 24);
+
+	auto intMs = static_cast<u64>(ms);
+
+	timeData.hours = intMs / (1000 * 60 * 60);
+	timeData.minutes = (intMs % (1000 * 60 * 60)) / (1000 * 60);
+	timeData.seconds = ((intMs % (1000 * 60 * 60)) % (1000 * 60)) / 1000;
 
 	return timeData;
 }
@@ -2750,6 +2794,21 @@ void MainWindow::testInputExperimentInfoStartStopExperimentClicked()
 			}
 		);
 	}
+}
+
+void MainWindow::testInputProcessValueSettingsApplySettingsClicked()
+{
+	std::lock_guard<std::mutex> lockGuard(mTestInputMtx);
+
+	const auto maxAllowedTempratureStr = ui->textEditTestInputProcessValueSettingsMaxAllowedTemp->toPlainText().toStdString();
+	if (!Utilities::isDouble(maxAllowedTempratureStr))
+	{
+		return;
+	}
+	const auto maxAllowedTemprature = std::stod(maxAllowedTempratureStr);
+	ThreadPool::submit(TaskPriority::Normal, [maxAllowedTemprature]() {
+		DSC::HeaterManager::setMaximumAllowedTemperature(maxAllowedTemprature);
+	});
 }
 
 void MainWindow::segmentsConfiguratorAddToProgramClicked()

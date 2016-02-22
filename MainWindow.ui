@@ -3512,6 +3512,25 @@ p, li { white-space: pre-wrap; }
             <string>Time</string>
            </property>
           </widget>
+          <widget class="QLabel" name="labelInputDataSettingExpTime_7">
+           <property name="geometry">
+            <rect>
+             <x>290</x>
+             <y>50</y>
+             <width>61</width>
+             <height>21</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <italic>false</italic>
+            </font>
+           </property>
+           <property name="text">
+            <string>ms</string>
+           </property>
+          </widget>
          </widget>
          <widget class="QFrame" name="frame_41">
           <property name="geometry">
@@ -4206,6 +4225,164 @@ p, li { white-space: pre-wrap; }
            </property>
            <property name="text">
             <string>Left Samples</string>
+           </property>
+          </widget>
+         </widget>
+         <widget class="QFrame" name="frame_21">
+          <property name="geometry">
+           <rect>
+            <x>830</x>
+            <y>460</y>
+            <width>431</width>
+            <height>171</height>
+           </rect>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <property name="lineWidth">
+           <number>2</number>
+          </property>
+          <widget class="QLabel" name="labelHeaterPowerPlotTemperature_7">
+           <property name="geometry">
+            <rect>
+             <x>120</x>
+             <y>10</y>
+             <width>231</width>
+             <height>31</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <italic>true</italic>
+            </font>
+           </property>
+           <property name="text">
+            <string>Process Value Settings</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelHeaterPowerControlModePowerInfo_5">
+           <property name="geometry">
+            <rect>
+             <x>20</x>
+             <y>60</y>
+             <width>211</width>
+             <height>21</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <italic>false</italic>
+             <underline>false</underline>
+            </font>
+           </property>
+           <property name="text">
+            <string>Max. Allowed Temp.</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelTestInputSettingExperimentTimeSeconds_2">
+           <property name="geometry">
+            <rect>
+             <x>210</x>
+             <y>170</y>
+             <width>61</width>
+             <height>21</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <italic>false</italic>
+            </font>
+           </property>
+           <property name="text">
+            <string>N/A</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelInputDataSettingExpTime_16">
+           <property name="geometry">
+            <rect>
+             <x>290</x>
+             <y>170</y>
+             <width>61</width>
+             <height>21</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <italic>false</italic>
+            </font>
+           </property>
+           <property name="text">
+            <string>sec.</string>
+           </property>
+          </widget>
+          <widget class="QTextEdit" name="textEditTestInputProcessValueSettingsMaxAllowedTemp">
+           <property name="geometry">
+            <rect>
+             <x>220</x>
+             <y>50</y>
+             <width>91</width>
+             <height>30</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+            </font>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
+           <property name="html">
+            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:14pt; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;100&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="labelTestInputProcessValueSettingsMaxAllowedTempInfo">
+           <property name="geometry">
+            <rect>
+             <x>330</x>
+             <y>60</y>
+             <width>61</width>
+             <height>21</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>14</pointsize>
+             <italic>false</italic>
+            </font>
+           </property>
+           <property name="text">
+            <string>oC</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="pushButtonTestInputProcessValueSettingsApplySettings">
+           <property name="geometry">
+            <rect>
+             <x>110</x>
+             <y>110</y>
+             <width>221</width>
+             <height>31</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Apply Settings</string>
            </property>
           </widget>
          </widget>
@@ -8802,6 +8979,22 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButtonTestInputProcessValueSettingsApplySettings</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>testInputProcessValueSettingsApplySettingsClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>958</x>
+     <y>681</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-2</x>
+     <y>671</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ButtonClicked()</slot>
@@ -8843,5 +9036,6 @@ p, li { white-space: pre-wrap; }
   <slot>testInputCreatorDistributionChanged()</slot>
   <slot>testInputExternalFileChooseFileClicked()</slot>
   <slot>testInputExperimentInfoStartStopExperimentClicked()</slot>
+  <slot>testInputProcessValueSettingsApplySettingsClicked()</slot>
  </slots>
 </ui>

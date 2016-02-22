@@ -10,13 +10,13 @@ namespace ModelIdentification
 	void InputDataGeneratorUniformDistribution::initialize()
 	{
 		mRandomEngine = std::make_unique<std::default_random_engine>();
-		mUniformDistributionGenerator = std::make_unique<std::uniform_real_distribution<float>>(mRangeMin, mRangeMax);
+		mUniformDistributionGenerator = std::make_unique<std::uniform_int_distribution<int>>(static_cast<int>(mRangeMin * 10.0F), static_cast<int>(mRangeMax * 10.0F));
 		(*mUniformDistributionGenerator)(*mRandomEngine);
 	}
 
 	float InputDataGeneratorUniformDistribution::getNextInputValue()
 	{
-		return (*mUniformDistributionGenerator)(*mRandomEngine);
+		return static_cast<float>((*mUniformDistributionGenerator)(*mRandomEngine)) / 10.0F;
 	}
 
 	void InputDataGeneratorUniformDistribution::validateInputData()
